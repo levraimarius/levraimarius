@@ -8,29 +8,27 @@ Je conçois aussi des SaaS orientés productivité et prospection, avec un souci
 ### 🛠️ Stack & Outils
 
 **Frontend**
-
-- Next.js / React
-- Astro
-- TypeScript
-- Tailwind CSS
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Astro](https://img.shields.io/badge/Astro-FF5D01?style=for-the-badge&logo=astro&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
 **Backend**
-
-- Node.js / Express
-- API REST & GraphQL
-- Automatisation (n8n, webhooks)
+![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)
+![GraphQL](https://img.shields.io/badge/GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)
+![n8n](https://img.shields.io/badge/n8n-FF6B6B?style=for-the-badge&logo=n8n&logoColor=white)
 
 **Base de données**
-
-- PostgreSQL
-- Supabase
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 
 **Hébergement & DevOps**
-
-- Vercel
-- Docker
-- CI/CD GitHub Actions
-- Linux / Ubuntu
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 
 ### 🎯 Projets récents
 
@@ -55,7 +53,7 @@ Je conçois aussi des SaaS orientés productivité et prospection, avec un souci
 
 - **Email :** contact@prismacreation.fr
 - **Site :** [https://prismacreation.fr](https://prismacreation.fr)
-- **LinkedIn :** [https://www.linkedin.com/in/marius-levrai/](https://www.linkedin.com/in/marius-levrai/)
+- **LinkedIn :** [https://www.linkedin.com/in/marius-thiesset/](https://www.linkedin.com/in/marius-thiesset/)
 
 ---
 
