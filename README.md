@@ -1,87 +1,62 @@
 # 👋 Salut, je suis Marius Levrai
 
-## 🚀 Développeur Full-Stack & Architecte Logiciel
+## 🚀 Développeur Web & Fondateur de Prisma Création
 
-Passionné par la création d'applications web modernes et performantes, je me spécialise dans le développement full-stack avec une approche centrée sur l'expérience utilisateur.
+J'aide les indépendants, TPE et PME à avoir un site qui attire, convertit et génère du business.
+Je conçois aussi des SaaS orientés productivité et prospection, avec un souci constant de performance et de simplicité.
 
-### 🛠️ Technologies & Outils
+### 🛠️ Stack & Outils
 
-**Frontend:**
+**Frontend**
 
-- React.js / Next.js
+- Next.js / React
+- Astro
 - TypeScript
 - Tailwind CSS
-- Vue.js
 
-**Backend:**
+**Backend**
 
 - Node.js / Express
-- Python / Django
-- PHP / Laravel
-- Java / Spring Boot
+- API REST & GraphQL
+- Automatisation (n8n, webhooks)
 
-**Base de données:**
+**Base de données**
 
 - PostgreSQL
-- MongoDB
-- MySQL
-- Redis
+- Supabase
 
-**DevOps & Cloud:**
+**Hébergement & DevOps**
 
-- Docker / Kubernetes
-- AWS / Azure
-- CI/CD (GitHub Actions, GitLab CI)
+- Vercel
+- Docker
+- CI/CD GitHub Actions
 - Linux / Ubuntu
 
-### 🎯 Projets Récents
+### 🎯 Projets récents
 
-- **Taada** - Plateforme de génération de sites web automatisée
-- **E-commerce** - Solutions de commerce électronique personnalisées
-- **APIs RESTful** - Architectures microservices scalables
+- **Taada** - CRM serverless qui génère une one-page optimisée en quelques minutes
+- **FindMyProspect** - SaaS interne d'automatisation de prospection
+- **Prisma Création** - Création de sites vitrines performants et SEO local
 
 ### 📊 Statistiques GitHub
 
 ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=levraimarius&show_icons=true&theme=radical)
-
 ![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=levraimarius&layout=compact&theme=radical)
 
-### 🌟 Compétences Clés
+### 🌟 Compétences clés
 
-- **Architecture Logicielle** - Design patterns, SOLID principles
-- **Performance** - Optimisation frontend/backend
-- **Sécurité** - OWASP, authentification, autorisation
-- **Tests** - TDD, unit testing, integration testing
-- **Agile/Scrum** - Méthodologies de développement
+- Conception de produits web orientés conversion
+- Architecture simple, scalable et maintenable
+- SEO local et optimisation des performances
+- Automatisation des processus métiers
+- Déploiement et hébergement serverless
 
 ### 📫 Contact
 
-- **Email:** [votre-email@example.com]
-- **LinkedIn:** [votre-profil-linkedin]
-- **Portfolio:** [votre-site-web]
-
-### 🎨 Fun Facts
-
-- 🎮 Gamer passionné
-- ☕ Amateur de café
-- 🌍 Voyageur digital
-- 📚 Apprentissage continu
+- **Email :** contact@prismacreation.fr
+- **Site :** [https://prismacreation.fr](https://prismacreation.fr)
+- **LinkedIn :** [https://www.linkedin.com/in/marius-levrai/](https://www.linkedin.com/in/marius-levrai/)
 
 ---
 
-_"Le code est de la poésie pour machines"_ - Continuez à coder, continuez à créer ! 🚀
-
-<!--
-**levraimarius/levraimarius** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-
-Here are some ideas to get you started:
-
-- 🔭 I'm currently working on ...
-- 🌱 I'm currently learning ...
-- 👯 I'm looking to collaborate on ...
-- 🤔 I'm looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+_"Le code est un outil, l'impact est l'objectif."_
