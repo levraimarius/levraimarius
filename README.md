@@ -1,5 +1,6 @@
 <div align="center">
-  <img src="https://readme-typing-svg.vercel.app/?lines=👋+Salut,+je+suis+Marius;🚀+Développeur+Web+%26+Fondateur;💼+de+Prisma+Création;🎯+Passionné+de+performance+%26+conversion&center=true&width=800&height=100&color=00d4ff&size=35&font=Fira%20Code">
+  <img src="https://prismacreation.fr/images/logo.png?w=32&h=32&q=80&f=webp" alt="Prisma Création Logo" width="32" height="32" style="margin-right: 10px;">
+  <img src="https://readme-typing-svg.vercel.app/?lines=👋+Salut,+je+suis+Marius;🚀+Développeur+Web+%26+Fondateur;💼+de+Prisma+Création;🎯+Passionné+de+performance+%26+conversion&center=true&width=800&height=100&color=6366f1&size=35&font=Fira%20Code">
 </div>
 
 ---
@@ -7,12 +8,18 @@
 ## 🎨 **À propos de moi**
 
 <div align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=levraimarius&show_icons=true&theme=radical&hide_border=true&bg_color=0d1117&title_color=00d4ff&icon_color=00d4ff&text_color=ffffff" alt="GitHub Stats" />
+  <img src="https://github-readme-stats.vercel.app/api?username=levraimarius&show_icons=true&theme=radical&hide_border=true&bg_color=0d1117&title_color=6366f1&icon_color=6366f1&text_color=ffffff" alt="GitHub Stats" />
 </div>
 
 > _"Le code est un outil, l'impact est l'objectif."_ 🎯
 
 **Je transforme les idées en solutions digitales qui convertissent.** Spécialisé dans la création de sites web performants et d'applications SaaS qui génèrent du business pour les indépendants, TPE et PME.
+
+<div align="center">
+  <img src="https://prismacreation.fr/images/logo.png?w=64&h=64&q=80&f=webp" alt="Prisma Création" width="64" height="64">
+  <h3 style="color: #6366f1;">🚀 Fondateur de Prisma Création</h3>
+  <p style="color: #6366f1; font-weight: bold;">Création de sites vitrines performants et SEO local</p>
+</div>
 
 ---
 
@@ -47,6 +54,13 @@
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 
+### 🧰 Outils & Autres
+
+![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
+![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
+![Stripe](https://img.shields.io/badge/Stripe-008CDD?style=for-the-badge&logo=stripe&logoColor=white)
+![WordPress](https://img.shields.io/badge/WordPress-21759B?style=for-the-badge&logo=wordpress&logoColor=white)
+
 </div>
 
 ---
@@ -68,7 +82,7 @@
 ## 📊 **Statistiques GitHub**
 
 <div align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=levraimarius&layout=compact&theme=radical&hide_border=true&bg_color=0d1117&title_color=00d4ff&text_color=ffffff" alt="Top Languages" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=levraimarius&layout=compact&theme=radical&hide_border=true&bg_color=0d1117&title_color=6366f1&text_color=ffffff" alt="Top Languages" />
 </div>
 
 ---
@@ -90,7 +104,7 @@
 ---
 
 <div align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=levraimarius&theme=radical&no-frame=true&no-bg=false&margin-w=4" alt="GitHub Trophies" />
+  <img src="https://github-profile-trophy.vercel.app/?username=levraimarius&theme=radical&no-frame=true&no-bg=false&margin-w=4&title_color=6366f1" alt="GitHub Trophies" />
 </div>
 
 ---
@@ -117,19 +131,18 @@ const marius = {
 <div align="center">
 
 [![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:contact@prismacreation.fr)
-[![Website](https://img.shields.io/badge/Website-000000?style=for-the-badge&logo=About.me&logoColor=white)](https://prismacreation.fr)
+[![Website](https://img.shields.io/badge/Website-6366f1?style=for-the-badge&logo=About.me&logoColor=white)](https://prismacreation.fr)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/marius-thiesset/)
+[![Prisma Création](https://img.shields.io/badge/Prisma_Création-6366f1?style=for-the-badge&logo=prisma&logoColor=white)](https://prismacreation.fr)
 
 </div>
 
 ---
 
 <div align="center">
-  <img src="https://komarev.com/ghpvc/?username=levraimarius&style=flat-square&color=00d4ff" alt="Profile Views" />
+  <img src="https://komarev.com/ghpvc/?username=levraimarius&style=flat-square&color=6366f1" alt="Profile Views" />
   
-  <img src="https://github.com/levraimarius/levraimarius/blob/output/github-contribution-grid-snake-dark.svg" alt="Snake animation" />
-  
-  <img src="https://raw.githubusercontent.com/levraimarius/levraimarius/output/github-contribution-grid-snake-dark.svg" alt="Snake animation" />
+  <img src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=levraimarius&theme=radical&title_color=6366f1" alt="Profile Details" />
 </div>
 
 ---
