@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="https://prismacreation.fr/images/logo.png?w=32&h=32&q=80&f=webp" alt="Prisma Création Logo" width="32" height="32" style="margin-right: 10px; vertical-align: middle;">
   <img src="https://readme-typing-svg.vercel.app/?lines=👋+Salut,+je+suis+Marius;🚀+Développeur+Web+%26+Fondateur;💼+de+Prisma+Création;🎯+Passionné+de+performance+%26+conversion&center=true&width=600&height=80&color=6366f1&size=30&font=Fira%20Code">
 </div>
 
@@ -11,9 +10,13 @@
   <img src="https://github-readme-stats.vercel.app/api?username=levraimarius&show_icons=true&theme=radical&hide_border=true&bg_color=0d1117&title_color=6366f1&icon_color=6366f1&text_color=ffffff" alt="GitHub Stats" />
 </div>
 
+<div align="center">
+
 > _"Le code est un outil, l'impact est l'objectif."_ 🎯
 
 **Je transforme les idées en solutions digitales qui convertissent.** Spécialisé dans la création de sites web performants et d'applications SaaS qui génèrent du business pour les indépendants, TPE et PME.
+
+</div>
 
 <div align="center">
   <img src="https://prismacreation.fr/images/logo.png?w=64&h=64&q=80&f=webp" alt="Prisma Création" width="64" height="64" style="margin-bottom: 10px;">
@@ -140,12 +143,14 @@ const marius = {
 
 <div align="center">
   <img src="https://komarev.com/ghpvc/?username=levraimarius&style=flat-square&color=6366f1" alt="Profile Views" />
+</div>
   
+<div align="center">
   <img src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=levraimarius&theme=radical&title_color=6366f1" alt="Profile Details" />
 </div>
 
 ---
 
 <div align="center">
-  <sub>Fait avec ❤️</sub>
+  <sub>Fait avec ❤️ par Marius</sub>
 </div>
