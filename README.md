@@ -10,11 +10,11 @@
   <img src="https://github-readme-stats.vercel.app/api?username=levraimarius&show_icons=true&theme=radical&hide_border=true&bg_color=0d1117&title_color=6366f1&icon_color=6366f1&text_color=ffffff" alt="GitHub Stats" />
 </div>
 
-<div align="center">
-
 > _"Le code est un outil, l'impact est l'objectif."_ 🎯
 
-**Je transforme les idées en solutions digitales qui convertissent.** Spécialisé dans la création de sites web performants et d'applications SaaS qui génèrent du business pour les indépendants, TPE et PME.
+<div align="center">
+
+**Je transforme les idées en solutions digitales qui convertissent.** Spécialisé dans la création de sites web performants, d'applications mobiles et de SaaS qui génèrent du business pour les indépendants, TPE et PME.
 
 </div>
 
@@ -32,9 +32,11 @@
 
 ### 🎨 **Frontend**
 
-![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Astro](https://img.shields.io/badge/Astro-FF5D01?style=for-the-badge&logo=astro&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![Vue.js](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D)
+![Nuxt.js](https://img.shields.io/badge/Nuxt.js-00DC82?style=for-the-badge&logo=nuxt.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
@@ -56,6 +58,10 @@
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+
+### 📱 **Mobile**
+
+![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 
 ### 🧰 **Outils & Autres**
 
@@ -98,6 +104,7 @@
 | --------------------- | ------ | ------------------------------ |
 | 🎨 **Design UX/UI**   | Expert | Conception orientée conversion |
 | ⚡ **Performance**    | Expert | Optimisation frontend/backend  |
+| 📱 **Mobile**         | Expert | Applications React Native      |
 | 🔍 **SEO Local**      | Expert | Référencement local optimisé   |
 | 🤖 **Automatisation** | Avancé | Processus métiers automatisés  |
 | ☁️ **Serverless**     | Expert | Déploiement cloud moderne      |
