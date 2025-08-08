@@ -7,24 +7,28 @@ Passionné par la création d'applications web modernes et performantes, je me s
 ### 🛠️ Technologies & Outils
 
 **Frontend:**
+
 - React.js / Next.js
 - TypeScript
 - Tailwind CSS
 - Vue.js
 
 **Backend:**
+
 - Node.js / Express
 - Python / Django
 - PHP / Laravel
 - Java / Spring Boot
 
 **Base de données:**
+
 - PostgreSQL
 - MongoDB
 - MySQL
 - Redis
 
 **DevOps & Cloud:**
+
 - Docker / Kubernetes
 - AWS / Azure
 - CI/CD (GitHub Actions, GitLab CI)
@@ -65,7 +69,7 @@ Passionné par la création d'applications web modernes et performantes, je me s
 
 ---
 
-*"Le code est de la poésie pour machines"* - Continuez à coder, continuez à créer ! 🚀
+_"Le code est de la poésie pour machines"_ - Continuez à coder, continuez à créer ! 🚀
 
 <!--
 **levraimarius/levraimarius** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
