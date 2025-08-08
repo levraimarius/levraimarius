@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="https://prismacreation.fr/images/logo.png?w=32&h=32&q=80&f=webp" alt="Prisma Création Logo" width="32" height="32" style="margin-right: 10px;">
-  <img src="https://readme-typing-svg.vercel.app/?lines=👋+Salut,+je+suis+Marius;🚀+Développeur+Web+%26+Fondateur;💼+de+Prisma+Création;🎯+Passionné+de+performance+%26+conversion&center=true&width=800&height=100&color=6366f1&size=35&font=Fira%20Code">
+  <img src="https://prismacreation.fr/images/logo.png?w=32&h=32&q=80&f=webp" alt="Prisma Création Logo" width="32" height="32" style="margin-right: 10px; vertical-align: middle;">
+  <img src="https://readme-typing-svg.vercel.app/?lines=👋+Salut,+je+suis+Marius;🚀+Développeur+Web+%26+Fondateur;💼+de+Prisma+Création;🎯+Passionné+de+performance+%26+conversion&center=true&width=600&height=80&color=6366f1&size=30&font=Fira%20Code">
 </div>
 
 ---
@@ -16,9 +16,9 @@
 **Je transforme les idées en solutions digitales qui convertissent.** Spécialisé dans la création de sites web performants et d'applications SaaS qui génèrent du business pour les indépendants, TPE et PME.
 
 <div align="center">
-  <img src="https://prismacreation.fr/images/logo.png?w=64&h=64&q=80&f=webp" alt="Prisma Création" width="64" height="64">
-  <h3 style="color: #6366f1;">🚀 Fondateur de Prisma Création</h3>
-  <p style="color: #6366f1; font-weight: bold;">Création de sites vitrines performants et SEO local</p>
+  <img src="https://prismacreation.fr/images/logo.png?w=64&h=64&q=80&f=webp" alt="Prisma Création" width="64" height="64" style="margin-bottom: 10px;">
+  <h3 style="color: #6366f1; margin: 10px 0;">🚀 Fondateur de Prisma Création</h3>
+  <p style="color: #6366f1; font-weight: bold; margin: 5px 0;">Création de sites vitrines performants et SEO local</p>
 </div>
 
 ---
@@ -54,7 +54,7 @@
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 
-### 🧰 Outils & Autres
+### 🧰 **Outils & Autres**
 
 ![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
@@ -71,8 +71,8 @@
 
 | Projet                                           | Description                                                          | Tech Stack                 | Status  |
 | ------------------------------------------------ | -------------------------------------------------------------------- | -------------------------- | ------- |
-| **[Taada](https://taada.fr)**                    | CRM serverless qui génère une one-page optimisée en quelques minutes | Next.js, Supabase, Vercel  | 🟢 Live |
-| **[FindMyProspect](https://findmyprospect.fr)**  | SaaS d'automatisation de prospection                                 | React, Node.js, PostgreSQL | 🟡 Beta |
+| **[Taada](https://taada.fr)**                    | CRM serverless qui génère une one-page optimisée en quelques minutes | Next.js, Supabase, Vercel  | 🟡 Beta |
+| **[FindMyProspect](https://findmyprospect.fr)**  | SaaS d'automatisation de prospection                                 | React, Node.js, PostgreSQL | 🟢 Live |
 | **[Prisma Création](https://prismacreation.fr)** | Création de sites vitrines performants et SEO local                  | Astro, Tailwind, Vercel    | 🟢 Live |
 
 </div>
@@ -131,7 +131,6 @@ const marius = {
 <div align="center">
 
 [![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:contact@prismacreation.fr)
-[![Website](https://img.shields.io/badge/Website-6366f1?style=for-the-badge&logo=About.me&logoColor=white)](https://prismacreation.fr)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/marius-thiesset/)
 [![Prisma Création](https://img.shields.io/badge/Prisma_Création-6366f1?style=for-the-badge&logo=prisma&logoColor=white)](https://prismacreation.fr)
 
