@@ -1,11 +1,5 @@
 <div align="center">
-  <img src="https://readme-typing-svg.vercel.app/?lines=👋+Salut,+je+suis+Marius+Levrai;🚀+Développeur+Web+%26+Fondateur;💼+Prisma+Création;🎯+Passionné+de+performance+%26+conversion&center=true&width=800&height=100&color=00d4ff&size=35&font=Fira%20Code">
-</div>
-
----
-
-<div align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=levraimarius&theme=radical&no-frame=true&no-bg=false&margin-w=4" alt="GitHub Trophies" />
+  <img src="https://readme-typing-svg.vercel.app/?lines=👋+Salut,+je+suis+Marius;🚀+Développeur+Web+%26+Fondateur;💼+de+Prisma+Création;🎯+Passionné+de+performance+%26+conversion&center=true&width=800&height=100&color=00d4ff&size=35&font=Fira%20Code">
 </div>
 
 ---
@@ -95,6 +89,12 @@
 
 ---
 
+<div align="center">
+  <img src="https://github-profile-trophy.vercel.app/?username=levraimarius&theme=radical&no-frame=true&no-bg=false&margin-w=4" alt="GitHub Trophies" />
+</div>
+
+---
+
 ## 🎨 **Fun Facts**
 
 <div align="center">
@@ -127,7 +127,9 @@ const marius = {
 <div align="center">
   <img src="https://komarev.com/ghpvc/?username=levraimarius&style=flat-square&color=00d4ff" alt="Profile Views" />
   
-  ![Snake animation](https://github.com/levraimarius/levraimarius/blob/output/github-contribution-grid-snake-dark.svg)
+  <img src="https://github.com/levraimarius/levraimarius/blob/output/github-contribution-grid-snake-dark.svg" alt="Snake animation" />
+  
+  <img src="https://raw.githubusercontent.com/levraimarius/levraimarius/output/github-contribution-grid-snake-dark.svg" alt="Snake animation" />
 </div>
 
 ---
