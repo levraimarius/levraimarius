@@ -66,19 +66,21 @@
   #toast {
     position: fixed; top: 34%; left: 50%;
     transform: translate(-50%, -50%) scale(0);
-    font-size: 30px; font-weight: 800; color: #fff;
+    font-size: 28px; font-weight: 800; color: #fff;
     background: linear-gradient(135deg, #ff8fab, #c98be0);
     padding: 14px 28px; border-radius: 999px;
     box-shadow: 0 8px 30px rgba(200, 100, 180, 0.45);
     transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     pointer-events: none;
     white-space: nowrap;
-    max-width: 92vw;
+    max-width: 94vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
     text-align: center;
   }
   #toast.show { transform: translate(-50%, -50%) scale(1); }
   #hint {
-    position: fixed; bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    position: fixed; bottom: calc(76px + env(safe-area-inset-bottom, 0px));
     left: 0; right: 0;
     text-align: center; color: #c98bb0; font-size: 15px; font-weight: 700;
     text-shadow: 0 1px 0 #fff;
@@ -91,10 +93,8 @@
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-6px); }
   }
-  #mute {
+  .roundBtn {
     position: fixed;
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-    right: calc(16px + env(safe-area-inset-right, 0px));
     width: 48px; height: 48px;
     border: none; border-radius: 50%;
     background: rgba(255, 255, 255, 0.78);
@@ -102,11 +102,63 @@
     font-size: 22px;
     cursor: pointer;
     touch-action: manipulation;
+    transition: opacity 0.2s, transform 0.1s;
   }
-  #mute:active { transform: scale(0.9); }
+  .roundBtn:active { transform: scale(0.9); }
+  .roundBtn.off { opacity: 0.45; }
+  #mute  { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); right: calc(16px + env(safe-area-inset-right, 0px)); }
+  #music { bottom: calc(74px + env(safe-area-inset-bottom, 0px)); right: calc(16px + env(safe-area-inset-right, 0px)); }
+  #albumBtn { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: calc(16px + env(safe-area-inset-left, 0px)); }
+  #album {
+    position: fixed; inset: 0;
+    background: rgba(80, 50, 90, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 10;
+    touch-action: pan-y;
+  }
+  #album.open { display: flex; }
+  #albumCard {
+    background: #fff7fb;
+    border-radius: 24px;
+    box-shadow: 0 12px 48px rgba(80, 40, 90, 0.4);
+    width: min(440px, 92vw);
+    max-height: 82vh;
+    overflow-y: auto;
+    padding: 22px 20px 16px;
+  }
+  #albumCard h2 {
+    text-align: center; color: #8a5a7a; font-size: 22px; margin-bottom: 12px;
+  }
+  #albumStats {
+    display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
+    margin-bottom: 14px;
+  }
+  #albumStats span {
+    background: #ffe3ef; color: #a96a8e; font-size: 12px; font-weight: 700;
+    padding: 5px 10px; border-radius: 999px;
+  }
+  #albumGrid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  }
+  .sticker {
+    background: #fff; border-radius: 14px; padding: 10px 6px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(180, 120, 160, 0.15);
+  }
+  .sticker .em { font-size: 28px; line-height: 1.2; }
+  .sticker .nm { font-size: 11px; font-weight: 800; color: #8a5a7a; margin-top: 2px; }
+  .sticker .ds { font-size: 9.5px; color: #c98bb0; font-weight: 600; }
+  .sticker.locked { opacity: 0.45; filter: grayscale(1); }
+  .closeHint {
+    text-align: center; color: #c98bb0; font-size: 12px; font-weight: 700;
+    margin-top: 14px;
+  }
   @media (max-width: 380px) {
     .badge .value { font-size: 20px; }
-    #toast { font-size: 24px; padding: 12px 22px; }
+    #toast { font-size: 22px; padding: 12px 22px; }
     #combo { font-size: 24px; }
   }
 </style>
@@ -119,8 +171,18 @@
 </div>
 <div id="combo"></div>
 <div id="toast"></div>
-<div id="hint">🫧 Tapote les bulles pour les faire éclater !</div>
-<button id="mute" aria-label="Son">🔊</button>
+<div id="hint">🫧 Tapote ou glisse sur les bulles !</div>
+<button id="mute" class="roundBtn" aria-label="Effets sonores">🔊</button>
+<button id="music" class="roundBtn" aria-label="Musique">🎵</button>
+<button id="albumBtn" class="roundBtn" aria-label="Album de stickers">🏅</button>
+<div id="album">
+  <div id="albumCard">
+    <h2>🏅 Album de stickers</h2>
+    <div id="albumStats"></div>
+    <div id="albumGrid"></div>
+    <p class="closeHint">Touche n'importe où pour fermer</p>
+  </div>
+</div>
 <script>
 (() => {
   'use strict';
@@ -135,6 +197,11 @@
   const toastEl = document.getElementById('toast');
   const hintEl = document.getElementById('hint');
   const muteBtn = document.getElementById('mute');
+  const musicBtn = document.getElementById('music');
+  const albumBtn = document.getElementById('albumBtn');
+  const albumEl = document.getElementById('album');
+  const albumStatsEl = document.getElementById('albumStats');
+  const albumGridEl = document.getElementById('albumGrid');
 
   let W = 0, H = 0, DPR = 1;
   function resize() {
@@ -161,17 +228,21 @@
   let displayedScore = 0;
   let best = +store.get('bullepop-best', 0) || 0;
   let totalPops = +store.get('bullepop-pops', 0) || 0;
+  let maxCombo = +store.get('bullepop-maxcombo', 0) || 0;
+  let maxLevel = +store.get('bullepop-maxlevel', 1) || 1;
+  let starsCaught = +store.get('bullepop-stars', 0) || 0;
   let soundOn = store.get('bullepop-sound', '1') === '1';
+  let musicOn = store.get('bullepop-music', '1') === '1';
   let combo = 0;
   let lastPopTime = 0;
   let firstPop = false;
   let level = 1;
   let recordBeaten = false;
-  let frenzyUntil = 0;
+  let frenzyUntil = 0;   // pluie de bulles 💖 (x2)
+  let feverUntil = 0;    // fièvre des bulles 🔥 (x3)
   let idSeq = 0;
   bestEl.textContent = best;
   totalEl.textContent = '🫧 ' + totalPops;
-  muteBtn.textContent = soundOn ? '🔊' : '🔇';
 
   const PASTELS = [
     { body: '#ffb3c6', cheek: '#ff8fab' }, // rose
@@ -192,6 +263,8 @@
   const clouds = [];
   const stars = [];
   const chainQueue = [];
+  const shootingStars = [];
+  let nextStarAt = performance.now() + 12000 + Math.random() * 15000;
 
   for (let i = 0; i < 6; i++) {
     clouds.push({
@@ -205,6 +278,58 @@
   for (let i = 0; i < 50; i++) {
     stars.push({ fx: Math.random(), fy: Math.random() * 0.85, r: 0.6 + Math.random() * 1.6, ph: Math.random() * Math.PI * 2 });
   }
+
+  // ---------- Album de stickers (succès, jamais punitifs) ----------
+  const STICKERS = [
+    { id: 'pop1',    em: '🫧', nm: 'Premier pop',     ds: 'Éclater une bulle' },
+    { id: 'pop100',  em: '💯', nm: 'Centenaire',      ds: '100 bulles éclatées' },
+    { id: 'pop1000', em: '🎉', nm: 'Millier moelleux', ds: '1000 bulles éclatées' },
+    { id: 'combo5',  em: '🔥', nm: 'Enchaînement',    ds: 'Atteindre un combo x5' },
+    { id: 'fever',   em: '🌟', nm: 'Fièvre des bulles', ds: 'Déclencher la fièvre x3' },
+    { id: 'gold',    em: '👑', nm: 'Royale',          ds: 'Éclater une bulle dorée' },
+    { id: 'rainbow', em: '🌈', nm: 'Arc-en-ciel',     ds: 'Réaction en chaîne' },
+    { id: 'heart',   em: '💖', nm: 'Pluie d’amour', ds: 'Pluie de bulles' },
+    { id: 'star',    em: '🌠', nm: 'Vœu exaucé',      ds: 'Attraper une étoile filante' },
+    { id: 'lvl5',    em: '🌅', nm: 'Grand voyageur',  ds: 'Atteindre le niveau 5' },
+    { id: 'night',   em: '🌙', nm: 'Oiseau de nuit',  ds: 'Voir la nuit étoilée' },
+    { id: 'score5k', em: '🏆', nm: 'Champion·ne',     ds: 'Marquer 5000 points' },
+  ];
+  let unlocked = {};
+  try { unlocked = JSON.parse(store.get('bullepop-stickers', '{}')) || {}; } catch (e) { unlocked = {}; }
+
+  function unlock(id) {
+    if (unlocked[id]) return;
+    unlocked[id] = true;
+    store.set('bullepop-stickers', JSON.stringify(unlocked));
+    const s = STICKERS.find(x => x.id === id);
+    if (s) {
+      showToast('Sticker débloqué ! ' + s.em + ' ' + s.nm, 2000);
+      playChime([784, 988, 1318], 0.09);
+      buzz([10, 30, 10]);
+    }
+  }
+
+  function renderAlbum() {
+    const count = STICKERS.filter(s => unlocked[s.id]).length;
+    albumStatsEl.innerHTML =
+      '<span>🏆 Record ' + best + '</span>' +
+      '<span>🫧 ' + totalPops + ' bulles</span>' +
+      '<span>🔥 Combo max x' + Math.min(1 + Math.floor(Math.max(maxCombo - 1, 0) / 2), 5) + '</span>' +
+      '<span>🌅 Niveau max ' + maxLevel + '</span>' +
+      '<span>🌠 ' + starsCaught + ' étoile' + (starsCaught > 1 ? 's' : '') + '</span>' +
+      '<span>🏅 ' + count + '/' + STICKERS.length + '</span>';
+    albumGridEl.innerHTML = STICKERS.map(s =>
+      '<div class="sticker' + (unlocked[s.id] ? '' : ' locked') + '">' +
+      '<div class="em">' + (unlocked[s.id] ? s.em : '❔') + '</div>' +
+      '<div class="nm">' + s.nm + '</div>' +
+      '<div class="ds">' + s.ds + '</div></div>'
+    ).join('');
+  }
+  albumBtn.addEventListener('click', () => {
+    renderAlbum();
+    albumEl.classList.add('open');
+  });
+  albumEl.addEventListener('click', () => albumEl.classList.remove('open'));
 
   // ---------- Thèmes de ciel (changent à chaque niveau, purement cosmétique) ----------
   function hexToRgb(h) {
@@ -226,21 +351,22 @@
   }
   function rgb(a) { return 'rgb(' + (a[0] | 0) + ',' + (a[1] | 0) + ',' + (a[2] | 0) + ')'; }
 
-  // ---------- Audio (sons doux générés, aucun fichier) ----------
+  // ---------- Audio (sons et musique générés, aucun fichier) ----------
   let audioCtx = null;
   function ensureAudio() {
     if (!audioCtx) {
       try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
     }
     if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    updateMusic();
   }
-  function tone(freq, when, dur, vol, type) {
+  function tone(freq, when, dur, vol, type, attack) {
     const o = audioCtx.createOscillator();
     const g = audioCtx.createGain();
     o.type = type || 'sine';
     o.frequency.value = freq;
     g.gain.setValueAtTime(0.001, when);
-    g.gain.exponentialRampToValueAtTime(vol, when + 0.015);
+    g.gain.exponentialRampToValueAtTime(vol, when + (attack || 0.015));
     g.gain.exponentialRampToValueAtTime(0.001, when + dur);
     o.connect(g).connect(audioCtx.destination);
     o.start(when);
@@ -270,11 +396,48 @@
     if (navigator.vibrate) { try { navigator.vibrate(p); } catch (e) {} }
   }
 
+  // Berceuse générative : quelques notes pentatoniques au hasard, très douces.
+  const SCALE = [261.63, 293.66, 329.63, 392.0, 440.0, 523.25, 587.33, 659.25];
+  let musicTimer = null;
+  let musicBeat = 0;
+  function musicTick() {
+    if (!audioCtx || !musicOn || document.hidden) return;
+    const t = audioCtx.currentTime;
+    musicBeat++;
+    if (Math.random() < 0.75) {
+      const n = SCALE[(Math.random() * SCALE.length) | 0];
+      tone(n, t, 1.4, 0.035, 'triangle', 0.05);
+      if (Math.random() < 0.35) {
+        tone(SCALE[(Math.random() * SCALE.length) | 0], t + 0.45, 1.2, 0.028, 'triangle', 0.05);
+      }
+    }
+    if (musicBeat % 6 === 0) {
+      tone(130.81, t, 3.2, 0.022, 'sine', 0.4); // nappe grave très discrète
+    }
+  }
+  function updateMusic() {
+    if (musicOn && audioCtx && !musicTimer) {
+      musicTimer = setInterval(musicTick, 1100);
+      musicTick();
+    } else if ((!musicOn || !audioCtx) && musicTimer) {
+      clearInterval(musicTimer);
+      musicTimer = null;
+    }
+  }
+
+  muteBtn.textContent = soundOn ? '🔊' : '🔇';
+  musicBtn.classList.toggle('off', !musicOn);
   muteBtn.addEventListener('click', () => {
     soundOn = !soundOn;
     muteBtn.textContent = soundOn ? '🔊' : '🔇';
     store.set('bullepop-sound', soundOn ? '1' : '0');
     if (soundOn) { ensureAudio(); playChime([660, 880], 0.07); }
+  });
+  musicBtn.addEventListener('click', () => {
+    musicOn = !musicOn;
+    musicBtn.classList.toggle('off', !musicOn);
+    store.set('bullepop-music', musicOn ? '1' : '0');
+    ensureAudio();
   });
 
   // ---------- Bulles ----------
@@ -301,6 +464,7 @@
       wobbleSpeed: 0.015 + Math.random() * 0.02,
       wobbleAmp: 0.5 + Math.random() * 0.8,
       palette, kind,
+      bow: kind === 'normal' && Math.random() < 0.18, // petit nœud décoratif
       blink: 0,
       nextBlink: 120 + Math.random() * 240,
       birth: performance.now(),
@@ -340,6 +504,25 @@
     }
   }
 
+  function sparkle(x, y, color, count, soft) {
+    if (particles.length > 360) return;
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: x + (Math.random() - 0.5) * 14,
+        y: y + (Math.random() - 0.5) * 14,
+        vx: (Math.random() - 0.5) * 1.5,
+        vy: -0.5 - Math.random(),
+        r: 1.5 + Math.random() * 2,
+        life: soft ? 0.5 : 0.7,
+        decay: 0.04,
+        color: color || '#ffffff',
+        star: true,
+        rot: Math.random() * Math.PI,
+        vrot: 0.1,
+      });
+    }
+  }
+
   function confettiRain() {
     const colors = ['#ffb3c6', '#a8d8ea', '#c3aed6', '#b5ead7', '#ffdac1', '#ffd96a'];
     for (let i = 0; i < 32; i++) {
@@ -370,6 +553,13 @@
     showToast._t = setTimeout(() => toastEl.classList.remove('show'), ms || 1500);
   }
 
+  // ---------- Bonus actifs ----------
+  function bonusMult(now) {
+    if (now < feverUntil) return 3;
+    if (now < frenzyUntil) return 2;
+    return 1;
+  }
+
   // ---------- Pop ! ----------
   function popBubble(b, chainIndex) {
     const idx = bubbles.indexOf(b);
@@ -379,14 +569,25 @@
     const now = performance.now();
     combo = (now - lastPopTime < 1700) ? Math.min(combo + 1, 12) : 1;
     lastPopTime = now;
+    if (combo > maxCombo) { maxCombo = combo; store.set('bullepop-maxcombo', maxCombo); }
     const mult = Math.min(1 + Math.floor((combo - 1) / 2), 5); // x1 à x5
-    const frenzy = now < frenzyUntil;
+    if (mult >= 5) unlock('combo5');
+
+    // fièvre des bulles : récompense des longs enchaînements, points x3
+    if (combo >= 10 && now > feverUntil) {
+      feverUntil = now + 6000;
+      showToast('Fièvre des bulles ! 🔥 Points x3', 1800);
+      playChime([659, 784, 988, 1318], 0.1);
+      buzz([12, 40, 12]);
+      unlock('fever');
+    }
+    const bonus = bonusMult(now);
 
     const base = b.kind === 'golden' ? 50
       : b.kind === 'heart' ? 20
       : b.kind === 'rainbow' ? 15
       : Math.max(1, Math.round((52 - b.baseR) / 7) + 1);
-    const points = base * mult * (frenzy ? 2 : 1);
+    const points = base * mult * bonus;
     score += points;
     totalPops++;
 
@@ -404,6 +605,7 @@
     if (b.kind === 'golden') {
       playChime([880, 1174, 1568], 0.1);
       buzz([12, 40, 12]);
+      unlock('gold');
     } else if (b.kind === 'rainbow') {
       // réaction en chaîne : toutes les bulles éclatent l'une après l'autre 🌈
       const others = bubbles.slice().sort((p, q) =>
@@ -411,17 +613,19 @@
       others.forEach((ob, i) => chainQueue.push({ id: ob.id, at: now + 80 * (i + 1), index: i }));
       if (others.length > 2) showToast('Réaction en chaîne ! 🌈', 1400);
       buzz([12, 40, 12]);
+      unlock('rainbow');
     } else if (b.kind === 'heart') {
       frenzyUntil = now + 6500;
       showToast('Pluie de bulles ! 💖 Points x2', 1800);
       playChime([523, 659, 784], 0.1);
       buzz([12, 40, 12]);
+      unlock('heart');
     } else {
       buzz(8);
     }
 
     if (combo >= 3) {
-      comboEl.textContent = 'Combo x' + mult + (frenzy ? ' 💖x2' : ' ✨');
+      comboEl.textContent = 'Combo x' + mult + (bonus === 3 ? ' 🔥x3' : bonus === 2 ? ' 💖x2' : ' ✨');
       comboEl.classList.add('show');
       clearTimeout(comboEl._t);
       comboEl._t = setTimeout(() => comboEl.classList.remove('show'), 900);
@@ -439,23 +643,58 @@
     }
     store.set('bullepop-pops', totalPops);
     totalEl.textContent = '🫧 ' + totalPops;
+    unlock('pop1');
+    if (totalPops >= 100) unlock('pop100');
+    if (totalPops >= 1000) unlock('pop1000');
+    if (best >= 5000) unlock('score5k');
 
     // niveaux : toutes les 500 pts le ciel change, pure récompense
     const newLevel = Math.floor(score / 500) + 1;
     if (newLevel > level) {
       level = newLevel;
       levelEl.textContent = 'Niveau ' + level;
+      if (level > maxLevel) { maxLevel = level; store.set('bullepop-maxlevel', maxLevel); }
       const theme = THEMES[(level - 1) % THEMES.length];
       showToast('Niveau ' + level + ' · ' + theme.name, 2000);
       confettiRain();
       playChime([523, 659, 784, 1046], 0.1);
       buzz([10, 30, 10, 30, 10]);
+      if (level >= 5) unlock('lvl5');
+      if ((level - 1) % THEMES.length === 3) unlock('night');
     }
 
     if (!firstPop) { firstPop = true; hintEl.style.opacity = '0'; }
   }
 
+  function catchStar(s, idx) {
+    shootingStars.splice(idx, 1);
+    const now = performance.now();
+    const mult = Math.min(1 + Math.floor(Math.max(combo - 1, 0) / 2), 5);
+    const points = 100 * mult * bonusMult(now);
+    score += points;
+    starsCaught++;
+    store.set('bullepop-stars', starsCaught);
+    addPopup(s.x, s.y - 20, '+' + points, '#ffd96a', true);
+    showToast('Vœu exaucé ! 🌠', 1600);
+    spawnParticles(s.x, s.y, '#ffd96a', true);
+    rings.push({ x: s.x, y: s.y, r: 14, max: 90, life: 1, color: '#ffd96a' });
+    playChime([1046, 1318, 1568, 2093], 0.09);
+    buzz([10, 30, 10]);
+    unlock('star');
+    if (score > best) {
+      best = score;
+      store.set('bullepop-best', best);
+      bestEl.textContent = best;
+    }
+    nextStarAt = now + 18000 + Math.random() * 22000;
+  }
+
   function popAt(px, py) {
+    // étoile filante en premier (grosse zone, c'est un cadeau)
+    for (let i = shootingStars.length - 1; i >= 0; i--) {
+      const s = shootingStars[i];
+      if (Math.hypot(s.x - px, s.y - py) < 44) { catchStar(s, i); return; }
+    }
     // bulle la plus proche du doigt, marge généreuse : zéro frustration
     let hit = null, hitDist = Infinity;
     for (const b of bubbles) {
@@ -466,38 +705,59 @@
       popBubble(hit);
     } else {
       // un tap dans le vide fait quand même un petit scintillement, jamais de sanction
-      for (let i = 0; i < 4; i++) {
-        particles.push({
-          x: px + (Math.random() - 0.5) * 14,
-          y: py + (Math.random() - 0.5) * 14,
-          vx: (Math.random() - 0.5) * 1.5,
-          vy: -0.5 - Math.random(),
-          r: 1.5 + Math.random() * 2,
-          life: 0.7, decay: 0.04,
-          color: '#ffffff', star: true,
-          rot: Math.random() * Math.PI, vrot: 0.1,
-        });
-      }
+      sparkle(px, py, '#ffffff', 4);
     }
   }
 
-  // ---------- Entrées (souris + multi-touch) ----------
+  // glisser le doigt : tout éclate au passage ✨
+  let lastTrailX = -999, lastTrailY = -999;
+  function swipeAt(px, py) {
+    for (let i = shootingStars.length - 1; i >= 0; i--) {
+      const s = shootingStars[i];
+      if (Math.hypot(s.x - px, s.y - py) < 44) { catchStar(s, i); return; }
+    }
+    for (let i = bubbles.length - 1; i >= 0; i--) {
+      const b = bubbles[i];
+      if (Math.hypot(b.x - px, b.y - py) < b.r + 4) popBubble(b);
+    }
+    if (Math.hypot(px - lastTrailX, py - lastTrailY) > 16) {
+      lastTrailX = px; lastTrailY = py;
+      sparkle(px, py, '#fff0f7', 2, true);
+    }
+  }
+
+  // ---------- Entrées (souris + multi-touch + glisser) ----------
   function onPress(e) {
     e.preventDefault();
     ensureAudio();
     popAt(e.clientX, e.clientY);
   }
+  function onMove(e) {
+    // doigt posé ou bouton de souris enfoncé
+    if (e.pointerType === 'touch' || e.buttons) {
+      e.preventDefault();
+      swipeAt(e.clientX, e.clientY);
+    }
+  }
   if (window.PointerEvent) {
     canvas.addEventListener('pointerdown', onPress);
+    canvas.addEventListener('pointermove', onMove);
   } else {
     canvas.addEventListener('mousedown', onPress);
+    canvas.addEventListener('mousemove', (e) => { if (e.buttons) swipeAt(e.clientX, e.clientY); });
     canvas.addEventListener('touchstart', (e) => {
       e.preventDefault();
       ensureAudio();
       for (const t of e.changedTouches) popAt(t.clientX, t.clientY);
     }, { passive: false });
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      for (const t of e.changedTouches) swipeAt(t.clientX, t.clientY);
+    }, { passive: false });
   }
-  document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+  document.addEventListener('touchmove', (e) => {
+    if (!(e.target && e.target.closest && e.target.closest('#album'))) e.preventDefault();
+  }, { passive: false });
   document.addEventListener('contextmenu', (e) => e.preventDefault());
   document.addEventListener('visibilitychange', () => { lastTime = performance.now(); });
 
@@ -542,8 +802,18 @@
       ctx.fill();
     }
 
-    if (performance.now() < frenzyUntil) {
+    const now = performance.now();
+    if (now < frenzyUntil) {
       ctx.fillStyle = 'rgba(255, 150, 190, 0.07)';
+      ctx.fillRect(0, 0, W, H);
+    }
+    if (now < feverUntil) {
+      // halo arc-en-ciel qui tourne doucement sur les bords
+      const hue = (time * 0.06) % 360;
+      const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.35, W / 2, H / 2, Math.max(W, H) * 0.75);
+      vg.addColorStop(0, 'hsla(' + hue + ', 90%, 70%, 0)');
+      vg.addColorStop(1, 'hsla(' + hue + ', 90%, 70%, 0.22)');
+      ctx.fillStyle = vg;
       ctx.fillRect(0, 0, W, H);
     }
   }
@@ -642,7 +912,7 @@
     }
     ctx.globalAlpha = 1;
 
-    // accessoires des bulles spéciales
+    // accessoires
     if (b.kind === 'golden') {
       ctx.fillStyle = '#ffb830';
       ctx.beginPath();
@@ -665,7 +935,6 @@
       ctx.fill();
       ctx.restore();
     } else if (b.kind === 'rainbow') {
-      // petites étincelles qui tournent autour
       for (let i = 0; i < 3; i++) {
         const a = time * 0.003 + (i * Math.PI * 2) / 3;
         const sx = Math.cos(a) * rx * 1.25;
@@ -674,6 +943,23 @@
         drawStarShape(sx, sy, 3.5, a, '#fff');
         ctx.globalAlpha = 1;
       }
+    } else if (b.bow) {
+      // petit nœud sur le côté
+      ctx.save();
+      ctx.translate(-rx * 0.62, -ry * 0.72);
+      ctx.rotate(-0.5);
+      ctx.fillStyle = b.palette.cheek;
+      const bs = rx * 0.22;
+      ctx.beginPath();
+      ctx.moveTo(0, 0); ctx.lineTo(-bs, -bs * 0.7); ctx.lineTo(-bs, bs * 0.7); ctx.closePath();
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(0, 0); ctx.lineTo(bs, -bs * 0.7); ctx.lineTo(bs, bs * 0.7); ctx.closePath();
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(0, 0, bs * 0.32, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
     }
 
     ctx.restore();
@@ -707,7 +993,7 @@
     drawBackground(time, dt);
 
     // --- apparitions : l'écran n'est jamais vide ---
-    const target = Math.min(16, 8 + Math.floor(score / 250));
+    const target = Math.min(16, 8 + Math.floor(score / 250)) + (now < feverUntil ? 4 : 0);
     spawnTimer -= dt;
     if (spawnTimer <= 0 && bubbles.length < target) {
       spawnBubble(Math.random() < 0.45 ? 'place' : 'rise');
@@ -723,6 +1009,44 @@
         spawnBubble('fall');
         frenzySpawnTimer = 9 + Math.random() * 8;
       }
+    }
+
+    // étoile filante 🌠
+    if (now >= nextStarAt && shootingStars.length === 0) {
+      const fromLeft = Math.random() < 0.5;
+      shootingStars.push({
+        x: fromLeft ? -40 : W + 40,
+        y: H * (0.08 + Math.random() * 0.25),
+        vx: (fromLeft ? 1 : -1) * (4.5 + Math.random() * 2.5),
+        vy: 0.5 + Math.random() * 0.5,
+        rot: 0,
+      });
+      nextStarAt = now + 18000 + Math.random() * 22000;
+    }
+    for (let i = shootingStars.length - 1; i >= 0; i--) {
+      const s = shootingStars[i];
+      s.x += s.vx * dt;
+      s.y += s.vy * dt;
+      s.rot += 0.12 * dt;
+      if (particles.length < 360) {
+        particles.push({
+          x: s.x - s.vx * 2, y: s.y - s.vy * 2,
+          vx: -s.vx * 0.08, vy: 0.1,
+          r: 1.5 + Math.random() * 2.5,
+          life: 0.8, decay: 0.03,
+          color: Math.random() < 0.5 ? '#ffd96a' : '#fff3c4',
+          star: Math.random() < 0.4,
+          rot: Math.random() * Math.PI, vrot: 0.1,
+        });
+      }
+      if (s.x < -60 || s.x > W + 60 || s.y > H + 40) { shootingStars.splice(i, 1); continue; }
+      ctx.save();
+      ctx.shadowColor = 'rgba(255, 217, 106, 0.9)';
+      ctx.shadowBlur = 18;
+      drawStarShape(s.x, s.y, 14, s.rot, '#ffd96a');
+      ctx.shadowBlur = 0;
+      drawStarShape(s.x, s.y, 7, -s.rot * 0.7, '#fff7d6');
+      ctx.restore();
     }
 
     // réaction en chaîne 🌈
@@ -787,18 +1111,16 @@
       p.rot += p.vrot * dt;
       p.life -= p.decay * dt;
       if (p.life <= 0 || p.y > H + 20) { particles.splice(i, 1); continue; }
+      ctx.globalAlpha = Math.min(1, p.life);
       if (p.star) {
-        ctx.globalAlpha = Math.min(1, p.life);
         drawStarShape(p.x, p.y, p.r * Math.min(1, p.life) * 1.6, p.rot, p.color);
-        ctx.globalAlpha = 1;
       } else {
-        ctx.globalAlpha = Math.min(1, p.life);
         ctx.fillStyle = p.color;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r * Math.min(1, p.life), 0, Math.PI * 2);
         ctx.fill();
-        ctx.globalAlpha = 1;
       }
+      ctx.globalAlpha = 1;
     }
 
     // --- popups "+N" ---
