@@ -575,9 +575,15 @@
     ).join('');
   }
   albumEl.addEventListener('click', (e) => {
-    if (e && e.target === albumEl) albumEl.classList.remove('open');
+    if (e && e.target === albumEl) {
+      albumEl.classList.remove('open');
+      whoosh(900, 300, 0.16, 0.013);
+    }
   });
-  closeAlbumBtn.addEventListener('click', () => albumEl.classList.remove('open'));
+  closeAlbumBtn.addEventListener('click', () => {
+    albumEl.classList.remove('open');
+    whoosh(900, 300, 0.16, 0.013);
+  });
 
   // ---------- Thèmes de ciel (changent à chaque niveau, purement cosmétique) ----------
   function hexToRgb(h) {
@@ -601,12 +607,80 @@
 
   // ---------- Audio (sons et musique générés, aucun fichier) ----------
   let audioCtx = null;
+  let master = null;   // compresseur doux : le mix reste rond même quand tout sonne
+  let noiseBuf = null; // bruit blanc partagé (souffles, ambiances)
   function ensureAudio() {
     if (!audioCtx) {
-      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        master = audioCtx.createDynamicsCompressor();
+        master.threshold.value = -18;
+        master.ratio.value = 6;
+        master.connect(audioCtx.destination);
+      } catch (e) {}
     }
     if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
     updateMusic();
+  }
+  function noiseBuffer() {
+    if (!noiseBuf) {
+      noiseBuf = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
+      const d = noiseBuf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    }
+    return noiseBuf;
+  }
+  // souffle feutré (bruit filtré qui glisse d'une hauteur à l'autre)
+  function whoosh(from, to, dur, vol) {
+    if (!audioCtx || !soundOn) return;
+    const t = audioCtx.currentTime;
+    const s = audioCtx.createBufferSource();
+    s.buffer = noiseBuffer(); s.loop = true;
+    const f = audioCtx.createBiquadFilter();
+    f.type = 'bandpass'; f.Q.value = 1.2;
+    f.frequency.setValueAtTime(from, t);
+    f.frequency.exponentialRampToValueAtTime(to, t + dur);
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0.001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + dur * 0.3);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    s.connect(f).connect(g).connect(master);
+    s.start(t); s.stop(t + dur + 0.05);
+  }
+  // saupoudrage cristallin (accompagne les confettis)
+  function sprinkle() {
+    if (!audioCtx || !soundOn) return;
+    const t = audioCtx.currentTime;
+    for (let i = 0; i < 7; i++) {
+      const at = t + Math.random() * 0.5;
+      const s = audioCtx.createBufferSource();
+      s.buffer = noiseBuffer(); s.loop = true;
+      const f = audioCtx.createBiquadFilter();
+      f.type = 'highpass';
+      f.frequency.value = 2500 + Math.random() * 2500;
+      const g = audioCtx.createGain();
+      g.gain.setValueAtTime(0.001, at);
+      g.gain.exponentialRampToValueAtTime(0.012, at + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.001, at + 0.06);
+      s.connect(f).connect(g).connect(master);
+      s.start(at); s.stop(at + 0.1);
+    }
+  }
+  // « blub » discret quand une bulle naît à l'écran
+  function playBlub(r) {
+    if (!audioCtx || !soundOn) return;
+    const t = audioCtx.currentTime;
+    const o = audioCtx.createOscillator();
+    o.type = 'sine';
+    const p = 150 + (52 - r) * 4;
+    o.frequency.setValueAtTime(p, t);
+    o.frequency.exponentialRampToValueAtTime(p * 1.6, t + 0.1);
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0.001, t);
+    g.gain.exponentialRampToValueAtTime(0.02, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.14);
+    o.connect(g).connect(master);
+    o.start(t); o.stop(t + 0.18);
   }
   function tone(freq, when, dur, vol, type, attack) {
     const o = audioCtx.createOscillator();
@@ -616,7 +690,7 @@
     g.gain.setValueAtTime(0.001, when);
     g.gain.exponentialRampToValueAtTime(vol, when + (attack || 0.015));
     g.gain.exponentialRampToValueAtTime(0.001, when + dur);
-    o.connect(g).connect(audioCtx.destination);
+    o.connect(g).connect(master);
     o.start(when);
     o.stop(when + dur + 0.05);
   }
@@ -631,7 +705,7 @@
     g.gain.setValueAtTime(0.001, t);
     g.gain.exponentialRampToValueAtTime(0.15, t + 0.012);
     g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
-    o.connect(g).connect(audioCtx.destination);
+    o.connect(g).connect(master);
     o.start(t);
     o.stop(t + 0.25);
     if (pitch < 520) { // les grosses bulles ont un « blop » plus rond
@@ -642,7 +716,7 @@
       g2.gain.setValueAtTime(0.001, t);
       g2.gain.exponentialRampToValueAtTime(0.06, t + 0.015);
       g2.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
-      o2.connect(g2).connect(audioCtx.destination);
+      o2.connect(g2).connect(master);
       o2.start(t);
       o2.stop(t + 0.2);
     }
@@ -663,19 +737,64 @@
 
   // Musique générative : chaque ciel a sa propre ambiance (gamme, tempo, timbre).
   const MOODS = [
-    { // aube rosée : berceuse pentatonique douce
+    { // aube rosée : berceuse pentatonique douce, brise légère
       scale: [261.63, 293.66, 329.63, 392.0, 440.0, 523.25, 587.33, 659.25],
-      step: 1100, wave: 'triangle', vol: 0.035, pad: 130.81, padEvery: 6, dual: 0.35 },
-    { // plein ciel : plus lumineux, un peu plus allant
+      step: 1100, wave: 'triangle', vol: 0.035, pad: 130.81, padEvery: 6, dual: 0.35,
+      airFreq: 320, airVol: 0.012 },
+    { // plein ciel : plus lumineux, brise claire et oiseaux au loin
       scale: [293.66, 329.63, 369.99, 440.0, 493.88, 587.33, 659.25, 739.99],
-      step: 820, wave: 'triangle', vol: 0.04, pad: 146.83, padEvery: 5, dual: 0.45 },
-    { // coucher de soleil : plus chaud, plus grave, plus lent
+      step: 820, wave: 'triangle', vol: 0.04, pad: 146.83, padEvery: 5, dual: 0.45,
+      airFreq: 500, airVol: 0.014, bird: true },
+    { // coucher de soleil : plus chaud, plus grave, vent feutré
       scale: [220.0, 246.94, 261.63, 329.63, 392.0, 440.0, 523.25],
-      step: 1350, wave: 'sine', vol: 0.042, pad: 110.0, padEvery: 5, dual: 0.3 },
-    { // nuit étoilée : boîte à musique clairsemée sur nappe profonde
+      step: 1350, wave: 'sine', vol: 0.042, pad: 110.0, padEvery: 5, dual: 0.3,
+      airFreq: 260, airVol: 0.016 },
+    { // nuit étoilée : boîte à musique clairsemée, souffle profond, grillons
       scale: [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5],
-      step: 1650, wave: 'triangle', vol: 0.028, pad: 98.0, padEvery: 4, dual: 0.2 },
+      step: 1650, wave: 'triangle', vol: 0.028, pad: 98.0, padEvery: 4, dual: 0.2,
+      airFreq: 170, airVol: 0.011, cricket: true },
   ];
+  // nappe d'air continue (bruit très filtré), suit le thème en douceur
+  let ambient = null;
+  function startAmbient() {
+    if (ambient || !audioCtx) return;
+    const s = audioCtx.createBufferSource();
+    s.buffer = noiseBuffer(); s.loop = true;
+    const f = audioCtx.createBiquadFilter();
+    f.type = 'lowpass'; f.frequency.value = 300; f.Q.value = 0.6;
+    const g = audioCtx.createGain();
+    g.gain.value = 0.0001;
+    s.connect(f).connect(g).connect(master);
+    s.start();
+    ambient = { src: s, filter: f, gain: g };
+  }
+  function stopAmbient() {
+    if (!ambient) return;
+    try { ambient.src.stop(); } catch (e) {}
+    ambient = null;
+  }
+  // gazouillis bref et lointain (plein ciel)
+  function chirp(at) {
+    for (let i = 0; i < 2; i++) {
+      const off = at + i * 0.17;
+      const o = audioCtx.createOscillator();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(2000 + i * 350 + Math.random() * 200, off);
+      o.frequency.exponentialRampToValueAtTime(2800 + i * 350, off + 0.1);
+      const g = audioCtx.createGain();
+      g.gain.setValueAtTime(0.001, off);
+      g.gain.exponentialRampToValueAtTime(0.01, off + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, off + 0.12);
+      o.connect(g).connect(master);
+      o.start(off); o.stop(off + 0.16);
+    }
+  }
+  // grillon très discret (nuit)
+  function cricket(at) {
+    for (let i = 0; i < 3; i++) {
+      tone(4200 + Math.random() * 200, at + i * 0.07, 0.05, 0.006, 'triangle', 0.01);
+    }
+  }
   let musicTimer = null;
   let musicBeat = 0;
   function musicTick() {
@@ -693,15 +812,27 @@
       if (musicBeat % mood.padEvery === 0) {
         tone(mood.pad, t, 3.4, 0.022, 'sine', 0.4); // nappe grave très discrète
       }
+      if (ambient) { // la brise suit le ciel
+        ambient.gain.gain.setTargetAtTime(mood.airVol, t, 1.2);
+        ambient.filter.frequency.setTargetAtTime(mood.airFreq, t, 1.5);
+      }
+      if (mood.bird && Math.random() < 0.16) chirp(t + Math.random() * 0.6);
+      if (mood.cricket && Math.random() < 0.22) cricket(t + Math.random() * 0.8);
+    } else if (ambient && audioCtx) {
+      ambient.gain.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.5);
     }
-    musicTimer = setTimeout(musicTick, mood.step * (0.85 + Math.random() * 0.3));
+    // la musique s'anime un peu pendant la fièvre
+    const step = mood.step * (performance.now() < feverUntil ? 0.55 : 1);
+    musicTimer = setTimeout(musicTick, step * (0.85 + Math.random() * 0.3));
   }
   function updateMusic() {
     if (musicOn && audioCtx && !musicTimer) {
+      startAmbient();
       musicTick();
     } else if ((!musicOn || !audioCtx) && musicTimer) {
       clearTimeout(musicTimer);
       musicTimer = null;
+      stopAmbient();
     }
   }
 
@@ -714,12 +845,20 @@
   syncOpts();
   if (!navigator.vibrate) optVibesRow.style.display = 'none'; // non supporté (ex. iPhone)
   menuBtn.addEventListener('click', () => {
+    ensureAudio();
     syncOpts();
     settingsEl.classList.add('open');
+    whoosh(300, 900, 0.2, 0.016);
   });
-  closeSettingsBtn.addEventListener('click', () => settingsEl.classList.remove('open'));
+  closeSettingsBtn.addEventListener('click', () => {
+    settingsEl.classList.remove('open');
+    whoosh(900, 300, 0.16, 0.013);
+  });
   settingsEl.addEventListener('click', (e) => {
-    if (e && e.target === settingsEl) settingsEl.classList.remove('open');
+    if (e && e.target === settingsEl) {
+      settingsEl.classList.remove('open');
+      whoosh(900, 300, 0.16, 0.013);
+    }
   });
   optSound.addEventListener('click', () => {
     soundOn = !soundOn;
@@ -732,17 +871,20 @@
     store.set('bullepop-music', musicOn ? '1' : '0');
     syncOpts();
     ensureAudio();
+    playChime(musicOn ? [740] : [520], 0.04);
   });
   optVibes.addEventListener('click', () => {
     vibesOn = !vibesOn;
     store.set('bullepop-vibes', vibesOn ? '1' : '0');
     syncOpts();
+    playChime(vibesOn ? [740] : [520], 0.04);
     if (vibesOn) buzz(15); // petit retour pour confirmer
   });
   openAlbumBtn.addEventListener('click', () => {
     settingsEl.classList.remove('open');
     renderAlbum();
     albumEl.classList.add('open');
+    whoosh(350, 1000, 0.2, 0.016);
   });
 
   // ---------- Bulles ----------
@@ -785,6 +927,13 @@
       b.vy = -(0.5 + Math.random() * 0.5) * (kind === 'golden' ? 1.4 : 1);
     }
     bubbles.push(b);
+    if (mode === 'place') {
+      const nowB = performance.now();
+      if (Math.random() < 0.6 && nowB - (spawnBubble._blub || 0) > 200) {
+        spawnBubble._blub = nowB;
+        playBlub(r);
+      }
+    }
     return b;
   }
 
@@ -829,6 +978,7 @@
   }
 
   function confettiRain() {
+    sprinkle();
     const colors = ['#ffb3c6', '#a8d8ea', '#c3aed6', '#b5ead7', '#ffdac1', '#ffd96a'];
     for (let i = 0; i < 32; i++) {
       particles.push({
@@ -916,6 +1066,13 @@
       if (combo > maxCombo) { maxCombo = combo; store.set('bullepop-maxcombo', maxCombo); }
     }
     const mult = Math.min(1 + Math.floor(combo / 4), 5); // x1 à x5
+    if (!noCombo) {
+      if (combo === 1) popBubble._mult = 1;
+      if (mult > (popBubble._mult || 1)) { // petit arpège à chaque palier
+        popBubble._mult = mult;
+        playChime([587 + mult * 60, 880 + mult * 60], 0.05);
+      }
+    }
     if (mult >= 5) unlock('combo5');
 
     // fièvre des bulles : récompense des longs enchaînements précis, points x3
@@ -1010,7 +1167,7 @@
           showToast('Cadeau du jour : pluie de bulles !', 2200, 'gift');
           confettiRain();
           frenzyUntil = performance.now() + 5000;
-          playChime([523, 659, 784, 1046], 0.1);
+          playChime([784, 988, 1175, 1568, 1318], 0.07); // petite boîte à musique
           buzz([10, 30, 10]);
         }, 1100);
       }
@@ -1040,6 +1197,7 @@
       if (level > maxLevel) { maxLevel = level; store.set('bullepop-maxlevel', maxLevel); }
       const theme = THEMES[(level - 1) % THEMES.length];
       showToast('Niveau ' + level + ' · ' + theme.name, 2000, theme.icon);
+      whoosh(250, 1600, 0.5, 0.02);
       confettiRain();
       playChime([523, 659, 784, 1046], 0.1);
       buzz([10, 30, 10, 30, 10]);
@@ -1109,6 +1267,10 @@
     if (Math.hypot(px - lastTrailX, py - lastTrailY) > 16) {
       lastTrailX = px; lastTrailY = py;
       sparkle(px, py, '#fff0f7', 2, true);
+      if (nowS - (swipeAt._w || 0) > 160) {
+        swipeAt._w = nowS;
+        whoosh(500, 900, 0.1, 0.008);
+      }
     }
   }
 
