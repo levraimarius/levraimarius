@@ -106,9 +106,69 @@
   }
   .roundBtn:active { transform: scale(0.9); }
   .roundBtn.off { opacity: 0.45; }
-  #mute  { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); right: calc(16px + env(safe-area-inset-right, 0px)); }
-  #music { bottom: calc(74px + env(safe-area-inset-bottom, 0px)); right: calc(16px + env(safe-area-inset-right, 0px)); }
-  #albumBtn { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: calc(16px + env(safe-area-inset-left, 0px)); }
+  #menuBtn { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); right: calc(16px + env(safe-area-inset-right, 0px)); }
+  #settings {
+    position: fixed; inset: 0;
+    background: rgba(80, 50, 90, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 10;
+    touch-action: pan-y;
+  }
+  #settings.open { display: flex; }
+  #settingsCard {
+    background: #fff7fb;
+    border-radius: 24px;
+    box-shadow: 0 12px 48px rgba(80, 40, 90, 0.4);
+    width: min(360px, 90vw);
+    max-height: 82vh;
+    overflow-y: auto;
+    padding: 22px 20px 18px;
+  }
+  #settingsCard h2 {
+    text-align: center; color: #8a5a7a; font-size: 22px; margin-bottom: 14px;
+  }
+  .optRow {
+    display: flex; align-items: center; justify-content: space-between;
+    background: #fff; border-radius: 14px;
+    padding: 12px 14px; margin-bottom: 8px;
+    box-shadow: 0 2px 8px rgba(180, 120, 160, 0.15);
+    font-size: 15px; font-weight: 700; color: #8a5a7a;
+  }
+  .switch {
+    width: 52px; height: 30px; border-radius: 999px; border: none;
+    background: #e8d5e3; position: relative; cursor: pointer;
+    transition: background 0.2s;
+    flex-shrink: 0;
+    touch-action: manipulation;
+  }
+  .switch::after {
+    content: ''; position: absolute; top: 3px; left: 3px;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #fff; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+    transition: transform 0.2s;
+  }
+  .switch.on { background: #ff8fab; }
+  .switch.on::after { transform: translateX(22px); }
+  .cardBtn {
+    display: block; width: 100%;
+    border: none; border-radius: 14px;
+    padding: 13px 14px; margin-top: 10px;
+    font-size: 15px; font-weight: 800;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  .cardBtn:active { transform: scale(0.97); }
+  #openAlbum {
+    background: linear-gradient(135deg, #ff8fab, #c98be0);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(200, 100, 180, 0.35);
+  }
+  #closeSettings {
+    background: #f3e3ee; color: #a96a8e;
+  }
   #album {
     position: fixed; inset: 0;
     background: rgba(80, 50, 90, 0.45);
@@ -172,9 +232,17 @@
 <div id="combo"></div>
 <div id="toast"></div>
 <div id="hint">🫧 Tapote ou glisse sur les bulles !</div>
-<button id="mute" class="roundBtn" aria-label="Effets sonores">🔊</button>
-<button id="music" class="roundBtn" aria-label="Musique">🎵</button>
-<button id="albumBtn" class="roundBtn" aria-label="Album de stickers">🏅</button>
+<button id="menuBtn" class="roundBtn" aria-label="Options">⚙️</button>
+<div id="settings">
+  <div id="settingsCard">
+    <h2>⚙️ Options</h2>
+    <div class="optRow"><span>🔊 Effets sonores</span><button class="switch" id="optSound" aria-label="Effets sonores"></button></div>
+    <div class="optRow"><span>🎵 Musique</span><button class="switch" id="optMusic" aria-label="Musique"></button></div>
+    <div class="optRow" id="optVibesRow"><span>📳 Vibrations</span><button class="switch" id="optVibes" aria-label="Vibrations"></button></div>
+    <button id="openAlbum" class="cardBtn">🏅 Album de stickers</button>
+    <button id="closeSettings" class="cardBtn">Fermer</button>
+  </div>
+</div>
 <div id="album">
   <div id="albumCard">
     <h2>🏅 Album de stickers</h2>
@@ -196,9 +264,14 @@
   const comboEl = document.getElementById('combo');
   const toastEl = document.getElementById('toast');
   const hintEl = document.getElementById('hint');
-  const muteBtn = document.getElementById('mute');
-  const musicBtn = document.getElementById('music');
-  const albumBtn = document.getElementById('albumBtn');
+  const menuBtn = document.getElementById('menuBtn');
+  const settingsEl = document.getElementById('settings');
+  const optSound = document.getElementById('optSound');
+  const optMusic = document.getElementById('optMusic');
+  const optVibes = document.getElementById('optVibes');
+  const optVibesRow = document.getElementById('optVibesRow');
+  const openAlbumBtn = document.getElementById('openAlbum');
+  const closeSettingsBtn = document.getElementById('closeSettings');
   const albumEl = document.getElementById('album');
   const albumStatsEl = document.getElementById('albumStats');
   const albumGridEl = document.getElementById('albumGrid');
@@ -233,6 +306,7 @@
   let starsCaught = +store.get('bullepop-stars', 0) || 0;
   let soundOn = store.get('bullepop-sound', '1') === '1';
   let musicOn = store.get('bullepop-music', '1') === '1';
+  let vibesOn = store.get('bullepop-vibes', '1') === '1';
   let combo = 0;
   let lastPopTime = 0;
   let firstPop = false;
@@ -325,10 +399,6 @@
       '<div class="ds">' + s.ds + '</div></div>'
     ).join('');
   }
-  albumBtn.addEventListener('click', () => {
-    renderAlbum();
-    albumEl.classList.add('open');
-  });
   albumEl.addEventListener('click', () => albumEl.classList.remove('open'));
 
   // ---------- Thèmes de ciel (changent à chaque niveau, purement cosmétique) ----------
@@ -393,6 +463,7 @@
     notes.forEach((f, i) => tone(f, t + i * 0.08, 0.32, vol || 0.09, 'triangle'));
   }
   function buzz(p) {
+    if (!vibesOn) return;
     if (navigator.vibrate) { try { navigator.vibrate(p); } catch (e) {} }
   }
 
@@ -425,19 +496,44 @@
     }
   }
 
-  muteBtn.textContent = soundOn ? '🔊' : '🔇';
-  musicBtn.classList.toggle('off', !musicOn);
-  muteBtn.addEventListener('click', () => {
+  // ---------- Menu d'options ----------
+  function syncOpts() {
+    optSound.classList.toggle('on', soundOn);
+    optMusic.classList.toggle('on', musicOn);
+    optVibes.classList.toggle('on', vibesOn);
+  }
+  syncOpts();
+  if (!navigator.vibrate) optVibesRow.style.display = 'none'; // non supporté (ex. iPhone)
+  menuBtn.addEventListener('click', () => {
+    syncOpts();
+    settingsEl.classList.add('open');
+  });
+  closeSettingsBtn.addEventListener('click', () => settingsEl.classList.remove('open'));
+  settingsEl.addEventListener('click', (e) => {
+    if (e && e.target === settingsEl) settingsEl.classList.remove('open');
+  });
+  optSound.addEventListener('click', () => {
     soundOn = !soundOn;
-    muteBtn.textContent = soundOn ? '🔊' : '🔇';
     store.set('bullepop-sound', soundOn ? '1' : '0');
+    syncOpts();
     if (soundOn) { ensureAudio(); playChime([660, 880], 0.07); }
   });
-  musicBtn.addEventListener('click', () => {
+  optMusic.addEventListener('click', () => {
     musicOn = !musicOn;
-    musicBtn.classList.toggle('off', !musicOn);
     store.set('bullepop-music', musicOn ? '1' : '0');
+    syncOpts();
     ensureAudio();
+  });
+  optVibes.addEventListener('click', () => {
+    vibesOn = !vibesOn;
+    store.set('bullepop-vibes', vibesOn ? '1' : '0');
+    syncOpts();
+    if (vibesOn) buzz(15); // petit retour pour confirmer
+  });
+  openAlbumBtn.addEventListener('click', () => {
+    settingsEl.classList.remove('open');
+    renderAlbum();
+    albumEl.classList.add('open');
   });
 
   // ---------- Bulles ----------
@@ -756,7 +852,7 @@
     }, { passive: false });
   }
   document.addEventListener('touchmove', (e) => {
-    if (!(e.target && e.target.closest && e.target.closest('#album'))) e.preventDefault();
+    if (!(e.target && e.target.closest && e.target.closest('#album, #settings'))) e.preventDefault();
   }, { passive: false });
   document.addEventListener('contextmenu', (e) => e.preventDefault());
   document.addEventListener('visibilitychange', () => { lastTime = performance.now(); });
