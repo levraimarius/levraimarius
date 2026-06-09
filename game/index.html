@@ -133,6 +133,41 @@
   #toast .ic { width: 26px; height: 26px; }
   #toast span { line-height: 1.25; }
 
+  #comboBar {
+    position: fixed; top: calc(150px + env(safe-area-inset-top, 0px));
+    left: 50%; transform: translateX(-50%);
+    width: 64px; height: 4px; border-radius: 999px;
+    background: rgba(255, 255, 255, 0.55);
+    overflow: hidden;
+    opacity: 0; transition: opacity 0.25s;
+    pointer-events: none;
+  }
+  #comboFill {
+    display: block; height: 100%; width: 100%;
+    background: linear-gradient(90deg, var(--pink), var(--purple));
+    border-radius: 999px;
+  }
+  #quest {
+    position: fixed;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    left: calc(16px + env(safe-area-inset-left, 0px));
+    display: flex; align-items: center; gap: 7px;
+    background: var(--glass);
+    backdrop-filter: blur(14px) saturate(1.3);
+    -webkit-backdrop-filter: blur(14px) saturate(1.3);
+    border: 1px solid var(--glass-edge);
+    border-radius: 999px;
+    padding: 10px 14px;
+    box-shadow: var(--shadow);
+    color: var(--ink); font-size: 13px; font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+  }
+  #quest.show { opacity: 1; transform: none; }
+
   /* ----- indice & boutons ----- */
   #hint {
     position: fixed; bottom: calc(22px + env(safe-area-inset-bottom, 0px));
@@ -332,6 +367,8 @@
     <symbol id="i-hundred" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#b5ead7"/><text x="12" y="15.2" text-anchor="middle" font-size="8.5" font-weight="800" fill="#3f7d62" font-family="Arial, sans-serif">100</text></symbol>
     <symbol id="i-flower" viewBox="0 0 24 24"><g fill="#ffb3c6"><circle cx="12" cy="5.5" r="3.4"/><circle cx="18.2" cy="10" r="3.4"/><circle cx="15.8" cy="17.3" r="3.4"/><circle cx="8.2" cy="17.3" r="3.4"/><circle cx="5.8" cy="10" r="3.4"/></g><circle cx="12" cy="11.8" r="3.2" fill="#ffd96a"/></symbol>
     <symbol id="i-cloud" viewBox="0 0 24 24"><path fill="#a8d8ea" d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#ffb3c6"/><circle cx="12" cy="12" r="5.5" fill="#fff"/><circle cx="12" cy="12" r="2.5" fill="#ff6f9c"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><rect x="4" y="9.5" width="16" height="11" rx="2" fill="#ffb3c6"/><rect x="3" y="6.5" width="18" height="4.5" rx="2" fill="#ff8fab"/><rect x="10.6" y="6.5" width="2.8" height="14" fill="#fff0f7"/><path d="M12 6.5C9 6.5 7.5 4.8 8.3 3.4c.8-1.4 3-.8 3.7 1.4.7-2.2 2.9-2.8 3.7-1.4.8 1.4-.7 3.1-3.7 3.1z" fill="#c98be0"/></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24"><path fill="#cbb3c6" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></symbol>
   </defs>
 </svg>
@@ -346,7 +383,9 @@
   <div class="chip"><svg class="ic" style="width:15px;height:15px"><use href="#i-trophy"/></svg><span id="best">0</span></div>
 </div>
 <div id="combo"></div>
+<div id="comboBar"><i id="comboFill"></i></div>
 <div id="toast"></div>
+<div id="quest"></div>
 <div id="hint"><svg class="ic" style="width:17px;height:17px"><use href="#i-bubble"/></svg> Tapote les bulles, vise bien pour le combo !</div>
 <button id="menuBtn" class="roundBtn" aria-label="Options"><svg class="ic" style="width:24px;height:24px"><use href="#i-gear"/></svg></button>
 <div id="settings">
@@ -383,6 +422,9 @@
   const scoreCard = document.getElementById('scoreCard');
   const lvlbarEl = document.getElementById('lvlbar');
   const closeAlbumBtn = document.getElementById('closeAlbum');
+  const questEl = document.getElementById('quest');
+  const comboBarEl = document.getElementById('comboBar');
+  const comboFillEl = document.getElementById('comboFill');
   const levelEl = document.getElementById('level');
   const comboEl = document.getElementById('combo');
   const toastEl = document.getElementById('toast');
@@ -438,6 +480,11 @@
   let frenzyUntil = 0;   // pluie de bulles (x2)
   let feverUntil = 0;    // fièvre des bulles (x3)
   let idSeq = 0;
+  let quest = null;
+  let questCooldown = 300; // ~5 s après le premier pop
+  let questsDone = +store.get('bullepop-quests', 0) || 0;
+  const todayStr = new Date().toISOString().slice(0, 10);
+  let giftPending = store.get('bullepop-day', '') !== todayStr;
   bestEl.textContent = best;
 
   // seuil cumulé de points pour finir le niveau n (paliers de plus en plus longs : 750, 1100, 1450…)
@@ -492,6 +539,8 @@
     { id: 'lvl5',    icon: 'sun',       nm: 'Grand voyageur',    ds: 'Atteindre le niveau 5' },
     { id: 'night',   icon: 'moon',      nm: 'Oiseau de nuit',    ds: 'Voir la nuit étoilée' },
     { id: 'score5k', icon: 'trophy',    nm: 'Champion·ne',       ds: 'Marquer 5000 points' },
+    { id: 'quest5',  icon: 'target',    nm: 'Touche-à-tout',     ds: 'Réussir 5 petits défis' },
+    { id: 'gift',    icon: 'gift',      nm: 'Bien le bonjour',   ds: 'Recevoir le cadeau du jour' },
   ];
   let unlocked = {};
   try { unlocked = JSON.parse(store.get('bullepop-stickers', '{}')) || {}; } catch (e) { unlocked = {}; }
@@ -516,6 +565,7 @@
       '<span>' + ic('flame', 13) + ' Combo max x' + Math.min(1 + Math.floor(maxCombo / 4), 5) + '</span>' +
       '<span>' + ic('sun', 13) + ' Niveau max ' + maxLevel + '</span>' +
       '<span>' + ic('shootstar', 13) + ' ' + starsCaught + ' étoile' + (starsCaught > 1 ? 's' : '') + '</span>' +
+      '<span>' + ic('target', 13) + ' ' + questsDone + ' défi' + (questsDone > 1 ? 's' : '') + '</span>' +
       '<span>' + ic('medal', 13) + ' ' + count + '/' + STICKERS.length + '</span>';
     albumGridEl.innerHTML = STICKERS.map(s =>
       '<div class="sticker' + (unlocked[s.id] ? '' : ' locked') + '">' +
@@ -525,9 +575,15 @@
     ).join('');
   }
   albumEl.addEventListener('click', (e) => {
-    if (e && e.target === albumEl) albumEl.classList.remove('open');
+    if (e && e.target === albumEl) {
+      albumEl.classList.remove('open');
+      whoosh(900, 300, 0.16, 0.013);
+    }
   });
-  closeAlbumBtn.addEventListener('click', () => albumEl.classList.remove('open'));
+  closeAlbumBtn.addEventListener('click', () => {
+    albumEl.classList.remove('open');
+    whoosh(900, 300, 0.16, 0.013);
+  });
 
   // ---------- Thèmes de ciel (changent à chaque niveau, purement cosmétique) ----------
   function hexToRgb(h) {
@@ -551,12 +607,80 @@
 
   // ---------- Audio (sons et musique générés, aucun fichier) ----------
   let audioCtx = null;
+  let master = null;   // compresseur doux : le mix reste rond même quand tout sonne
+  let noiseBuf = null; // bruit blanc partagé (souffles, ambiances)
   function ensureAudio() {
     if (!audioCtx) {
-      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        master = audioCtx.createDynamicsCompressor();
+        master.threshold.value = -18;
+        master.ratio.value = 6;
+        master.connect(audioCtx.destination);
+      } catch (e) {}
     }
     if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
     updateMusic();
+  }
+  function noiseBuffer() {
+    if (!noiseBuf) {
+      noiseBuf = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
+      const d = noiseBuf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    }
+    return noiseBuf;
+  }
+  // souffle feutré (bruit filtré qui glisse d'une hauteur à l'autre)
+  function whoosh(from, to, dur, vol) {
+    if (!audioCtx || !soundOn) return;
+    const t = audioCtx.currentTime;
+    const s = audioCtx.createBufferSource();
+    s.buffer = noiseBuffer(); s.loop = true;
+    const f = audioCtx.createBiquadFilter();
+    f.type = 'bandpass'; f.Q.value = 1.2;
+    f.frequency.setValueAtTime(from, t);
+    f.frequency.exponentialRampToValueAtTime(to, t + dur);
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0.001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + dur * 0.3);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    s.connect(f).connect(g).connect(master);
+    s.start(t); s.stop(t + dur + 0.05);
+  }
+  // saupoudrage cristallin (accompagne les confettis)
+  function sprinkle() {
+    if (!audioCtx || !soundOn) return;
+    const t = audioCtx.currentTime;
+    for (let i = 0; i < 7; i++) {
+      const at = t + Math.random() * 0.5;
+      const s = audioCtx.createBufferSource();
+      s.buffer = noiseBuffer(); s.loop = true;
+      const f = audioCtx.createBiquadFilter();
+      f.type = 'highpass';
+      f.frequency.value = 2500 + Math.random() * 2500;
+      const g = audioCtx.createGain();
+      g.gain.setValueAtTime(0.001, at);
+      g.gain.exponentialRampToValueAtTime(0.012, at + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.001, at + 0.06);
+      s.connect(f).connect(g).connect(master);
+      s.start(at); s.stop(at + 0.1);
+    }
+  }
+  // « blub » discret quand une bulle naît à l'écran
+  function playBlub(r) {
+    if (!audioCtx || !soundOn) return;
+    const t = audioCtx.currentTime;
+    const o = audioCtx.createOscillator();
+    o.type = 'sine';
+    const p = 150 + (52 - r) * 4;
+    o.frequency.setValueAtTime(p, t);
+    o.frequency.exponentialRampToValueAtTime(p * 1.6, t + 0.1);
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0.001, t);
+    g.gain.exponentialRampToValueAtTime(0.02, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.14);
+    o.connect(g).connect(master);
+    o.start(t); o.stop(t + 0.18);
   }
   function tone(freq, when, dur, vol, type, attack) {
     const o = audioCtx.createOscillator();
@@ -566,7 +690,7 @@
     g.gain.setValueAtTime(0.001, when);
     g.gain.exponentialRampToValueAtTime(vol, when + (attack || 0.015));
     g.gain.exponentialRampToValueAtTime(0.001, when + dur);
-    o.connect(g).connect(audioCtx.destination);
+    o.connect(g).connect(master);
     o.start(when);
     o.stop(when + dur + 0.05);
   }
@@ -581,7 +705,7 @@
     g.gain.setValueAtTime(0.001, t);
     g.gain.exponentialRampToValueAtTime(0.15, t + 0.012);
     g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
-    o.connect(g).connect(audioCtx.destination);
+    o.connect(g).connect(master);
     o.start(t);
     o.stop(t + 0.25);
     if (pitch < 520) { // les grosses bulles ont un « blop » plus rond
@@ -592,7 +716,7 @@
       g2.gain.setValueAtTime(0.001, t);
       g2.gain.exponentialRampToValueAtTime(0.06, t + 0.015);
       g2.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
-      o2.connect(g2).connect(audioCtx.destination);
+      o2.connect(g2).connect(master);
       o2.start(t);
       o2.stop(t + 0.2);
     }
@@ -613,19 +737,64 @@
 
   // Musique générative : chaque ciel a sa propre ambiance (gamme, tempo, timbre).
   const MOODS = [
-    { // aube rosée : berceuse pentatonique douce
+    { // aube rosée : berceuse pentatonique douce, brise légère
       scale: [261.63, 293.66, 329.63, 392.0, 440.0, 523.25, 587.33, 659.25],
-      step: 1100, wave: 'triangle', vol: 0.035, pad: 130.81, padEvery: 6, dual: 0.35 },
-    { // plein ciel : plus lumineux, un peu plus allant
+      step: 1100, wave: 'triangle', vol: 0.035, pad: 130.81, padEvery: 6, dual: 0.35,
+      airFreq: 320, airVol: 0.012 },
+    { // plein ciel : plus lumineux, brise claire et oiseaux au loin
       scale: [293.66, 329.63, 369.99, 440.0, 493.88, 587.33, 659.25, 739.99],
-      step: 820, wave: 'triangle', vol: 0.04, pad: 146.83, padEvery: 5, dual: 0.45 },
-    { // coucher de soleil : plus chaud, plus grave, plus lent
+      step: 820, wave: 'triangle', vol: 0.04, pad: 146.83, padEvery: 5, dual: 0.45,
+      airFreq: 500, airVol: 0.014, bird: true },
+    { // coucher de soleil : plus chaud, plus grave, vent feutré
       scale: [220.0, 246.94, 261.63, 329.63, 392.0, 440.0, 523.25],
-      step: 1350, wave: 'sine', vol: 0.042, pad: 110.0, padEvery: 5, dual: 0.3 },
-    { // nuit étoilée : boîte à musique clairsemée sur nappe profonde
+      step: 1350, wave: 'sine', vol: 0.042, pad: 110.0, padEvery: 5, dual: 0.3,
+      airFreq: 260, airVol: 0.016 },
+    { // nuit étoilée : boîte à musique clairsemée, souffle profond, grillons
       scale: [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5],
-      step: 1650, wave: 'triangle', vol: 0.028, pad: 98.0, padEvery: 4, dual: 0.2 },
+      step: 1650, wave: 'triangle', vol: 0.028, pad: 98.0, padEvery: 4, dual: 0.2,
+      airFreq: 170, airVol: 0.011, cricket: true },
   ];
+  // nappe d'air continue (bruit très filtré), suit le thème en douceur
+  let ambient = null;
+  function startAmbient() {
+    if (ambient || !audioCtx) return;
+    const s = audioCtx.createBufferSource();
+    s.buffer = noiseBuffer(); s.loop = true;
+    const f = audioCtx.createBiquadFilter();
+    f.type = 'lowpass'; f.frequency.value = 300; f.Q.value = 0.6;
+    const g = audioCtx.createGain();
+    g.gain.value = 0.0001;
+    s.connect(f).connect(g).connect(master);
+    s.start();
+    ambient = { src: s, filter: f, gain: g };
+  }
+  function stopAmbient() {
+    if (!ambient) return;
+    try { ambient.src.stop(); } catch (e) {}
+    ambient = null;
+  }
+  // gazouillis bref et lointain (plein ciel)
+  function chirp(at) {
+    for (let i = 0; i < 2; i++) {
+      const off = at + i * 0.17;
+      const o = audioCtx.createOscillator();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(2000 + i * 350 + Math.random() * 200, off);
+      o.frequency.exponentialRampToValueAtTime(2800 + i * 350, off + 0.1);
+      const g = audioCtx.createGain();
+      g.gain.setValueAtTime(0.001, off);
+      g.gain.exponentialRampToValueAtTime(0.01, off + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, off + 0.12);
+      o.connect(g).connect(master);
+      o.start(off); o.stop(off + 0.16);
+    }
+  }
+  // grillon très discret (nuit)
+  function cricket(at) {
+    for (let i = 0; i < 3; i++) {
+      tone(4200 + Math.random() * 200, at + i * 0.07, 0.05, 0.006, 'triangle', 0.01);
+    }
+  }
   let musicTimer = null;
   let musicBeat = 0;
   function musicTick() {
@@ -643,15 +812,27 @@
       if (musicBeat % mood.padEvery === 0) {
         tone(mood.pad, t, 3.4, 0.022, 'sine', 0.4); // nappe grave très discrète
       }
+      if (ambient) { // la brise suit le ciel
+        ambient.gain.gain.setTargetAtTime(mood.airVol, t, 1.2);
+        ambient.filter.frequency.setTargetAtTime(mood.airFreq, t, 1.5);
+      }
+      if (mood.bird && Math.random() < 0.16) chirp(t + Math.random() * 0.6);
+      if (mood.cricket && Math.random() < 0.22) cricket(t + Math.random() * 0.8);
+    } else if (ambient && audioCtx) {
+      ambient.gain.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.5);
     }
-    musicTimer = setTimeout(musicTick, mood.step * (0.85 + Math.random() * 0.3));
+    // la musique s'anime un peu pendant la fièvre
+    const step = mood.step * (performance.now() < feverUntil ? 0.55 : 1);
+    musicTimer = setTimeout(musicTick, step * (0.85 + Math.random() * 0.3));
   }
   function updateMusic() {
     if (musicOn && audioCtx && !musicTimer) {
+      startAmbient();
       musicTick();
     } else if ((!musicOn || !audioCtx) && musicTimer) {
       clearTimeout(musicTimer);
       musicTimer = null;
+      stopAmbient();
     }
   }
 
@@ -664,12 +845,20 @@
   syncOpts();
   if (!navigator.vibrate) optVibesRow.style.display = 'none'; // non supporté (ex. iPhone)
   menuBtn.addEventListener('click', () => {
+    ensureAudio();
     syncOpts();
     settingsEl.classList.add('open');
+    whoosh(300, 900, 0.2, 0.016);
   });
-  closeSettingsBtn.addEventListener('click', () => settingsEl.classList.remove('open'));
+  closeSettingsBtn.addEventListener('click', () => {
+    settingsEl.classList.remove('open');
+    whoosh(900, 300, 0.16, 0.013);
+  });
   settingsEl.addEventListener('click', (e) => {
-    if (e && e.target === settingsEl) settingsEl.classList.remove('open');
+    if (e && e.target === settingsEl) {
+      settingsEl.classList.remove('open');
+      whoosh(900, 300, 0.16, 0.013);
+    }
   });
   optSound.addEventListener('click', () => {
     soundOn = !soundOn;
@@ -682,17 +871,20 @@
     store.set('bullepop-music', musicOn ? '1' : '0');
     syncOpts();
     ensureAudio();
+    playChime(musicOn ? [740] : [520], 0.04);
   });
   optVibes.addEventListener('click', () => {
     vibesOn = !vibesOn;
     store.set('bullepop-vibes', vibesOn ? '1' : '0');
     syncOpts();
+    playChime(vibesOn ? [740] : [520], 0.04);
     if (vibesOn) buzz(15); // petit retour pour confirmer
   });
   openAlbumBtn.addEventListener('click', () => {
     settingsEl.classList.remove('open');
     renderAlbum();
     albumEl.classList.add('open');
+    whoosh(350, 1000, 0.2, 0.016);
   });
 
   // ---------- Bulles ----------
@@ -735,6 +927,13 @@
       b.vy = -(0.5 + Math.random() * 0.5) * (kind === 'golden' ? 1.4 : 1);
     }
     bubbles.push(b);
+    if (mode === 'place') {
+      const nowB = performance.now();
+      if (Math.random() < 0.6 && nowB - (spawnBubble._blub || 0) > 200) {
+        spawnBubble._blub = nowB;
+        playBlub(r);
+      }
+    }
     return b;
   }
 
@@ -779,6 +978,7 @@
   }
 
   function confettiRain() {
+    sprinkle();
     const colors = ['#ffb3c6', '#a8d8ea', '#c3aed6', '#b5ead7', '#ffdac1', '#ffd96a'];
     for (let i = 0; i < 32; i++) {
       particles.push({
@@ -808,6 +1008,43 @@
     showToast._t = setTimeout(() => toastEl.classList.remove('show'), ms || 1500);
   }
 
+  // ---------- Petits défis doux (jamais de chrono, jamais d'échec) ----------
+  const COLOR_NAMES = ['roses', 'bleues', 'lilas', 'menthe', 'pêche', 'citron'];
+  function newQuest() {
+    const r = Math.random();
+    if (r < 0.4) {
+      const ci = (Math.random() * PASTELS.length) | 0;
+      quest = { t: 'color', ci, need: 6, got: 0, label: 'Bulles ' + COLOR_NAMES[ci] };
+    } else if (r < 0.6) {
+      quest = { t: 'small', need: 5, got: 0, label: 'Petites bulles' };
+    } else if (r < 0.8) {
+      quest = { t: 'big', need: 4, got: 0, label: 'Grosses bulles' };
+    } else if (r < 0.95) {
+      quest = { t: 'any', need: 12, got: 0, label: 'Bulles éclatées' };
+    } else {
+      quest = { t: 'gold', need: 1, got: 0, label: 'Bulle dorée' };
+    }
+    renderQuest();
+    questEl.classList.add('show');
+  }
+  function renderQuest() {
+    questEl.innerHTML = ic('target', 15) + '<span>' + quest.label + ' : ' + quest.got + '/' + quest.need + '</span>';
+  }
+  function completeQuest() {
+    score += 150;
+    questsDone++;
+    store.set('bullepop-quests', questsDone);
+    if (questsDone >= 5) unlock('quest5');
+    showToast('Défi réussi ! +150', 1800, 'target');
+    confettiRain();
+    playChime([659, 784, 988], 0.09);
+    buzz([10, 30, 10]);
+    onScoreChanged();
+    quest = null;
+    questCooldown = 480; // petite pause avant le défi suivant
+    questEl.classList.remove('show');
+  }
+
   // ---------- Bonus actifs ----------
   function bonusMult(now) {
     if (now < feverUntil) return 3;
@@ -829,6 +1066,13 @@
       if (combo > maxCombo) { maxCombo = combo; store.set('bullepop-maxcombo', maxCombo); }
     }
     const mult = Math.min(1 + Math.floor(combo / 4), 5); // x1 à x5
+    if (!noCombo) {
+      if (combo === 1) popBubble._mult = 1;
+      if (mult > (popBubble._mult || 1)) { // petit arpège à chaque palier
+        popBubble._mult = mult;
+        playChime([587 + mult * 60, 880 + mult * 60], 0.05);
+      }
+    }
     if (mult >= 5) unlock('combo5');
 
     // fièvre des bulles : récompense des longs enchaînements précis, points x3
@@ -852,6 +1096,19 @@
     clearTimeout(popBubble._bumpT);
     popBubble._bumpT = setTimeout(() => scoreCard.classList.remove('bump'), 170);
 
+    if (quest) {
+      const m = quest.t === 'any'
+        || (quest.t === 'color' && b.kind === 'normal' && b.palette === PASTELS[quest.ci])
+        || (quest.t === 'small' && b.kind === 'normal' && b.baseR < 38)
+        || (quest.t === 'big' && b.baseR > 40)
+        || (quest.t === 'gold' && b.kind === 'golden');
+      if (m) {
+        quest.got++;
+        if (quest.got >= quest.need) completeQuest();
+        else renderQuest();
+      }
+    }
+
     const fancy = b.kind !== 'normal';
     spawnParticles(b.x, b.y, b.kind === 'golden' ? '#ffd96a' : b.palette.body, fancy);
     rings.push({ x: b.x, y: b.y, r: b.baseR * 0.6, max: b.baseR * 2.4, life: 1, color: b.palette.cheek });
@@ -860,7 +1117,7 @@
     if (chainIndex !== undefined) {
       playPop(Math.min(1400, 380 + chainIndex * 55));
     } else {
-      playPop(280 + (52 - b.baseR) * 11 + Math.random() * 50);
+      playPop((280 + (52 - b.baseR) * 11 + Math.random() * 50) * (1 + Math.min(combo, 12) * 0.012));
     }
 
     if (b.kind === 'golden') {
@@ -893,6 +1150,32 @@
       comboEl._t = setTimeout(() => comboEl.classList.remove('show'), 900);
     }
 
+    store.set('bullepop-pops', totalPops);
+    unlock('pop1');
+    if (totalPops >= 100) unlock('pop100');
+    if (totalPops >= 1000) unlock('pop1000');
+    onScoreChanged();
+
+    if (!firstPop) {
+      firstPop = true;
+      hintEl.style.opacity = '0';
+      if (giftPending) { // petit cadeau à la première partie du jour
+        giftPending = false;
+        store.set('bullepop-day', todayStr);
+        setTimeout(() => {
+          unlock('gift');
+          showToast('Cadeau du jour : pluie de bulles !', 2200, 'gift');
+          confettiRain();
+          frenzyUntil = performance.now() + 5000;
+          playChime([784, 988, 1175, 1568, 1318], 0.07); // petite boîte à musique
+          buzz([10, 30, 10]);
+        }, 1100);
+      }
+    }
+  }
+
+  // record battu et passages de niveau (appelé après chaque gain de points)
+  function onScoreChanged() {
     if (score > best) {
       best = score;
       store.set('bullepop-best', best);
@@ -903,10 +1186,6 @@
         playChime([659, 784, 1046], 0.1);
       }
     }
-    store.set('bullepop-pops', totalPops);
-    unlock('pop1');
-    if (totalPops >= 100) unlock('pop100');
-    if (totalPops >= 1000) unlock('pop1000');
     if (best >= 5000) unlock('score5k');
 
     // niveaux : paliers progressifs, le ciel change tranquillement, pure récompense
@@ -918,14 +1197,13 @@
       if (level > maxLevel) { maxLevel = level; store.set('bullepop-maxlevel', maxLevel); }
       const theme = THEMES[(level - 1) % THEMES.length];
       showToast('Niveau ' + level + ' · ' + theme.name, 2000, theme.icon);
+      whoosh(250, 1600, 0.5, 0.02);
       confettiRain();
       playChime([523, 659, 784, 1046], 0.1);
       buzz([10, 30, 10, 30, 10]);
       if (level >= 5) unlock('lvl5');
       if ((level - 1) % THEMES.length === 3) unlock('night');
     }
-
-    if (!firstPop) { firstPop = true; hintEl.style.opacity = '0'; }
   }
 
   function catchStar(s, idx) {
@@ -943,11 +1221,7 @@
     playChime([1046, 1318, 1568, 2093], 0.09);
     buzz([10, 30, 10]);
     unlock('star');
-    if (score > best) {
-      best = score;
-      store.set('bullepop-best', best);
-      bestEl.textContent = best;
-    }
+    onScoreChanged();
     nextStarAt = now + 18000 + Math.random() * 22000;
   }
 
@@ -993,6 +1267,10 @@
     if (Math.hypot(px - lastTrailX, py - lastTrailY) > 16) {
       lastTrailX = px; lastTrailY = py;
       sparkle(px, py, '#fff0f7', 2, true);
+      if (nowS - (swipeAt._w || 0) > 160) {
+        swipeAt._w = nowS;
+        whoosh(500, 900, 0.1, 0.008);
+      }
     }
   }
 
@@ -1282,6 +1560,21 @@
     }
     // filet de sécurité : si presque tout a éclaté, on en fait réapparaître sur place
     while (bubbles.length < 3) spawnBubble('place');
+
+    // petits défis doux
+    if (!quest && firstPop) {
+      questCooldown -= dt;
+      if (questCooldown <= 0) newQuest();
+    }
+
+    // jauge de la fenêtre de combo
+    const comboRem = Math.max(0, 1 - (now - lastPopTime) / 2500);
+    if (combo >= 3 && comboRem > 0) {
+      comboBarEl.style.opacity = '1';
+      comboFillEl.style.width = (comboRem * 100).toFixed(0) + '%';
+    } else {
+      comboBarEl.style.opacity = '0';
+    }
 
     // pluie de bulles pendant la frénésie
     if (now < frenzyUntil) {
