@@ -347,7 +347,7 @@
 </div>
 <div id="combo"></div>
 <div id="toast"></div>
-<div id="hint"><svg class="ic" style="width:17px;height:17px"><use href="#i-bubble"/></svg> Tapote ou glisse sur les bulles !</div>
+<div id="hint"><svg class="ic" style="width:17px;height:17px"><use href="#i-bubble"/></svg> Tapote les bulles, vise bien pour le combo !</div>
 <button id="menuBtn" class="roundBtn" aria-label="Options"><svg class="ic" style="width:24px;height:24px"><use href="#i-gear"/></svg></button>
 <div id="settings">
   <div id="settingsCard" class="card">
@@ -440,6 +440,9 @@
   let idSeq = 0;
   bestEl.textContent = best;
 
+  // seuil cumulé de points pour finir le niveau n (paliers de plus en plus longs : 750, 1100, 1450…)
+  function cumulAt(n) { return n * 750 + 175 * n * (n - 1); }
+
   const PASTELS = [
     { body: '#ffb3c6', cheek: '#ff8fab' }, // rose
     { body: '#a8d8ea', cheek: '#7ec4dd' }, // bleu ciel
@@ -510,7 +513,7 @@
     albumStatsEl.innerHTML =
       '<span>' + ic('trophy', 13) + ' Record ' + best + '</span>' +
       '<span>' + ic('bubble', 13) + ' ' + totalPops + ' bulle' + (totalPops > 1 ? 's' : '') + '</span>' +
-      '<span>' + ic('flame', 13) + ' Combo max x' + Math.min(1 + Math.floor(Math.max(maxCombo - 1, 0) / 2), 5) + '</span>' +
+      '<span>' + ic('flame', 13) + ' Combo max x' + Math.min(1 + Math.floor(maxCombo / 4), 5) + '</span>' +
       '<span>' + ic('sun', 13) + ' Niveau max ' + maxLevel + '</span>' +
       '<span>' + ic('shootstar', 13) + ' ' + starsCaught + ' étoile' + (starsCaught > 1 ? 's' : '') + '</span>' +
       '<span>' + ic('medal', 13) + ' ' + count + '/' + STICKERS.length + '</span>';
@@ -581,6 +584,22 @@
     o.connect(g).connect(audioCtx.destination);
     o.start(t);
     o.stop(t + 0.25);
+    if (pitch < 520) { // les grosses bulles ont un « blop » plus rond
+      const o2 = audioCtx.createOscillator();
+      const g2 = audioCtx.createGain();
+      o2.type = 'sine';
+      o2.frequency.value = pitch * 0.5;
+      g2.gain.setValueAtTime(0.001, t);
+      g2.gain.exponentialRampToValueAtTime(0.06, t + 0.015);
+      g2.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+      o2.connect(g2).connect(audioCtx.destination);
+      o2.start(t);
+      o2.stop(t + 0.2);
+    }
+  }
+  function playPuff() { // souffle discret quand on tape dans le vide
+    if (!audioCtx || !soundOn) return;
+    tone(170, audioCtx.currentTime, 0.1, 0.022, 'sine', 0.02);
   }
   function playChime(notes, vol) {
     if (!audioCtx || !soundOn) return;
@@ -592,31 +611,46 @@
     if (navigator.vibrate) { try { navigator.vibrate(p); } catch (e) {} }
   }
 
-  // Berceuse générative : quelques notes pentatoniques au hasard, très douces.
-  const SCALE = [261.63, 293.66, 329.63, 392.0, 440.0, 523.25, 587.33, 659.25];
+  // Musique générative : chaque ciel a sa propre ambiance (gamme, tempo, timbre).
+  const MOODS = [
+    { // aube rosée : berceuse pentatonique douce
+      scale: [261.63, 293.66, 329.63, 392.0, 440.0, 523.25, 587.33, 659.25],
+      step: 1100, wave: 'triangle', vol: 0.035, pad: 130.81, padEvery: 6, dual: 0.35 },
+    { // plein ciel : plus lumineux, un peu plus allant
+      scale: [293.66, 329.63, 369.99, 440.0, 493.88, 587.33, 659.25, 739.99],
+      step: 820, wave: 'triangle', vol: 0.04, pad: 146.83, padEvery: 5, dual: 0.45 },
+    { // coucher de soleil : plus chaud, plus grave, plus lent
+      scale: [220.0, 246.94, 261.63, 329.63, 392.0, 440.0, 523.25],
+      step: 1350, wave: 'sine', vol: 0.042, pad: 110.0, padEvery: 5, dual: 0.3 },
+    { // nuit étoilée : boîte à musique clairsemée sur nappe profonde
+      scale: [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5],
+      step: 1650, wave: 'triangle', vol: 0.028, pad: 98.0, padEvery: 4, dual: 0.2 },
+  ];
   let musicTimer = null;
   let musicBeat = 0;
   function musicTick() {
-    if (!audioCtx || !musicOn || document.hidden) return;
-    const t = audioCtx.currentTime;
-    musicBeat++;
-    if (Math.random() < 0.75) {
-      const n = SCALE[(Math.random() * SCALE.length) | 0];
-      tone(n, t, 1.4, 0.035, 'triangle', 0.05);
-      if (Math.random() < 0.35) {
-        tone(SCALE[(Math.random() * SCALE.length) | 0], t + 0.45, 1.2, 0.028, 'triangle', 0.05);
+    const mood = MOODS[(level - 1) % MOODS.length];
+    if (audioCtx && musicOn && !document.hidden) {
+      const t = audioCtx.currentTime;
+      musicBeat++;
+      if (Math.random() < 0.78) {
+        const n = mood.scale[(Math.random() * mood.scale.length) | 0];
+        tone(n, t, 1.4, mood.vol, mood.wave, 0.05);
+        if (Math.random() < mood.dual) {
+          tone(mood.scale[(Math.random() * mood.scale.length) | 0], t + 0.45, 1.2, mood.vol * 0.8, mood.wave, 0.05);
+        }
+      }
+      if (musicBeat % mood.padEvery === 0) {
+        tone(mood.pad, t, 3.4, 0.022, 'sine', 0.4); // nappe grave très discrète
       }
     }
-    if (musicBeat % 6 === 0) {
-      tone(130.81, t, 3.2, 0.022, 'sine', 0.4); // nappe grave très discrète
-    }
+    musicTimer = setTimeout(musicTick, mood.step * (0.85 + Math.random() * 0.3));
   }
   function updateMusic() {
     if (musicOn && audioCtx && !musicTimer) {
-      musicTimer = setInterval(musicTick, 1100);
       musicTick();
     } else if ((!musicOn || !audioCtx) && musicTimer) {
-      clearInterval(musicTimer);
+      clearTimeout(musicTimer);
       musicTimer = null;
     }
   }
@@ -671,7 +705,7 @@
     else if (roll < 0.10 && performance.now() > frenzyUntil) kind = 'heart';
 
     const special = kind !== 'normal';
-    const r = special ? 26 + Math.random() * 8 : 24 + Math.random() * 24;
+    const r = special ? 27 + Math.random() * 8 : 26 + Math.random() * 24;
     const palette = kind === 'golden' ? GOLD : kind === 'heart' ? HEART : kind === 'rainbow' ? RAINBOW
       : PASTELS[(Math.random() * PASTELS.length) | 0];
 
@@ -692,13 +726,13 @@
     };
     if (mode === 'fall') {
       b.y = -r - 10;
-      b.vy = 0.7 + Math.random() * 0.5;
+      b.vy = 0.6 + Math.random() * 0.4;
     } else if (mode === 'place') {
       b.y = H * 0.14 + Math.random() * H * 0.62;
       b.vy = -(0.25 + Math.random() * 0.3);
     } else {
       b.y = H + r + 10;
-      b.vy = -(0.7 + Math.random() * 0.7) * (kind === 'golden' ? 1.4 : 1);
+      b.vy = -(0.5 + Math.random() * 0.5) * (kind === 'golden' ? 1.4 : 1);
     }
     bubbles.push(b);
     return b;
@@ -706,7 +740,7 @@
 
   function spawnParticles(x, y, color, fancy) {
     if (particles.length > 320) return;
-    const n = fancy ? 24 : 13;
+    const n = fancy ? 16 : 9;
     for (let i = 0; i < n; i++) {
       const a = (Math.PI * 2 * i) / n + Math.random() * 0.5;
       const sp = 1.5 + Math.random() * 3.5;
@@ -782,20 +816,23 @@
   }
 
   // ---------- Pop ! ----------
-  function popBubble(b, chainIndex) {
+  // noCombo : les pops automatiques (chaîne, glisser) profitent du combo mais ne le font pas monter
+  function popBubble(b, chainIndex, noCombo) {
     const idx = bubbles.indexOf(b);
     if (idx === -1) return;
     bubbles.splice(idx, 1);
 
     const now = performance.now();
-    combo = (now - lastPopTime < 1700) ? Math.min(combo + 1, 12) : 1;
-    lastPopTime = now;
-    if (combo > maxCombo) { maxCombo = combo; store.set('bullepop-maxcombo', maxCombo); }
-    const mult = Math.min(1 + Math.floor((combo - 1) / 2), 5); // x1 à x5
+    if (!noCombo) {
+      combo = (now - lastPopTime < 2500) ? combo + 1 : 1;
+      lastPopTime = now;
+      if (combo > maxCombo) { maxCombo = combo; store.set('bullepop-maxcombo', maxCombo); }
+    }
+    const mult = Math.min(1 + Math.floor(combo / 4), 5); // x1 à x5
     if (mult >= 5) unlock('combo5');
 
-    // fièvre des bulles : récompense des longs enchaînements, points x3
-    if (combo >= 10 && now > feverUntil) {
+    // fièvre des bulles : récompense des longs enchaînements précis, points x3
+    if (!noCombo && combo >= 12 && now > feverUntil) {
       feverUntil = now + 6000;
       showToast('Fièvre des bulles ! Points x3', 1800, 'flame');
       playChime([659, 784, 988, 1318], 0.1);
@@ -872,8 +909,9 @@
     if (totalPops >= 1000) unlock('pop1000');
     if (best >= 5000) unlock('score5k');
 
-    // niveaux : toutes les 500 pts le ciel change, pure récompense
-    const newLevel = Math.floor(score / 500) + 1;
+    // niveaux : paliers progressifs, le ciel change tranquillement, pure récompense
+    let newLevel = level;
+    while (score >= cumulAt(newLevel)) newLevel++;
     if (newLevel > level) {
       level = newLevel;
       levelEl.textContent = 'Niveau ' + level;
@@ -919,17 +957,19 @@
       const s = shootingStars[i];
       if (Math.hypot(s.x - px, s.y - py) < 44) { catchStar(s, i); return; }
     }
-    // bulle la plus proche du doigt, marge généreuse : zéro frustration
+    // viser compte : il faut toucher la bulle (petite marge de confort)
     let hit = null, hitDist = Infinity;
     for (const b of bubbles) {
       const d = Math.hypot(b.x - px, b.y - py);
-      if (d < b.r + 18 && d < hitDist) { hit = b; hitDist = d; }
+      if (d < b.r + 6 && d < hitDist) { hit = b; hitDist = d; }
     }
     if (hit) {
       popBubble(hit);
     } else {
-      // un tap dans le vide fait quand même un petit scintillement, jamais de sanction
-      sparkle(px, py, '#ffffff', 4);
+      // tap dans le vide : le combo retombe, c'est la seule conséquence
+      combo = 0;
+      playPuff();
+      sparkle(px, py, '#ffffff', 3);
     }
   }
 
@@ -940,9 +980,15 @@
       const s = shootingStars[i];
       if (Math.hypot(s.x - px, s.y - py) < 44) { catchStar(s, i); return; }
     }
+    const nowS = performance.now();
     for (let i = bubbles.length - 1; i >= 0; i--) {
       const b = bubbles[i];
-      if (Math.hypot(b.x - px, b.y - py) < b.r + 4) popBubble(b);
+      if (Math.hypot(b.x - px, b.y - py) < b.r * 0.95) {
+        if (nowS - (swipeAt._last || 0) < 110) break; // cadence douce, pas de moisson frénétique
+        swipeAt._last = nowS;
+        popBubble(b, undefined, true);
+        break;
+      }
     }
     if (Math.hypot(px - lastTrailX, py - lastTrailY) > 16) {
       lastTrailX = px; lastTrailY = py;
@@ -1228,21 +1274,21 @@
     drawBackground(time, dt);
 
     // --- apparitions : l'écran n'est jamais vide ---
-    const target = Math.min(16, 8 + Math.floor(score / 250)) + (now < feverUntil ? 4 : 0);
+    const target = Math.min(10, 6 + Math.floor(level / 3)) + (now < feverUntil ? 3 : 0);
     spawnTimer -= dt;
     if (spawnTimer <= 0 && bubbles.length < target) {
       spawnBubble(Math.random() < 0.45 ? 'place' : 'rise');
-      spawnTimer = 10 + Math.random() * 14;
+      spawnTimer = 22 + Math.random() * 26;
     }
     // filet de sécurité : si presque tout a éclaté, on en fait réapparaître sur place
-    while (bubbles.length < 5) spawnBubble('place');
+    while (bubbles.length < 3) spawnBubble('place');
 
     // pluie de bulles pendant la frénésie
     if (now < frenzyUntil) {
       frenzySpawnTimer -= dt;
-      if (frenzySpawnTimer <= 0 && bubbles.length < 26) {
+      if (frenzySpawnTimer <= 0 && bubbles.length < 18) {
         spawnBubble('fall');
-        frenzySpawnTimer = 9 + Math.random() * 8;
+        frenzySpawnTimer = 14 + Math.random() * 10;
       }
     }
 
@@ -1256,6 +1302,7 @@
         vy: 0.5 + Math.random() * 0.5,
         rot: 0,
       });
+      playChime([1568, 2093], 0.045); // petit signal : une étoile passe !
       nextStarAt = now + 18000 + Math.random() * 22000;
     }
     for (let i = shootingStars.length - 1; i >= 0; i--) {
@@ -1290,7 +1337,7 @@
       if (now >= c.at) {
         chainQueue.splice(i, 1);
         const b = bubbles.find(bb => bb.id === c.id);
-        if (b) popBubble(b, c.index);
+        if (b) popBubble(b, c.index, true);
       }
     }
 
@@ -1328,9 +1375,9 @@
       ring.r += (ring.max - ring.r) * 0.18 * dt;
       ring.life -= 0.05 * dt;
       if (ring.life <= 0) { rings.splice(i, 1); continue; }
-      ctx.globalAlpha = ring.life * 0.7;
+      ctx.globalAlpha = ring.life * 0.6;
       ctx.strokeStyle = ring.color;
-      ctx.lineWidth = 3 * ring.life;
+      ctx.lineWidth = 2.5 * ring.life;
       ctx.beginPath();
       ctx.arc(ring.x, ring.y, ring.r, 0, Math.PI * 2);
       ctx.stroke();
@@ -1365,7 +1412,7 @@
       p.life -= 0.02 * dt;
       if (p.life <= 0) { popups.splice(i, 1); continue; }
       ctx.globalAlpha = Math.min(1, p.life * 2);
-      ctx.font = '800 ' + (p.big ? 30 : 22) + 'px "Segoe UI", sans-serif';
+      ctx.font = '800 ' + (p.big ? 26 : 18) + 'px "Segoe UI", sans-serif';
       ctx.textAlign = 'center';
       ctx.strokeStyle = 'rgba(255,255,255,0.9)';
       ctx.lineWidth = 4;
@@ -1380,7 +1427,9 @@
       displayedScore += Math.ceil((score - displayedScore) * 0.2);
       if (Math.abs(score - displayedScore) < 1) displayedScore = score;
       scoreEl.textContent = displayedScore;
-      lvlbarEl.style.width = ((displayedScore % 500) / 5).toFixed(1) + '%';
+      const prevAt = level <= 1 ? 0 : cumulAt(level - 1);
+      const frac = Math.max(0, Math.min(1, (displayedScore - prevAt) / (cumulAt(level) - prevAt)));
+      lvlbarEl.style.width = (frac * 100).toFixed(1) + '%';
     }
 
     requestAnimationFrame(frame);
