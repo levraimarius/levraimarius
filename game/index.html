@@ -335,6 +335,29 @@
     border-style: dashed; border-color: #e6ccdb;
     background: rgba(255, 255, 255, 0.55);
   }
+  /* ----- habillages par monde ----- */
+  body.pixelMode {
+    font-family: 'Courier New', Courier, monospace;
+    --glass: #fff7fb;
+    --glass-edge: #5a4a52;
+    --shadow: 4px 4px 0 rgba(90, 74, 82, 0.25);
+  }
+  body.pixelMode .chip, body.pixelMode #scoreCard, body.pixelMode #combo, body.pixelMode #comboBar,
+  body.pixelMode #toast, body.pixelMode #hint, body.pixelMode #quest, body.pixelMode .roundBtn,
+  body.pixelMode .card, body.pixelMode .optRow, body.pixelMode .switch, body.pixelMode .switch::after,
+  body.pixelMode .cardBtn, body.pixelMode .closeX, body.pixelMode #albumStats span,
+  body.pixelMode .sticker, body.pixelMode .sticker .em, body.pixelMode #lvlbarTrack, body.pixelMode #lvlbar {
+    border-radius: 0 !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  body.neonMode {
+    --glass: rgba(28, 14, 52, 0.6);
+    --glass-edge: rgba(140, 225, 255, 0.4);
+    --ink: #eef6ff;
+    --ink-soft: #9fb4e0;
+    --shadow: 0 8px 28px rgba(255, 80, 220, 0.3);
+  }
   @media (max-width: 380px) {
     #scoreCard .value { font-size: 26px; }
     #scoreCard { min-width: 126px; }
@@ -367,6 +390,10 @@
     <symbol id="i-hundred" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#b5ead7"/><text x="12" y="15.2" text-anchor="middle" font-size="8.5" font-weight="800" fill="#3f7d62" font-family="Arial, sans-serif">100</text></symbol>
     <symbol id="i-flower" viewBox="0 0 24 24"><g fill="#ffb3c6"><circle cx="12" cy="5.5" r="3.4"/><circle cx="18.2" cy="10" r="3.4"/><circle cx="15.8" cy="17.3" r="3.4"/><circle cx="8.2" cy="17.3" r="3.4"/><circle cx="5.8" cy="10" r="3.4"/></g><circle cx="12" cy="11.8" r="3.2" fill="#ffd96a"/></symbol>
     <symbol id="i-cloud" viewBox="0 0 24 24"><path fill="#a8d8ea" d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></symbol>
+    <symbol id="i-fish" viewBox="0 0 24 24"><ellipse cx="10.5" cy="12" rx="7" ry="4.6" fill="#7ec4dd"/><path d="M16.5 12l5-3.5v7l-5-3.5z" fill="#5fa8c8"/><circle cx="7.5" cy="11" r="1" fill="#26506b"/></symbol>
+    <symbol id="i-pixel" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" fill="#ff8fab"/><rect x="13" y="4" width="7" height="7" fill="#a8d8ea"/><rect x="4" y="13" width="7" height="7" fill="#ffd96a"/><rect x="13" y="13" width="7" height="7" fill="#b5ead7"/></symbol>
+    <symbol id="i-neon" viewBox="0 0 24 24"><circle cx="12" cy="9.5" r="6" fill="#ff8fab"/><rect x="5" y="10" width="14" height="1.5" fill="#341058"/><rect x="5.7" y="12.4" width="12.6" height="1.1" fill="#341058"/><path d="M3 21h18M7 21l3.4-7M17 21l-3.4-7M12 14v7" stroke="#7ee0ff" stroke-width="1.4" fill="none"/></symbol>
+    <symbol id="i-planet" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="#c3aed6"/><circle cx="9.8" cy="9.8" r="1.6" fill="#fff" opacity=".45"/><ellipse cx="12" cy="12.5" rx="10" ry="3.2" fill="none" stroke="#ffd96a" stroke-width="1.6" transform="rotate(-18 12 12.5)"/></symbol>
     <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#ffb3c6"/><circle cx="12" cy="12" r="5.5" fill="#fff"/><circle cx="12" cy="12" r="2.5" fill="#ff6f9c"/></symbol>
     <symbol id="i-gift" viewBox="0 0 24 24"><rect x="4" y="9.5" width="16" height="11" rx="2" fill="#ffb3c6"/><rect x="3" y="6.5" width="18" height="4.5" rx="2" fill="#ff8fab"/><rect x="10.6" y="6.5" width="2.8" height="14" fill="#fff0f7"/><path d="M12 6.5C9 6.5 7.5 4.8 8.3 3.4c.8-1.4 3-.8 3.7 1.4.7-2.2 2.9-2.8 3.7-1.4.8 1.4-.7 3.1-3.7 3.1z" fill="#c98be0"/></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24"><path fill="#cbb3c6" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></symbol>
@@ -411,7 +438,11 @@
   'use strict';
 
   const canvas = document.getElementById('c');
-  const ctx = canvas.getContext('2d');
+  const mainCtx = canvas.getContext('2d');
+  let ctx = mainCtx; // bascule vers un canvas basse résolution pour le thème pixel art
+  const pixCanvas = document.createElement('canvas');
+  const pixCtx = pixCanvas.getContext('2d');
+  const PIX = 5; // taille des « gros pixels »
 
   // icône SVG réutilisable (définie dans le bloc <defs> de la page)
   function ic(name, px) {
@@ -448,7 +479,7 @@
     H = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
     canvas.width = Math.max(1, Math.round(W * DPR));
     canvas.height = Math.max(1, Math.round(H * DPR));
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    mainCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
   }
   window.addEventListener('resize', resize);
   window.addEventListener('orientationchange', resize);
@@ -589,17 +620,59 @@
   function hexToRgb(h) {
     return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
   }
+  function shade(hex, amt) { // mélange une couleur hex vers le blanc (amt>0) ou le noir (amt<0)
+    const c = hexToRgb(hex);
+    const t = amt > 0 ? 255 : 0, q = Math.abs(amt);
+    return 'rgb(' + c.map(v => Math.round(v + (t - v) * q)).join(',') + ')';
+  }
   const THEMES = [
-    { name: 'Aube rosée',        icon: 'flower', top: '#ffeef5', mid: '#fde2ef', bot: '#e3f0ff', cloud: 0.55, star: 0 },
-    { name: 'Plein ciel',        icon: 'cloud',  top: '#cdebff', mid: '#e0f4ff', bot: '#fdf6e3', cloud: 0.85, star: 0 },
-    { name: 'Coucher de soleil', icon: 'sun',    top: '#ffd9a8', mid: '#ffc2cd', bot: '#e7b6e0', cloud: 0.5,  star: 0.2 },
-    { name: 'Nuit étoilée',      icon: 'moon',   top: '#33305e', mid: '#564b87', bot: '#8a6fae', cloud: 0.13, star: 1 },
-  ].map(t => ({ name: t.name, icon: t.icon, top: hexToRgb(t.top), mid: hexToRgb(t.mid), bot: hexToRgb(t.bot), cloud: t.cloud, star: t.star }));
+    { name: 'Aube rosée',        icon: 'flower', top: '#ffeef5', mid: '#fde2ef', bot: '#e3f0ff', cloud: 0.55, star: 0,    pal: 'pastel', glow: 0 },
+    { name: 'Plein ciel',        icon: 'cloud',  top: '#cdebff', mid: '#e0f4ff', bot: '#fdf6e3', cloud: 0.85, star: 0,    pal: 'pastel', glow: 0 },
+    { name: 'Coucher de soleil', icon: 'sun',    top: '#ffc88f', mid: '#ffb3ad', bot: '#d8a0d8', cloud: 0.4,  star: 0.25, pal: 'pastel', glow: 0.25 },
+    { name: 'Nuit étoilée',      icon: 'moon',   top: '#33305e', mid: '#564b87', bot: '#8a6fae', cloud: 0.13, star: 1,    pal: 'pastel', glow: 0.45 },
+    { name: 'Fonds marins',      icon: 'fish',   top: '#62c2ea', mid: '#3795d2', bot: '#1d5fa6', cloud: 0,    star: 0,    pal: 'marine', glow: 0.4,  mode: 'water' },
+    { name: 'Monde pixel',       icon: 'pixel',  top: '#8fd6ff', mid: '#c2ecff', bot: '#a8e8b8', cloud: 0.9,  star: 0,    pal: 'pastel', glow: 0,    mode: 'pixel' },
+    { name: 'Néon rétro',        icon: 'neon',   top: '#160a2e', mid: '#341058', bot: '#0c0524', cloud: 0,    star: 0.7,  pal: 'neon',   glow: 1,    mode: 'neon' },
+    { name: 'Cosmos',            icon: 'planet', top: '#0b0b28', mid: '#1c1242', bot: '#2c1856', cloud: 0,    star: 1,    pal: 'cosmos', glow: 0.8,  mode: 'space' },
+  ].map(t => Object.assign({}, t, { top: hexToRgb(t.top), mid: hexToRgb(t.mid), bot: hexToRgb(t.bot) }));
+  function curThemeIdx() { return (level - 1) % THEMES.length; }
+  function curTheme() { return THEMES[curThemeIdx()]; }
+  // chaque monde a ses propres couleurs de bulles
+  const PAL_SETS = {
+    pastel: { colors: PASTELS, names: ['roses', 'bleues', 'lilas', 'menthe', 'pêche', 'citron'] },
+    marine: { colors: [
+      { body: '#9fe8ff', cheek: '#5fc2e8' },
+      { body: '#b5ead7', cheek: '#8fd6ba' },
+      { body: '#cdd9ff', cheek: '#92a8e8' },
+      { body: '#ffc9e2', cheek: '#ff8fc0' },
+    ], names: ['azur', 'menthe', 'pervenche', 'corail'] },
+    neon: { colors: [
+      { body: '#ff5fd6', cheek: '#ff9ee8' },
+      { body: '#45e8ff', cheek: '#9ff4ff' },
+      { body: '#b07aff', cheek: '#d4b3ff' },
+      { body: '#5fff9e', cheek: '#aaffd0' },
+      { body: '#ffe45f', cheek: '#fff3ad' },
+    ], names: ['magenta', 'cyan', 'violettes', 'vert fluo', 'jaune fluo'] },
+    cosmos: { colors: [
+      { body: '#a8b8ff', cheek: '#7e94e8' },
+      { body: '#ffb3e8', cheek: '#f08fd0' },
+      { body: '#9ff0e0', cheek: '#6ad4c0' },
+      { body: '#e8d9ff', cheek: '#c0a8f0' },
+    ], names: ['pervenche', 'roses', 'turquoise', 'lavande'] },
+  };
+  function currentPalSet() { return PAL_SETS[curTheme().pal] || PAL_SETS.pastel; }
 
   const sky = {
     top: THEMES[0].top.slice(), mid: THEMES[0].mid.slice(), bot: THEMES[0].bot.slice(),
     cloud: THEMES[0].cloud, star: THEMES[0].star,
   };
+  const fxA = THEMES.map((t, i) => (i === 0 ? 1 : 0)); // intensité de chaque décor (fondu croisé)
+  const fxParts = {};
+  function parts(key, n, init) {
+    let arr = fxParts[key];
+    if (!arr) { arr = fxParts[key] = []; for (let i = 0; i < n; i++) arr.push(init(i)); }
+    return arr;
+  }
   function lerpTo(arr, target, k) {
     for (let i = 0; i < 3; i++) arr[i] += (target[i] - arr[i]) * k;
   }
@@ -753,6 +826,22 @@
       scale: [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5],
       step: 1650, wave: 'triangle', vol: 0.028, pad: 98.0, padEvery: 4, dual: 0.2,
       airFreq: 170, airVol: 0.011, cricket: true },
+    { // fonds marins : notes liquides, lentes et graves, glouglous
+      scale: [196.0, 220.0, 261.63, 293.66, 329.63, 392.0],
+      step: 1500, wave: 'sine', vol: 0.04, pad: 98.0, padEvery: 4, dual: 0.25,
+      airFreq: 130, airVol: 0.02, water: true },
+    { // monde pixel : petite mélodie chiptune toute douce
+      scale: [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5],
+      step: 620, wave: 'square', vol: 0.012, pad: 130.81, padEvery: 8, dual: 0.5, dur: 0.22,
+      airFreq: 60, airVol: 0.0001 },
+    { // néon rétro : pulsation synthwave feutrée
+      scale: [233.08, 277.18, 311.13, 369.99, 415.3, 466.16],
+      step: 950, wave: 'sawtooth', vol: 0.014, pad: 58.27, padEvery: 2, dual: 0.3, dur: 0.5,
+      airFreq: 220, airVol: 0.008 },
+    { // cosmos : scintillements rares sur nappe très profonde
+      scale: [783.99, 880.0, 1046.5, 1318.5],
+      step: 2300, wave: 'sine', vol: 0.026, pad: 65.41, padEvery: 3, dual: 0.15, dur: 3,
+      airFreq: 90, airVol: 0.015 },
   ];
   // nappe d'air continue (bruit très filtré), suit le thème en douceur
   let ambient = null;
@@ -789,6 +878,19 @@
       o.start(off); o.stop(off + 0.16);
     }
   }
+  // glouglou liquide (fonds marins)
+  function bloop(at) {
+    const o = audioCtx.createOscillator();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(200 + Math.random() * 120, at);
+    o.frequency.exponentialRampToValueAtTime(480 + Math.random() * 200, at + 0.18);
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0.001, at);
+    g.gain.exponentialRampToValueAtTime(0.012, at + 0.03);
+    g.gain.exponentialRampToValueAtTime(0.001, at + 0.22);
+    o.connect(g).connect(master);
+    o.start(at); o.stop(at + 0.26);
+  }
   // grillon très discret (nuit)
   function cricket(at) {
     for (let i = 0; i < 3; i++) {
@@ -803,10 +905,11 @@
       const t = audioCtx.currentTime;
       musicBeat++;
       if (Math.random() < 0.78) {
+        const dur = mood.dur || 1.4;
         const n = mood.scale[(Math.random() * mood.scale.length) | 0];
-        tone(n, t, 1.4, mood.vol, mood.wave, 0.05);
+        tone(n, t, dur, mood.vol, mood.wave, 0.05);
         if (Math.random() < mood.dual) {
-          tone(mood.scale[(Math.random() * mood.scale.length) | 0], t + 0.45, 1.2, mood.vol * 0.8, mood.wave, 0.05);
+          tone(mood.scale[(Math.random() * mood.scale.length) | 0], t + 0.45, dur * 0.85, mood.vol * 0.8, mood.wave, 0.05);
         }
       }
       if (musicBeat % mood.padEvery === 0) {
@@ -818,6 +921,7 @@
       }
       if (mood.bird && Math.random() < 0.16) chirp(t + Math.random() * 0.6);
       if (mood.cricket && Math.random() < 0.22) cricket(t + Math.random() * 0.8);
+      if (mood.water && Math.random() < 0.3) bloop(t + Math.random() * 0.8);
     } else if (ambient && audioCtx) {
       ambient.gain.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.5);
     }
@@ -898,8 +1002,10 @@
 
     const special = kind !== 'normal';
     const r = special ? 27 + Math.random() * 8 : 26 + Math.random() * 24;
+    const set = currentPalSet();
+    const pi = (Math.random() * set.colors.length) | 0;
     const palette = kind === 'golden' ? GOLD : kind === 'heart' ? HEART : kind === 'rainbow' ? RAINBOW
-      : PASTELS[(Math.random() * PASTELS.length) | 0];
+      : set.colors[pi];
 
     const b = {
       id: ++idSeq,
@@ -910,7 +1016,7 @@
       wobblePhase: Math.random() * Math.PI * 2,
       wobbleSpeed: 0.015 + Math.random() * 0.02,
       wobbleAmp: 0.5 + Math.random() * 0.8,
-      palette, kind,
+      palette, kind, pi,
       bow: kind === 'normal' && Math.random() < 0.18, // petit nœud décoratif
       blink: 0,
       nextBlink: 120 + Math.random() * 240,
@@ -1009,12 +1115,12 @@
   }
 
   // ---------- Petits défis doux (jamais de chrono, jamais d'échec) ----------
-  const COLOR_NAMES = ['roses', 'bleues', 'lilas', 'menthe', 'pêche', 'citron'];
   function newQuest() {
     const r = Math.random();
     if (r < 0.4) {
-      const ci = (Math.random() * PASTELS.length) | 0;
-      quest = { t: 'color', ci, need: 6, got: 0, label: 'Bulles ' + COLOR_NAMES[ci] };
+      const set = currentPalSet();
+      const ci = (Math.random() * set.colors.length) | 0;
+      quest = { t: 'color', ci, need: 6, got: 0, label: 'Bulles ' + set.names[ci] };
     } else if (r < 0.6) {
       quest = { t: 'small', need: 5, got: 0, label: 'Petites bulles' };
     } else if (r < 0.8) {
@@ -1098,7 +1204,7 @@
 
     if (quest) {
       const m = quest.t === 'any'
-        || (quest.t === 'color' && b.kind === 'normal' && b.palette === PASTELS[quest.ci])
+        || (quest.t === 'color' && b.kind === 'normal' && b.pi === quest.ci)
         || (quest.t === 'small' && b.kind === 'normal' && b.baseR < 38)
         || (quest.t === 'big' && b.baseR > 40)
         || (quest.t === 'gold' && b.kind === 'golden');
@@ -1174,6 +1280,12 @@
     }
   }
 
+  // l'interface change de peau dans les mondes pixel et néon
+  function applyThemeClass() {
+    const m = curTheme().mode;
+    document.body.className = m === 'pixel' ? 'pixelMode' : m === 'neon' ? 'neonMode' : '';
+  }
+
   // record battu et passages de niveau (appelé après chaque gain de points)
   function onScoreChanged() {
     if (score > best) {
@@ -1194,6 +1306,7 @@
     if (newLevel > level) {
       level = newLevel;
       levelEl.textContent = 'Niveau ' + level;
+      applyThemeClass();
       if (level > maxLevel) { maxLevel = level; store.set('bullepop-maxlevel', maxLevel); }
       const theme = THEMES[(level - 1) % THEMES.length];
       showToast('Niveau ' + level + ' · ' + theme.name, 2000, theme.icon);
@@ -1313,14 +1426,266 @@
   document.addEventListener('visibilitychange', () => { lastTime = performance.now(); });
 
   // ---------- Dessin ----------
+  // ---------- Décors par thème ----------
+  function fxDawn(a, time, dt) { // soleil levant + pétales
+    const g = ctx.createRadialGradient(W * 0.5, H * 1.05, 10, W * 0.5, H * 1.05, H * 0.6);
+    g.addColorStop(0, 'rgba(255,210,160,' + (0.55 * a).toFixed(3) + ')');
+    g.addColorStop(1, 'rgba(255,210,160,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+    for (const p of parts('petale', 10, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: 0.25 + Math.random() * 0.3, vy: 0.2 + Math.random() * 0.25,
+      rot: Math.random() * 6, vr: (Math.random() - 0.5) * 0.04,
+      s: 4 + Math.random() * 5,
+    }))) {
+      p.x += p.vx * dt; p.y += p.vy * dt; p.rot += p.vr * dt;
+      if (p.y > H + 10 || p.x > W + 10) { p.x = Math.random() * W * 0.6 - 20; p.y = -10; }
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = 'rgba(255,170,200,' + (0.55 * a).toFixed(3) + ')';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.s, p.s * 0.55, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+  function fxDay(a, time, dt) { // grand soleil + poussières de lumière
+    const sx = W * 0.82, sy = H * 0.15, r = Math.min(W, H) * 0.085;
+    const halo = ctx.createRadialGradient(sx, sy, r * 0.4, sx, sy, r * 3.2);
+    halo.addColorStop(0, 'rgba(255,240,180,' + (0.5 * a).toFixed(3) + ')');
+    halo.addColorStop(1, 'rgba(255,240,180,0)');
+    ctx.fillStyle = halo;
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(255,243,196,' + a.toFixed(3) + ')';
+    ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI * 2); ctx.fill();
+    for (const mo of parts('motes', 12, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      vy: -(0.1 + Math.random() * 0.15), ph: Math.random() * 6, s: 1.2 + Math.random() * 1.8,
+    }))) {
+      mo.y += mo.vy * dt; mo.x += Math.sin(time * 0.001 + mo.ph) * 0.2 * dt;
+      if (mo.y < -5) { mo.y = H + 5; mo.x = Math.random() * W; }
+      ctx.globalAlpha = Math.max(0, a * (0.25 + 0.2 * Math.sin(time * 0.003 + mo.ph)));
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath(); ctx.arc(mo.x, mo.y, mo.s, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  }
+  function fxSunset(a, time, dt) { // soleil couchant + oiseaux au loin
+    const sx = W * 0.5, sy = H * 0.6, r = Math.min(W, H) * 0.11;
+    const halo = ctx.createRadialGradient(sx, sy, r * 0.5, sx, sy, r * 4);
+    halo.addColorStop(0, 'rgba(255,150,90,' + (0.5 * a).toFixed(3) + ')');
+    halo.addColorStop(1, 'rgba(255,150,90,0)');
+    ctx.fillStyle = halo;
+    ctx.fillRect(0, 0, W, H);
+    const sg = ctx.createLinearGradient(0, sy - r, 0, sy + r);
+    sg.addColorStop(0, '#fff3c4');
+    sg.addColorStop(1, '#ffb060');
+    ctx.globalAlpha = a;
+    ctx.fillStyle = sg;
+    ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = 1;
+    for (const o of parts('oiseaux', 3, () => ({
+      x: Math.random() * W, y: H * (0.08 + Math.random() * 0.22),
+      dir: Math.random() < 0.5 ? -1 : 1, sp: 0.3 + Math.random() * 0.3, ph: Math.random() * 6,
+    }))) {
+      o.x += o.dir * o.sp * dt;
+      if (o.x > W + 20) o.x = -20;
+      if (o.x < -20) o.x = W + 20;
+      const f = Math.sin(time * 0.015 + o.ph) * 2.5;
+      ctx.strokeStyle = 'rgba(90,55,75,' + (0.5 * a).toFixed(3) + ')';
+      ctx.lineWidth = 1.6;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(o.x - 5, o.y);
+      ctx.quadraticCurveTo(o.x - 2.5, o.y - 4 - f, o.x, o.y);
+      ctx.quadraticCurveTo(o.x + 2.5, o.y - 4 - f, o.x + 5, o.y);
+      ctx.stroke();
+    }
+  }
+  function fxNight(a, time, dt) { // lune + lucioles
+    const mx = W * 0.78, my = H * 0.14, r = 28;
+    const halo = ctx.createRadialGradient(mx, my, r * 0.5, mx, my, r * 3.5);
+    halo.addColorStop(0, 'rgba(250,240,210,' + (0.4 * a).toFixed(3) + ')');
+    halo.addColorStop(1, 'rgba(250,240,210,0)');
+    ctx.fillStyle = halo;
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(248,240,220,' + a.toFixed(3) + ')';
+    ctx.beginPath(); ctx.arc(mx, my, r, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(180,170,150,' + (0.45 * a).toFixed(3) + ')';
+    for (const [cx0, cy0, cr] of [[-8, -4, 5], [7, 6, 4], [4, -9, 3]]) {
+      ctx.beginPath(); ctx.arc(mx + cx0, my + cy0, cr, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (const lu of parts('lucioles', 9, () => ({
+      x: Math.random() * W, y: H * (0.3 + Math.random() * 0.6), ph: Math.random() * 6,
+    }))) {
+      lu.x += Math.sin(time * 0.0007 + lu.ph * 3) * 0.4 * dt;
+      lu.y += Math.cos(time * 0.0005 + lu.ph * 2) * 0.3 * dt;
+      if (lu.x < -10) lu.x = W + 10; if (lu.x > W + 10) lu.x = -10;
+      if (lu.y < H * 0.2) lu.y = H; if (lu.y > H + 10) lu.y = H * 0.3;
+      const tw = Math.max(0, 0.4 + 0.6 * Math.sin(time * 0.004 + lu.ph * 5));
+      const lg = ctx.createRadialGradient(lu.x, lu.y, 0.5, lu.x, lu.y, 7);
+      lg.addColorStop(0, 'rgba(255,240,140,' + (0.6 * a * tw).toFixed(3) + ')');
+      lg.addColorStop(1, 'rgba(255,240,140,0)');
+      ctx.fillStyle = lg;
+      ctx.beginPath(); ctx.arc(lu.x, lu.y, 7, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+  }
+  function fxWater(a, time, dt) { // rayons de lumière, bulles d'eau, poissons, algues
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 3; i++) {
+      const bx = W * (0.2 + i * 0.3) + Math.sin(time * 0.0004 + i * 2) * 30;
+      ctx.save();
+      ctx.translate(bx, -20);
+      ctx.rotate(0.15 + i * 0.06 + Math.sin(time * 0.0003 + i) * 0.04);
+      const lg = ctx.createLinearGradient(0, 0, 0, H);
+      lg.addColorStop(0, 'rgba(255,255,255,' + (0.10 * a).toFixed(3) + ')');
+      lg.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = lg;
+      ctx.fillRect(-30 - i * 8, 0, 60 + i * 16, H * 1.2);
+      ctx.restore();
+    }
+    ctx.restore();
+    ctx.fillStyle = 'rgba(255,255,255,' + (0.3 * a).toFixed(3) + ')';
+    for (const e of parts('eau', 14, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      vy: -(0.3 + Math.random() * 0.4), ph: Math.random() * 6, s: 1 + Math.random() * 2.2,
+    }))) {
+      e.y += e.vy * dt; e.x += Math.sin(time * 0.002 + e.ph) * 0.3 * dt;
+      if (e.y < -5) { e.y = H + 5; e.x = Math.random() * W; }
+      ctx.beginPath(); ctx.arc(e.x, e.y, e.s, 0, Math.PI * 2); ctx.fill();
+    }
+    for (const f of parts('poissons', 3, () => ({
+      x: Math.random() * W, y: H * (0.3 + Math.random() * 0.5),
+      dir: Math.random() < 0.5 ? -1 : 1, sp: 0.4 + Math.random() * 0.5,
+      s: 8 + Math.random() * 7, ph: Math.random() * 6,
+    }))) {
+      f.x += f.dir * f.sp * dt;
+      f.y += Math.sin(time * 0.001 + f.ph) * 0.2 * dt;
+      if (f.dir > 0 && f.x > W + 30) { f.x = -30; f.y = H * (0.3 + Math.random() * 0.5); }
+      if (f.dir < 0 && f.x < -30) { f.x = W + 30; f.y = H * (0.3 + Math.random() * 0.5); }
+      ctx.save();
+      ctx.translate(f.x, f.y);
+      ctx.scale(f.dir, 1);
+      ctx.fillStyle = 'rgba(18,60,105,' + (0.35 * a).toFixed(3) + ')';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, f.s, f.s * 0.45, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(-f.s * 0.9, 0);
+      ctx.lineTo(-f.s * 1.5, -f.s * 0.45);
+      ctx.lineTo(-f.s * 1.5, f.s * 0.45);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+    for (let i = 0; i < 4; i++) {
+      const ax = W * (0.1 + i * 0.26);
+      const sw = Math.sin(time * 0.0012 + i * 1.7) * 14;
+      ctx.strokeStyle = 'rgba(20,95,80,' + (0.35 * a).toFixed(3) + ')';
+      ctx.lineWidth = 5;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(ax, H + 4);
+      ctx.quadraticCurveTo(ax + sw * 0.4, H - 35, ax + sw, H - 65 - i * 12);
+      ctx.stroke();
+    }
+  }
+  function fxPixel(a, time, dt) { // soleil franc + collines (la pixellisation fait le reste)
+    ctx.fillStyle = 'rgba(255,223,106,' + a.toFixed(3) + ')';
+    ctx.beginPath(); ctx.arc(W * 0.18, H * 0.13, Math.min(W, H) * 0.08, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(126,200,138,' + (0.85 * a).toFixed(3) + ')';
+    ctx.beginPath(); ctx.arc(W * 0.25, H + 60, H * 0.22, Math.PI, 0); ctx.fill();
+    ctx.fillStyle = 'rgba(106,180,120,' + (0.85 * a).toFixed(3) + ')';
+    ctx.beginPath(); ctx.arc(W * 0.85, H + 80, H * 0.26, Math.PI, 0); ctx.fill();
+  }
+  function fxNeon(a, time, dt) { // soleil rayé + grille 3D qui défile vers l'horizon
+    const hor = H * 0.56;
+    const r = Math.min(W, H) * 0.16;
+    ctx.save();
+    ctx.beginPath(); ctx.arc(W / 2, hor - r * 0.35, r, 0, Math.PI * 2); ctx.clip();
+    const sg = ctx.createLinearGradient(0, hor - r * 1.4, 0, hor + r * 0.6);
+    sg.addColorStop(0, 'rgba(255,224,130,' + a.toFixed(3) + ')');
+    sg.addColorStop(1, 'rgba(255,70,160,' + a.toFixed(3) + ')');
+    ctx.fillStyle = sg;
+    ctx.fillRect(W / 2 - r, hor - r * 1.4, r * 2, r * 2.2);
+    ctx.fillStyle = 'rgba(22,10,46,' + a.toFixed(3) + ')';
+    for (let j = 0; j < 5; j++) {
+      const sy = hor - r * 0.55 + j * r * 0.2 + ((time * 0.012) % (r * 0.2));
+      ctx.fillRect(W / 2 - r, sy, r * 2, 2.2 + j * 0.9);
+    }
+    ctx.restore();
+    const hg = ctx.createLinearGradient(0, hor - 26, 0, hor + 26);
+    hg.addColorStop(0, 'rgba(255,80,200,0)');
+    hg.addColorStop(0.5, 'rgba(255,80,200,' + (0.4 * a).toFixed(3) + ')');
+    hg.addColorStop(1, 'rgba(255,80,200,0)');
+    ctx.fillStyle = hg;
+    ctx.fillRect(0, hor - 26, W, 52);
+    ctx.strokeStyle = 'rgba(255,80,200,' + (0.5 * a).toFixed(3) + ')';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    for (let k = -9; k <= 9; k++) {
+      ctx.moveTo(W / 2 + k * W * 0.022, hor);
+      ctx.lineTo(W / 2 + k * W * 0.24, H + 40);
+    }
+    const sc = (time * 0.00045) % 1;
+    for (let j = 0; j < 14; j++) {
+      const z = (j + sc) / 14;
+      const y = hor + Math.pow(z, 2.4) * (H - hor) * 1.15;
+      if (y > H + 20) continue;
+      ctx.moveTo(0, y);
+      ctx.lineTo(W, y);
+    }
+    ctx.stroke();
+  }
+  function fxSpace(a, time, dt) { // nébuleuses + planète à anneaux
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    const nebs = [
+      [0.25 + Math.sin(time * 0.00008) * 0.05, 0.32, 0.45, '150,80,220', 0.13],
+      [0.75, 0.62 + Math.cos(time * 0.0001) * 0.05, 0.5, '255,100,180', 0.10],
+      [0.5, 0.15, 0.38, '80,140,255', 0.10],
+    ];
+    for (const [nfx, nfy, nfr, col, al] of nebs) {
+      const ng = ctx.createRadialGradient(W * nfx, H * nfy, 10, W * nfx, H * nfy, Math.max(W, H) * nfr);
+      ng.addColorStop(0, 'rgba(' + col + ',' + (al * a).toFixed(3) + ')');
+      ng.addColorStop(1, 'rgba(' + col + ',0)');
+      ctx.fillStyle = ng;
+      ctx.fillRect(0, 0, W, H);
+    }
+    ctx.restore();
+    ctx.save();
+    ctx.translate(W * 0.18, H * 0.2);
+    ctx.rotate(-0.3);
+    ctx.globalAlpha = a;
+    const pg = ctx.createRadialGradient(-6, -6, 2, 0, 0, 22);
+    pg.addColorStop(0, '#ffd9b0');
+    pg.addColorStop(1, '#c98a6a');
+    ctx.fillStyle = pg;
+    ctx.beginPath(); ctx.arc(0, 0, 17, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,217,106,0.75)';
+    ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.ellipse(0, 1, 29, 8.5, 0, 0, Math.PI * 2); ctx.stroke();
+    ctx.globalAlpha = 1;
+    ctx.restore();
+  }
+  const FX = [fxDawn, fxDay, fxSunset, fxNight, fxWater, fxPixel, fxNeon, fxSpace];
+
   function drawBackground(time, dt) {
-    const target = THEMES[(level - 1) % THEMES.length];
-    const k = Math.min(1, 0.025 * dt);
+    const ti = curThemeIdx();
+    const target = THEMES[ti];
+    const k = Math.min(1, 0.02 * dt);
     lerpTo(sky.top, target.top, k);
     lerpTo(sky.mid, target.mid, k);
     lerpTo(sky.bot, target.bot, k);
     sky.cloud += (target.cloud - sky.cloud) * k;
     sky.star += (target.star - sky.star) * k;
+    for (let i = 0; i < fxA.length; i++) fxA[i] += ((i === ti ? 1 : 0) - fxA[i]) * Math.min(1, k * 1.4);
 
     const g = ctx.createLinearGradient(0, 0, 0, H);
     g.addColorStop(0, rgb(sky.top));
@@ -1341,16 +1706,22 @@
       ctx.globalAlpha = 1;
     }
 
-    ctx.fillStyle = 'rgba(255, 255, 255, ' + sky.cloud.toFixed(3) + ')';
-    for (const cl of clouds) {
-      cl.drift += cl.speed * dt;
-      const x = ((cl.fx * W + cl.drift) % (W + cl.r * 4)) - cl.r * 2;
-      const y = cl.fy * H;
-      ctx.beginPath();
-      ctx.arc(x, y, cl.r * 0.6, 0, Math.PI * 2);
-      ctx.arc(x + cl.r * 0.5, y - cl.r * 0.25, cl.r * 0.45, 0, Math.PI * 2);
-      ctx.arc(x + cl.r, y, cl.r * 0.55, 0, Math.PI * 2);
-      ctx.fill();
+    for (let i = 0; i < THEMES.length; i++) {
+      if (fxA[i] > 0.02) FX[i](fxA[i], time, dt);
+    }
+
+    if (sky.cloud > 0.02) {
+      ctx.fillStyle = 'rgba(255, 255, 255, ' + sky.cloud.toFixed(3) + ')';
+      for (const cl of clouds) {
+        cl.drift += cl.speed * dt;
+        const x = ((cl.fx * W + cl.drift) % (W + cl.r * 4)) - cl.r * 2;
+        const y = cl.fy * H;
+        ctx.beginPath();
+        ctx.arc(x, y, cl.r * 0.6, 0, Math.PI * 2);
+        ctx.arc(x + cl.r * 0.5, y - cl.r * 0.25, cl.r * 0.45, 0, Math.PI * 2);
+        ctx.arc(x + cl.r, y, cl.r * 0.55, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
 
     const now = performance.now();
@@ -1359,7 +1730,6 @@
       ctx.fillRect(0, 0, W, H);
     }
     if (now < feverUntil) {
-      // halo arc-en-ciel qui tourne doucement sur les bords
       const hue = (time * 0.06) % 360;
       const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.35, W / 2, H / 2, Math.max(W, H) * 0.75);
       vg.addColorStop(0, 'hsla(' + hue + ', 90%, 70%, 0)');
@@ -1389,15 +1759,20 @@
     ctx.save();
     ctx.translate(b.x, b.y);
 
+    const th = curTheme();
     if (b.kind === 'golden') {
       ctx.shadowColor = 'rgba(255, 200, 60, 0.8)';
       ctx.shadowBlur = 22;
     } else if (b.kind === 'heart') {
       ctx.shadowColor = 'rgba(255, 110, 160, 0.7)';
       ctx.shadowBlur = 18;
+    } else if (th.glow) {
+      // dans les mondes lumineux, les bulles rayonnent de leur propre couleur
+      ctx.shadowColor = b.palette.body;
+      ctx.shadowBlur = 24 * th.glow;
     }
 
-    // corps
+    // corps avec volume : lumière en haut à gauche, ombre sur le bord opposé
     ctx.beginPath();
     ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
     if (b.kind === 'rainbow') {
@@ -1409,15 +1784,25 @@
       rg.addColorStop(1, '#c3aed6');
       ctx.fillStyle = rg;
     } else {
-      ctx.fillStyle = b.palette.body;
+      const p = b.palette;
+      if (!p._hi) { p._hi = shade(p.body, 0.45); p._lo = shade(p.body, -0.18); }
+      const bg = ctx.createRadialGradient(-rx * 0.35, -ry * 0.45, rx * 0.1, 0, 0, rx * 1.25);
+      bg.addColorStop(0, p._hi);
+      bg.addColorStop(0.55, p.body);
+      bg.addColorStop(1, p._lo);
+      ctx.fillStyle = bg;
     }
     ctx.fill();
     ctx.shadowBlur = 0;
 
-    // reflet de bulle
+    // double reflet : grand reflet doux + petit éclat net
     ctx.beginPath();
     ctx.ellipse(-rx * 0.35, -ry * 0.4, rx * 0.22, ry * 0.14, -0.6, 0, Math.PI * 2);
     ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(rx * 0.18, -ry * 0.58, Math.max(1.2, rx * 0.07), 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.fill();
 
     // visage kawaii
@@ -1548,6 +1933,17 @@
     const dt = Math.min((time - lastTime) / 16.67, 3);
     lastTime = time;
     const now = performance.now();
+
+    const pixelOn = curTheme().mode === 'pixel';
+    if (pixelOn) {
+      const pw = Math.max(1, Math.ceil(W / PIX));
+      const ph = Math.max(1, Math.ceil(H / PIX));
+      if (pixCanvas.width !== pw || pixCanvas.height !== ph) { pixCanvas.width = pw; pixCanvas.height = ph; }
+      pixCtx.setTransform(1 / PIX, 0, 0, 1 / PIX, 0, 0);
+      ctx = pixCtx;
+    } else {
+      ctx = mainCtx;
+    }
 
     drawBackground(time, dt);
 
@@ -1725,8 +2121,33 @@
       lvlbarEl.style.width = (frac * 100).toFixed(1) + '%';
     }
 
+    if (pixelOn) {
+      mainCtx.save();
+      mainCtx.imageSmoothingEnabled = false;
+      mainCtx.drawImage(pixCanvas, 0, 0, pixCanvas.width, pixCanvas.height, 0, 0, W, H);
+      mainCtx.restore();
+    }
+
     requestAnimationFrame(frame);
   }
+
+  // départ direct sur un monde via l'ancre #niveauN
+  if (window.location && window.location.hash) {
+    const mh = /#niveau(\d+)/.exec(window.location.hash);
+    if (mh) {
+      level = Math.max(1, Math.min(99, +mh[1]));
+      score = level > 1 ? cumulAt(level - 1) : 0;
+      displayedScore = score;
+      scoreEl.textContent = score;
+      levelEl.textContent = 'Niveau ' + level;
+      const th0 = curTheme();
+      sky.top = th0.top.slice(); sky.mid = th0.mid.slice(); sky.bot = th0.bot.slice();
+      sky.cloud = th0.cloud; sky.star = th0.star;
+      for (let i = 0; i < fxA.length; i++) fxA[i] = 0;
+      fxA[curThemeIdx()] = 1;
+    }
+  }
+  applyThemeClass();
 
   // quelques bulles dès le départ, réparties à l'écran
   for (let i = 0; i < 8; i++) {
