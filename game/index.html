@@ -2,7 +2,10 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#ffeef5">
 <title>Bulle Pop 🫧</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -10,63 +13,114 @@
     width: 100%; height: 100%;
     overflow: hidden;
     touch-action: none;
+    overscroll-behavior: none;
     font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
     user-select: none;
     -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
     background: #ffeef5;
   }
   canvas { display: block; width: 100%; height: 100%; cursor: pointer; }
   #hud {
     position: fixed; top: 0; left: 0; right: 0;
     display: flex; justify-content: space-between; align-items: flex-start;
-    padding: 16px 20px;
+    padding: calc(12px + env(safe-area-inset-top, 0px))
+             calc(16px + env(safe-area-inset-right, 0px))
+             0
+             calc(16px + env(safe-area-inset-left, 0px));
     pointer-events: none;
   }
   .badge {
-    background: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.78);
     backdrop-filter: blur(6px);
-    border-radius: 20px;
-    padding: 10px 18px;
-    box-shadow: 0 4px 14px rgba(180, 120, 160, 0.18);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 18px;
+    padding: 8px 16px;
+    box-shadow: 0 4px 14px rgba(120, 90, 140, 0.2);
     text-align: center;
+    min-width: 92px;
   }
   .badge .label {
-    font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
-    color: #c98bb0; font-weight: 600;
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: #c98bb0; font-weight: 700;
   }
   .badge .value {
-    font-size: 26px; font-weight: 800; color: #8a5a7a;
+    font-size: 24px; font-weight: 800; color: #8a5a7a;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.15;
+  }
+  .badge .sub {
+    font-size: 11px; color: #c98bb0; font-weight: 600;
     font-variant-numeric: tabular-nums;
   }
   #combo {
-    position: fixed; top: 90px; left: 50%; transform: translateX(-50%) scale(0);
-    font-size: 30px; font-weight: 800; color: #ff8fab;
-    text-shadow: 0 2px 0 #fff, 0 4px 12px rgba(255, 143, 171, 0.4);
+    position: fixed; top: calc(86px + env(safe-area-inset-top, 0px));
+    left: 50%; transform: translateX(-50%) scale(0);
+    font-size: 28px; font-weight: 800; color: #ff8fab;
+    text-shadow: 0 2px 0 #fff, 0 4px 12px rgba(255, 143, 171, 0.45);
     transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
     pointer-events: none;
+    white-space: nowrap;
   }
   #combo.show { transform: translateX(-50%) scale(1); }
+  #toast {
+    position: fixed; top: 34%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: 30px; font-weight: 800; color: #fff;
+    background: linear-gradient(135deg, #ff8fab, #c98be0);
+    padding: 14px 28px; border-radius: 999px;
+    box-shadow: 0 8px 30px rgba(200, 100, 180, 0.45);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+    white-space: nowrap;
+    max-width: 92vw;
+    text-align: center;
+  }
+  #toast.show { transform: translate(-50%, -50%) scale(1); }
   #hint {
-    position: fixed; bottom: 24px; left: 0; right: 0;
-    text-align: center; color: #c98bb0; font-size: 15px; font-weight: 600;
+    position: fixed; bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    left: 0; right: 0;
+    text-align: center; color: #c98bb0; font-size: 15px; font-weight: 700;
+    text-shadow: 0 1px 0 #fff;
     pointer-events: none;
     animation: floaty 2.4s ease-in-out infinite;
     transition: opacity 1s;
+    padding: 0 16px;
   }
   @keyframes floaty {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-6px); }
+  }
+  #mute {
+    position: fixed;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    right: calc(16px + env(safe-area-inset-right, 0px));
+    width: 48px; height: 48px;
+    border: none; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: 0 4px 14px rgba(120, 90, 140, 0.2);
+    font-size: 22px;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  #mute:active { transform: scale(0.9); }
+  @media (max-width: 380px) {
+    .badge .value { font-size: 20px; }
+    #toast { font-size: 24px; padding: 12px 22px; }
+    #combo { font-size: 24px; }
   }
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
 <div id="hud">
-  <div class="badge"><div class="label">Score</div><div class="value" id="score">0</div></div>
-  <div class="badge"><div class="label">Record</div><div class="value" id="best">0</div></div>
+  <div class="badge"><div class="label">Score</div><div class="value" id="score">0</div><div class="sub" id="level">Niveau 1</div></div>
+  <div class="badge"><div class="label">Record</div><div class="value" id="best">0</div><div class="sub" id="total">🫧 0</div></div>
 </div>
 <div id="combo"></div>
-<div id="hint">🫧 Clique sur les bulles pour les faire éclater !</div>
+<div id="toast"></div>
+<div id="hint">🫧 Tapote les bulles pour les faire éclater !</div>
+<button id="mute" aria-label="Son">🔊</button>
 <script>
 (() => {
   'use strict';
@@ -75,29 +129,49 @@
   const ctx = canvas.getContext('2d');
   const scoreEl = document.getElementById('score');
   const bestEl = document.getElementById('best');
+  const totalEl = document.getElementById('total');
+  const levelEl = document.getElementById('level');
   const comboEl = document.getElementById('combo');
+  const toastEl = document.getElementById('toast');
   const hintEl = document.getElementById('hint');
+  const muteBtn = document.getElementById('mute');
 
   let W = 0, H = 0, DPR = 1;
   function resize() {
     DPR = Math.min(window.devicePixelRatio || 1, 2);
     W = window.innerWidth;
-    H = window.innerHeight;
-    canvas.width = W * DPR;
-    canvas.height = H * DPR;
+    H = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+    canvas.width = Math.max(1, Math.round(W * DPR));
+    canvas.height = Math.max(1, Math.round(H * DPR));
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   }
   window.addEventListener('resize', resize);
+  window.addEventListener('orientationchange', resize);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', resize);
   resize();
+
+  // ---------- Sauvegarde (tolérante au mode privé) ----------
+  const store = {
+    get(k, d) { try { return localStorage.getItem(k) ?? d; } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+  };
 
   // ---------- État ----------
   let score = 0;
-  let best = +(localStorage.getItem('bullepop-best') || 0);
+  let displayedScore = 0;
+  let best = +store.get('bullepop-best', 0) || 0;
+  let totalPops = +store.get('bullepop-pops', 0) || 0;
+  let soundOn = store.get('bullepop-sound', '1') === '1';
   let combo = 0;
   let lastPopTime = 0;
-  let displayedScore = 0;
   let firstPop = false;
+  let level = 1;
+  let recordBeaten = false;
+  let frenzyUntil = 0;
+  let idSeq = 0;
   bestEl.textContent = best;
+  totalEl.textContent = '🫧 ' + totalPops;
+  muteBtn.textContent = soundOn ? '🔊' : '🔇';
 
   const PASTELS = [
     { body: '#ffb3c6', cheek: '#ff8fab' }, // rose
@@ -108,20 +182,49 @@
     { body: '#fff5ba', cheek: '#f5e58a' }, // citron doux
   ];
   const GOLD = { body: '#ffd96a', cheek: '#ffb830' };
+  const HEART = { body: '#ffa8c5', cheek: '#ff6f9c' };
+  const RAINBOW = { body: '#ffffff', cheek: '#ff8fab' };
 
   const bubbles = [];
   const particles = [];
+  const rings = [];
   const popups = [];
   const clouds = [];
+  const stars = [];
+  const chainQueue = [];
 
   for (let i = 0; i < 6; i++) {
     clouds.push({
-      x: Math.random() * W,
-      y: Math.random() * H * 0.7,
+      fx: Math.random(),
+      fy: Math.random() * 0.65,
       r: 40 + Math.random() * 60,
       speed: 0.08 + Math.random() * 0.12,
+      drift: 0,
     });
   }
+  for (let i = 0; i < 50; i++) {
+    stars.push({ fx: Math.random(), fy: Math.random() * 0.85, r: 0.6 + Math.random() * 1.6, ph: Math.random() * Math.PI * 2 });
+  }
+
+  // ---------- Thèmes de ciel (changent à chaque niveau, purement cosmétique) ----------
+  function hexToRgb(h) {
+    return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+  }
+  const THEMES = [
+    { name: 'Aube rosée 🌸',        top: '#ffeef5', mid: '#fde2ef', bot: '#e3f0ff', cloud: 0.55, star: 0 },
+    { name: 'Plein ciel ☁️',        top: '#cdebff', mid: '#e0f4ff', bot: '#fdf6e3', cloud: 0.85, star: 0 },
+    { name: 'Coucher de soleil 🌅', top: '#ffd9a8', mid: '#ffc2cd', bot: '#e7b6e0', cloud: 0.5,  star: 0.2 },
+    { name: 'Nuit étoilée 🌙',      top: '#33305e', mid: '#564b87', bot: '#8a6fae', cloud: 0.13, star: 1 },
+  ].map(t => ({ name: t.name, top: hexToRgb(t.top), mid: hexToRgb(t.mid), bot: hexToRgb(t.bot), cloud: t.cloud, star: t.star }));
+
+  const sky = {
+    top: THEMES[0].top.slice(), mid: THEMES[0].mid.slice(), bot: THEMES[0].bot.slice(),
+    cloud: THEMES[0].cloud, star: THEMES[0].star,
+  };
+  function lerpTo(arr, target, k) {
+    for (let i = 0; i < 3; i++) arr[i] += (target[i] - arr[i]) * k;
+  }
+  function rgb(a) { return 'rgb(' + (a[0] | 0) + ',' + (a[1] | 0) + ',' + (a[2] | 0) + ')'; }
 
   // ---------- Audio (sons doux générés, aucun fichier) ----------
   let audioCtx = null;
@@ -131,62 +234,94 @@
     }
     if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
   }
-  function playPop(pitch, golden) {
-    if (!audioCtx) return;
+  function tone(freq, when, dur, vol, type) {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = type || 'sine';
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(0.001, when);
+    g.gain.exponentialRampToValueAtTime(vol, when + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.001, when + dur);
+    o.connect(g).connect(audioCtx.destination);
+    o.start(when);
+    o.stop(when + dur + 0.05);
+  }
+  function playPop(pitch) {
+    if (!audioCtx || !soundOn) return;
     const t = audioCtx.currentTime;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(pitch, t);
-    osc.frequency.exponentialRampToValueAtTime(pitch * 1.8, t + 0.08);
-    gain.gain.setValueAtTime(0.001, t);
-    gain.gain.exponentialRampToValueAtTime(golden ? 0.22 : 0.16, t + 0.012);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
-    osc.connect(gain).connect(audioCtx.destination);
-    osc.start(t);
-    osc.stop(t + 0.25);
-    if (golden) {
-      // petit carillon en plus pour la bulle dorée
-      [880, 1174, 1568].forEach((f, i) => {
-        const o = audioCtx.createOscillator();
-        const g = audioCtx.createGain();
-        o.type = 'triangle';
-        o.frequency.value = f;
-        g.gain.setValueAtTime(0.001, t + i * 0.07);
-        g.gain.exponentialRampToValueAtTime(0.1, t + i * 0.07 + 0.02);
-        g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.07 + 0.3);
-        o.connect(g).connect(audioCtx.destination);
-        o.start(t + i * 0.07);
-        o.stop(t + i * 0.07 + 0.35);
-      });
-    }
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(pitch, t);
+    o.frequency.exponentialRampToValueAtTime(pitch * 1.8, t + 0.08);
+    g.gain.setValueAtTime(0.001, t);
+    g.gain.exponentialRampToValueAtTime(0.15, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+    o.connect(g).connect(audioCtx.destination);
+    o.start(t);
+    o.stop(t + 0.25);
+  }
+  function playChime(notes, vol) {
+    if (!audioCtx || !soundOn) return;
+    const t = audioCtx.currentTime;
+    notes.forEach((f, i) => tone(f, t + i * 0.08, 0.32, vol || 0.09, 'triangle'));
+  }
+  function buzz(p) {
+    if (navigator.vibrate) { try { navigator.vibrate(p); } catch (e) {} }
   }
 
+  muteBtn.addEventListener('click', () => {
+    soundOn = !soundOn;
+    muteBtn.textContent = soundOn ? '🔊' : '🔇';
+    store.set('bullepop-sound', soundOn ? '1' : '0');
+    if (soundOn) { ensureAudio(); playChime([660, 880], 0.07); }
+  });
+
   // ---------- Bulles ----------
-  function spawnBubble() {
-    const golden = Math.random() < 0.06;
-    const r = golden ? 26 + Math.random() * 8 : 24 + Math.random() * 26;
-    const palette = golden ? GOLD : PASTELS[(Math.random() * PASTELS.length) | 0];
-    bubbles.push({
-      x: r + Math.random() * (W - r * 2),
-      y: H + r + 10,
-      r,
-      baseR: r,
-      vy: -(0.35 + Math.random() * 0.45) * (golden ? 1.6 : 1),
+  // mode : 'rise' (monte depuis le bas), 'place' (apparaît sur place), 'fall' (pluie de bulles)
+  function spawnBubble(mode) {
+    let kind = 'normal';
+    const roll = Math.random();
+    if (roll < 0.05) kind = 'golden';
+    else if (roll < 0.08) kind = 'rainbow';
+    else if (roll < 0.10 && performance.now() > frenzyUntil) kind = 'heart';
+
+    const special = kind !== 'normal';
+    const r = special ? 26 + Math.random() * 8 : 24 + Math.random() * 24;
+    const palette = kind === 'golden' ? GOLD : kind === 'heart' ? HEART : kind === 'rainbow' ? RAINBOW
+      : PASTELS[(Math.random() * PASTELS.length) | 0];
+
+    const b = {
+      id: ++idSeq,
+      x: r + Math.random() * Math.max(1, W - r * 2),
+      y: 0,
+      r, baseR: r,
+      vy: 0,
       wobblePhase: Math.random() * Math.PI * 2,
       wobbleSpeed: 0.015 + Math.random() * 0.02,
       wobbleAmp: 0.5 + Math.random() * 0.8,
-      palette,
-      golden,
+      palette, kind,
       blink: 0,
       nextBlink: 120 + Math.random() * 240,
-      squish: 0,
       birth: performance.now(),
-    });
+    };
+    if (mode === 'fall') {
+      b.y = -r - 10;
+      b.vy = 0.7 + Math.random() * 0.5;
+    } else if (mode === 'place') {
+      b.y = H * 0.14 + Math.random() * H * 0.62;
+      b.vy = -(0.25 + Math.random() * 0.3);
+    } else {
+      b.y = H + r + 10;
+      b.vy = -(0.7 + Math.random() * 0.7) * (kind === 'golden' ? 1.4 : 1);
+    }
+    bubbles.push(b);
+    return b;
   }
 
-  function spawnParticles(x, y, color, golden) {
-    const n = golden ? 26 : 14;
+  function spawnParticles(x, y, color, fancy) {
+    if (particles.length > 320) return;
+    const n = fancy ? 24 : 13;
     for (let i = 0; i < n; i++) {
       const a = (Math.PI * 2 * i) / n + Math.random() * 0.5;
       const sp = 1.5 + Math.random() * 3.5;
@@ -197,46 +332,96 @@
         r: 2 + Math.random() * 4,
         life: 1,
         decay: 0.015 + Math.random() * 0.02,
-        color: golden ? (Math.random() < 0.5 ? '#ffd96a' : '#fff3c4') : color,
-        star: golden || Math.random() < 0.25,
+        color: fancy && Math.random() < 0.5 ? '#fff3c4' : color,
+        star: fancy || Math.random() < 0.25,
         rot: Math.random() * Math.PI * 2,
         vrot: (Math.random() - 0.5) * 0.2,
       });
     }
   }
 
-  function addPopup(x, y, text, golden) {
-    popups.push({ x, y, text, life: 1, golden });
+  function confettiRain() {
+    const colors = ['#ffb3c6', '#a8d8ea', '#c3aed6', '#b5ead7', '#ffdac1', '#ffd96a'];
+    for (let i = 0; i < 32; i++) {
+      particles.push({
+        x: Math.random() * W,
+        y: -10 - Math.random() * 40,
+        vx: (Math.random() - 0.5) * 1.2,
+        vy: 1 + Math.random() * 2.2,
+        r: 3 + Math.random() * 3.5,
+        life: 1,
+        decay: 0.004 + Math.random() * 0.005,
+        color: colors[(Math.random() * colors.length) | 0],
+        star: true,
+        rot: Math.random() * Math.PI * 2,
+        vrot: (Math.random() - 0.5) * 0.25,
+      });
+    }
   }
 
-  // ---------- Interaction ----------
-  function popAt(px, py) {
-    ensureAudio();
-    // on prend la bulle la plus proche du clic (avec une marge généreuse, zéro frustration)
-    let hit = -1, hitDist = Infinity;
-    for (let i = 0; i < bubbles.length; i++) {
-      const b = bubbles[i];
-      const d = Math.hypot(b.x - px, b.y - py);
-      if (d < b.r + 14 && d < hitDist) { hit = i; hitDist = d; }
-    }
-    if (hit === -1) return;
+  function addPopup(x, y, text, color, big) {
+    popups.push({ x: Math.min(Math.max(x, 40), W - 40), y, text, life: 1, color, big });
+  }
 
-    const b = bubbles.splice(hit, 1)[0];
+  function showToast(text, ms) {
+    toastEl.textContent = text;
+    toastEl.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toastEl.classList.remove('show'), ms || 1500);
+  }
+
+  // ---------- Pop ! ----------
+  function popBubble(b, chainIndex) {
+    const idx = bubbles.indexOf(b);
+    if (idx === -1) return;
+    bubbles.splice(idx, 1);
+
     const now = performance.now();
-    combo = (now - lastPopTime < 1600) ? Math.min(combo + 1, 10) : 1;
+    combo = (now - lastPopTime < 1700) ? Math.min(combo + 1, 12) : 1;
     lastPopTime = now;
-
     const mult = Math.min(1 + Math.floor((combo - 1) / 2), 5); // x1 à x5
-    const base = b.golden ? 50 : Math.max(1, Math.round((50 - b.baseR) / 7) + 1);
-    const points = base * mult;
-    score += points;
+    const frenzy = now < frenzyUntil;
 
-    spawnParticles(b.x, b.y, b.palette.body, b.golden);
-    addPopup(b.x, b.y - b.r, '+' + points, b.golden);
-    playPop(300 + (50 - b.baseR) * 12 + Math.random() * 60, b.golden);
+    const base = b.kind === 'golden' ? 50
+      : b.kind === 'heart' ? 20
+      : b.kind === 'rainbow' ? 15
+      : Math.max(1, Math.round((52 - b.baseR) / 7) + 1);
+    const points = base * mult * (frenzy ? 2 : 1);
+    score += points;
+    totalPops++;
+
+    const fancy = b.kind !== 'normal';
+    spawnParticles(b.x, b.y, b.kind === 'golden' ? '#ffd96a' : b.palette.body, fancy);
+    rings.push({ x: b.x, y: b.y, r: b.baseR * 0.6, max: b.baseR * 2.4, life: 1, color: b.palette.cheek });
+    addPopup(b.x, b.y - b.r, '+' + points, fancy ? '#ff9f1c' : b.palette.cheek, fancy);
+
+    if (chainIndex !== undefined) {
+      playPop(Math.min(1400, 380 + chainIndex * 55));
+    } else {
+      playPop(280 + (52 - b.baseR) * 11 + Math.random() * 50);
+    }
+
+    if (b.kind === 'golden') {
+      playChime([880, 1174, 1568], 0.1);
+      buzz([12, 40, 12]);
+    } else if (b.kind === 'rainbow') {
+      // réaction en chaîne : toutes les bulles éclatent l'une après l'autre 🌈
+      const others = bubbles.slice().sort((p, q) =>
+        Math.hypot(p.x - b.x, p.y - b.y) - Math.hypot(q.x - b.x, q.y - b.y));
+      others.forEach((ob, i) => chainQueue.push({ id: ob.id, at: now + 80 * (i + 1), index: i }));
+      if (others.length > 2) showToast('Réaction en chaîne ! 🌈', 1400);
+      buzz([12, 40, 12]);
+    } else if (b.kind === 'heart') {
+      frenzyUntil = now + 6500;
+      showToast('Pluie de bulles ! 💖 Points x2', 1800);
+      playChime([523, 659, 784], 0.1);
+      buzz([12, 40, 12]);
+    } else {
+      buzz(8);
+    }
 
     if (combo >= 3) {
-      comboEl.textContent = 'Combo x' + mult + ' ✨';
+      comboEl.textContent = 'Combo x' + mult + (frenzy ? ' 💖x2' : ' ✨');
       comboEl.classList.add('show');
       clearTimeout(comboEl._t);
       comboEl._t = setTimeout(() => comboEl.classList.remove('show'), 900);
@@ -244,33 +429,131 @@
 
     if (score > best) {
       best = score;
-      localStorage.setItem('bullepop-best', best);
+      store.set('bullepop-best', best);
       bestEl.textContent = best;
+      if (!recordBeaten && totalPops > 20) {
+        recordBeaten = true;
+        showToast('Nouveau record ! 🏆', 1800);
+        playChime([659, 784, 1046], 0.1);
+      }
     }
+    store.set('bullepop-pops', totalPops);
+    totalEl.textContent = '🫧 ' + totalPops;
+
+    // niveaux : toutes les 500 pts le ciel change, pure récompense
+    const newLevel = Math.floor(score / 500) + 1;
+    if (newLevel > level) {
+      level = newLevel;
+      levelEl.textContent = 'Niveau ' + level;
+      const theme = THEMES[(level - 1) % THEMES.length];
+      showToast('Niveau ' + level + ' · ' + theme.name, 2000);
+      confettiRain();
+      playChime([523, 659, 784, 1046], 0.1);
+      buzz([10, 30, 10, 30, 10]);
+    }
+
     if (!firstPop) { firstPop = true; hintEl.style.opacity = '0'; }
   }
 
-  canvas.addEventListener('pointerdown', (e) => popAt(e.clientX, e.clientY));
+  function popAt(px, py) {
+    // bulle la plus proche du doigt, marge généreuse : zéro frustration
+    let hit = null, hitDist = Infinity;
+    for (const b of bubbles) {
+      const d = Math.hypot(b.x - px, b.y - py);
+      if (d < b.r + 18 && d < hitDist) { hit = b; hitDist = d; }
+    }
+    if (hit) {
+      popBubble(hit);
+    } else {
+      // un tap dans le vide fait quand même un petit scintillement, jamais de sanction
+      for (let i = 0; i < 4; i++) {
+        particles.push({
+          x: px + (Math.random() - 0.5) * 14,
+          y: py + (Math.random() - 0.5) * 14,
+          vx: (Math.random() - 0.5) * 1.5,
+          vy: -0.5 - Math.random(),
+          r: 1.5 + Math.random() * 2,
+          life: 0.7, decay: 0.04,
+          color: '#ffffff', star: true,
+          rot: Math.random() * Math.PI, vrot: 0.1,
+        });
+      }
+    }
+  }
+
+  // ---------- Entrées (souris + multi-touch) ----------
+  function onPress(e) {
+    e.preventDefault();
+    ensureAudio();
+    popAt(e.clientX, e.clientY);
+  }
+  if (window.PointerEvent) {
+    canvas.addEventListener('pointerdown', onPress);
+  } else {
+    canvas.addEventListener('mousedown', onPress);
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      ensureAudio();
+      for (const t of e.changedTouches) popAt(t.clientX, t.clientY);
+    }, { passive: false });
+  }
+  document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+  document.addEventListener('contextmenu', (e) => e.preventDefault());
+  document.addEventListener('visibilitychange', () => { lastTime = performance.now(); });
 
   // ---------- Dessin ----------
-  function drawBackground(time) {
+  function drawBackground(time, dt) {
+    const target = THEMES[(level - 1) % THEMES.length];
+    const k = Math.min(1, 0.025 * dt);
+    lerpTo(sky.top, target.top, k);
+    lerpTo(sky.mid, target.mid, k);
+    lerpTo(sky.bot, target.bot, k);
+    sky.cloud += (target.cloud - sky.cloud) * k;
+    sky.star += (target.star - sky.star) * k;
+
     const g = ctx.createLinearGradient(0, 0, 0, H);
-    g.addColorStop(0, '#ffeef5');
-    g.addColorStop(0.55, '#fde2ef');
-    g.addColorStop(1, '#e3f0ff');
+    g.addColorStop(0, rgb(sky.top));
+    g.addColorStop(0.55, rgb(sky.mid));
+    g.addColorStop(1, rgb(sky.bot));
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, W, H);
 
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+    if (sky.star > 0.02) {
+      ctx.fillStyle = '#fff';
+      for (const s of stars) {
+        const tw = 0.45 + 0.55 * Math.sin(time * 0.002 + s.ph);
+        ctx.globalAlpha = sky.star * tw * 0.9;
+        ctx.beginPath();
+        ctx.arc(s.fx * W, s.fy * H, s.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    ctx.fillStyle = 'rgba(255, 255, 255, ' + sky.cloud.toFixed(3) + ')';
     for (const cl of clouds) {
-      cl.x += cl.speed;
-      if (cl.x - cl.r * 2 > W) cl.x = -cl.r * 2;
+      cl.drift += cl.speed * dt;
+      const x = ((cl.fx * W + cl.drift) % (W + cl.r * 4)) - cl.r * 2;
+      const y = cl.fy * H;
       ctx.beginPath();
-      ctx.arc(cl.x, cl.y, cl.r * 0.6, 0, Math.PI * 2);
-      ctx.arc(cl.x + cl.r * 0.5, cl.y - cl.r * 0.25, cl.r * 0.45, 0, Math.PI * 2);
-      ctx.arc(cl.x + cl.r, cl.y, cl.r * 0.55, 0, Math.PI * 2);
+      ctx.arc(x, y, cl.r * 0.6, 0, Math.PI * 2);
+      ctx.arc(x + cl.r * 0.5, y - cl.r * 0.25, cl.r * 0.45, 0, Math.PI * 2);
+      ctx.arc(x + cl.r, y, cl.r * 0.55, 0, Math.PI * 2);
       ctx.fill();
     }
+
+    if (performance.now() < frenzyUntil) {
+      ctx.fillStyle = 'rgba(255, 150, 190, 0.07)';
+      ctx.fillRect(0, 0, W, H);
+    }
+  }
+
+  function heartPath(s) {
+    ctx.beginPath();
+    ctx.moveTo(0, s * 0.45);
+    ctx.bezierCurveTo(-s * 0.7, 0, -s * 0.55, -s * 0.5, 0, -s * 0.15);
+    ctx.bezierCurveTo(s * 0.55, -s * 0.5, s * 0.7, 0, 0, s * 0.45);
+    ctx.closePath();
   }
 
   function drawBubble(b, time) {
@@ -280,19 +563,33 @@
     const wob = Math.sin(time * 0.003 + b.wobblePhase) * 0.06;
     const rx = b.r * ease * (1 + wob);
     const ry = b.r * ease * (1 - wob);
+    if (rx < 1 || ry < 1) return;
 
     ctx.save();
     ctx.translate(b.x, b.y);
 
-    if (b.golden) {
+    if (b.kind === 'golden') {
       ctx.shadowColor = 'rgba(255, 200, 60, 0.8)';
-      ctx.shadowBlur = 24;
+      ctx.shadowBlur = 22;
+    } else if (b.kind === 'heart') {
+      ctx.shadowColor = 'rgba(255, 110, 160, 0.7)';
+      ctx.shadowBlur = 18;
     }
 
     // corps
     ctx.beginPath();
     ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
-    ctx.fillStyle = b.palette.body;
+    if (b.kind === 'rainbow') {
+      const rg = ctx.createLinearGradient(-rx, -ry, rx, ry);
+      rg.addColorStop(0, '#ffb3c6');
+      rg.addColorStop(0.3, '#ffdac1');
+      rg.addColorStop(0.55, '#b5ead7');
+      rg.addColorStop(0.8, '#a8d8ea');
+      rg.addColorStop(1, '#c3aed6');
+      ctx.fillStyle = rg;
+    } else {
+      ctx.fillStyle = b.palette.body;
+    }
     ctx.fill();
     ctx.shadowBlur = 0;
 
@@ -313,18 +610,18 @@
       ctx.lineWidth = Math.max(1.5, rx * 0.06);
       ctx.strokeStyle = '#5a4a52';
       ctx.lineCap = 'round';
-      [-1, 1].forEach(s => {
+      for (const s of [-1, 1]) {
         ctx.beginPath();
         ctx.moveTo(s * eyeX - rx * 0.1, eyeY);
         ctx.lineTo(s * eyeX + rx * 0.1, eyeY);
         ctx.stroke();
-      });
+      }
     } else {
-      [-1, 1].forEach(s => {
+      for (const s of [-1, 1]) {
         ctx.beginPath();
         ctx.arc(s * eyeX, eyeY, Math.max(2, rx * 0.09), 0, Math.PI * 2);
         ctx.fill();
-      });
+      }
     }
 
     // sourire
@@ -338,15 +635,15 @@
     // joues roses
     ctx.fillStyle = b.palette.cheek;
     ctx.globalAlpha = 0.55;
-    [-1, 1].forEach(s => {
+    for (const s of [-1, 1]) {
       ctx.beginPath();
       ctx.ellipse(s * rx * 0.55, ry * 0.18, rx * 0.13, ry * 0.09, 0, 0, Math.PI * 2);
       ctx.fill();
-    });
+    }
     ctx.globalAlpha = 1;
 
-    // petite couronne sur la bulle dorée
-    if (b.golden) {
+    // accessoires des bulles spéciales
+    if (b.kind === 'golden') {
       ctx.fillStyle = '#ffb830';
       ctx.beginPath();
       const cw = rx * 0.5, ch = ry * 0.32, cy = -ry - ch * 0.2;
@@ -359,16 +656,33 @@
       ctx.lineTo(cw, cy);
       ctx.closePath();
       ctx.fill();
+    } else if (b.kind === 'heart') {
+      ctx.save();
+      ctx.translate(rx * 0.55, -ry * 0.95);
+      ctx.rotate(0.3);
+      ctx.fillStyle = '#ff6f9c';
+      heartPath(rx * 0.32);
+      ctx.fill();
+      ctx.restore();
+    } else if (b.kind === 'rainbow') {
+      // petites étincelles qui tournent autour
+      for (let i = 0; i < 3; i++) {
+        const a = time * 0.003 + (i * Math.PI * 2) / 3;
+        const sx = Math.cos(a) * rx * 1.25;
+        const sy = Math.sin(a) * ry * 1.25;
+        ctx.globalAlpha = 0.7 + 0.3 * Math.sin(time * 0.01 + i);
+        drawStarShape(sx, sy, 3.5, a, '#fff');
+        ctx.globalAlpha = 1;
+      }
     }
 
     ctx.restore();
   }
 
-  function drawStar(x, y, r, rot, color, alpha) {
+  function drawStarShape(x, y, r, rot, color) {
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(rot);
-    ctx.globalAlpha = alpha;
     ctx.fillStyle = color;
     ctx.beginPath();
     for (let i = 0; i < 5; i++) {
@@ -382,23 +696,61 @@
 
   // ---------- Boucle ----------
   let spawnTimer = 0;
+  let frenzySpawnTimer = 0;
   let lastTime = performance.now();
 
   function frame(time) {
     const dt = Math.min((time - lastTime) / 16.67, 3);
     lastTime = time;
+    const now = performance.now();
 
-    drawBackground(time);
+    drawBackground(time, dt);
 
-    // apparition des bulles : densité confortable, jamais vide
+    // --- apparitions : l'écran n'est jamais vide ---
+    const target = Math.min(16, 8 + Math.floor(score / 250));
     spawnTimer -= dt;
-    const target = Math.min(14, 6 + Math.floor(score / 200));
     if (spawnTimer <= 0 && bubbles.length < target) {
-      spawnBubble();
-      spawnTimer = 25 + Math.random() * 35;
+      spawnBubble(Math.random() < 0.45 ? 'place' : 'rise');
+      spawnTimer = 10 + Math.random() * 14;
+    }
+    // filet de sécurité : si presque tout a éclaté, on en fait réapparaître sur place
+    while (bubbles.length < 5) spawnBubble('place');
+
+    // pluie de bulles pendant la frénésie 💖
+    if (now < frenzyUntil) {
+      frenzySpawnTimer -= dt;
+      if (frenzySpawnTimer <= 0 && bubbles.length < 26) {
+        spawnBubble('fall');
+        frenzySpawnTimer = 9 + Math.random() * 8;
+      }
     }
 
-    // bulles
+    // réaction en chaîne 🌈
+    for (let i = chainQueue.length - 1; i >= 0; i--) {
+      const c = chainQueue[i];
+      if (now >= c.at) {
+        chainQueue.splice(i, 1);
+        const b = bubbles.find(bb => bb.id === c.id);
+        if (b) popBubble(b, c.index);
+      }
+    }
+
+    // --- bulles ---
+    // légère répulsion pour qu'elles ne s'empilent pas
+    for (let i = 0; i < bubbles.length; i++) {
+      for (let j = i + 1; j < bubbles.length; j++) {
+        const a = bubbles[i], c = bubbles[j];
+        const dx = c.x - a.x, dy = c.y - a.y;
+        const d = Math.hypot(dx, dy);
+        const min = (a.r + c.r) * 0.9;
+        if (d > 0.01 && d < min) {
+          const push = (min - d) * 0.02 * dt;
+          const nx = dx / d, ny = dy / d;
+          a.x -= nx * push; a.y -= ny * push * 0.4;
+          c.x += nx * push; c.y += ny * push * 0.4;
+        }
+      }
+    }
     for (let i = bubbles.length - 1; i >= 0; i--) {
       const b = bubbles[i];
       b.wobblePhase += b.wobbleSpeed * dt;
@@ -406,44 +758,62 @@
       b.y += b.vy * dt;
       if (b.x < b.r) b.x = b.r;
       if (b.x > W - b.r) b.x = W - b.r;
-      if (b.y < -b.r * 2) { bubbles.splice(i, 1); continue; } // elle s'envole, c'est tout
+      // elle s'envole ou se pose, c'est tout — aucune pénalité
+      if (b.y < -b.r * 2 || b.y > H + b.r * 2.5) { bubbles.splice(i, 1); continue; }
       drawBubble(b, time);
     }
 
-    // particules
+    // --- anneaux de pop ---
+    for (let i = rings.length - 1; i >= 0; i--) {
+      const ring = rings[i];
+      ring.r += (ring.max - ring.r) * 0.18 * dt;
+      ring.life -= 0.05 * dt;
+      if (ring.life <= 0) { rings.splice(i, 1); continue; }
+      ctx.globalAlpha = ring.life * 0.7;
+      ctx.strokeStyle = ring.color;
+      ctx.lineWidth = 3 * ring.life;
+      ctx.beginPath();
+      ctx.arc(ring.x, ring.y, ring.r, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+
+    // --- particules ---
     for (let i = particles.length - 1; i >= 0; i--) {
       const p = particles[i];
       p.x += p.vx * dt;
       p.y += p.vy * dt;
-      p.vy += 0.06 * dt;
+      p.vy += 0.05 * dt;
       p.rot += p.vrot * dt;
       p.life -= p.decay * dt;
-      if (p.life <= 0) { particles.splice(i, 1); continue; }
+      if (p.life <= 0 || p.y > H + 20) { particles.splice(i, 1); continue; }
       if (p.star) {
-        drawStar(p.x, p.y, p.r * p.life * 1.6, p.rot, p.color, p.life);
+        ctx.globalAlpha = Math.min(1, p.life);
+        drawStarShape(p.x, p.y, p.r * Math.min(1, p.life) * 1.6, p.rot, p.color);
+        ctx.globalAlpha = 1;
       } else {
-        ctx.globalAlpha = p.life;
+        ctx.globalAlpha = Math.min(1, p.life);
         ctx.fillStyle = p.color;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.r * Math.min(1, p.life), 0, Math.PI * 2);
         ctx.fill();
         ctx.globalAlpha = 1;
       }
     }
 
-    // popups "+N"
+    // --- popups "+N" ---
     for (let i = popups.length - 1; i >= 0; i--) {
       const p = popups[i];
       p.y -= 0.8 * dt;
       p.life -= 0.02 * dt;
       if (p.life <= 0) { popups.splice(i, 1); continue; }
       ctx.globalAlpha = Math.min(1, p.life * 2);
-      ctx.font = '800 ' + (p.golden ? 30 : 22) + 'px "Segoe UI", sans-serif';
+      ctx.font = '800 ' + (p.big ? 30 : 22) + 'px "Segoe UI", sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillStyle = p.golden ? '#ff9f1c' : '#ff8fab';
       ctx.strokeStyle = 'rgba(255,255,255,0.9)';
       ctx.lineWidth = 4;
       ctx.strokeText(p.text, p.x, p.y);
+      ctx.fillStyle = p.color;
       ctx.fillText(p.text, p.x, p.y);
       ctx.globalAlpha = 1;
     }
@@ -459,10 +829,10 @@
   }
 
   // quelques bulles dès le départ, réparties à l'écran
-  for (let i = 0; i < 7; i++) {
-    spawnBubble();
-    const b = bubbles[bubbles.length - 1];
-    b.y = H * 0.15 + Math.random() * H * 0.7;
+  for (let i = 0; i < 8; i++) {
+    const b = spawnBubble('place');
+    b.birth = performance.now() - 1000; // déjà visibles, pas d'animation d'apparition
+    b.y = H * 0.12 + (i / 8) * H * 0.7 + Math.random() * 40;
   }
 
   requestAnimationFrame(frame);
