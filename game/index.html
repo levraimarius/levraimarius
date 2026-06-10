@@ -98,45 +98,50 @@
     transition: width 0.25s ease;
   }
 
-  /* ----- combo & toast ----- */
+  /* ----- combo (discret, à gauche) & notifications (discrètes, à droite) ----- */
   #combo {
-    position: fixed; top: calc(112px + env(safe-area-inset-top, 0px));
-    left: 50%; transform: translateX(-50%) scale(0);
-    display: flex; align-items: center; gap: 6px;
-    background: linear-gradient(135deg, var(--pink), var(--purple));
+    position: fixed; top: calc(64px + env(safe-area-inset-top, 0px));
+    left: calc(18px + env(safe-area-inset-left, 0px));
+    display: flex; align-items: center; gap: 5px;
+    font-size: 14px; font-weight: 800;
     color: #fff;
-    font-size: 17px; font-weight: 800;
-    padding: 7px 16px; border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.45);
-    box-shadow: 0 6px 22px rgba(255, 143, 171, 0.45);
+    text-shadow: 0 1px 2px rgba(70, 35, 70, 0.7), 0 0 10px rgba(70, 35, 70, 0.5);
+    transform: scale(0);
+    transform-origin: left center;
     transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
     pointer-events: none;
     white-space: nowrap;
   }
-  #combo.show { transform: translateX(-50%) scale(1); }
-  #combo .ic { width: 20px; height: 20px; }
-  #toast {
-    position: fixed; top: 32%; left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-    font-size: 24px; font-weight: 800; color: #fff;
-    background: linear-gradient(135deg, var(--pink), var(--purple));
-    padding: 14px 26px; border-radius: 26px;
-    border: 1px solid rgba(255, 255, 255, 0.45);
-    box-shadow: 0 16px 44px rgba(200, 100, 180, 0.45);
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  #combo.show { transform: scale(1); }
+  #combo .ic { width: 16px; height: 16px; filter: drop-shadow(0 1px 1px rgba(70, 35, 70, 0.4)); }
+  #notifs {
+    position: fixed; top: calc(64px + env(safe-area-inset-top, 0px));
+    right: calc(18px + env(safe-area-inset-right, 0px));
+    display: flex; flex-direction: column; align-items: flex-end; gap: 5px;
     pointer-events: none;
-    width: max-content; max-width: 88vw;
-    text-align: center;
+    z-index: 5;
   }
-  #toast.show { transform: translate(-50%, -50%) scale(1); }
-  #toast .ic { width: 26px; height: 26px; }
-  #toast span { line-height: 1.25; }
+  .notif {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 800;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(70, 35, 70, 0.7), 0 0 10px rgba(70, 35, 70, 0.5);
+    transition: opacity 0.45s;
+    animation: notifIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+    max-width: 72vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  @keyframes notifIn {
+    from { transform: translateX(12px); opacity: 0; }
+  }
+  .notif .ic { width: 16px; height: 16px; filter: drop-shadow(0 1px 1px rgba(70, 35, 70, 0.4)); }
 
   #comboBar {
-    position: fixed; top: calc(150px + env(safe-area-inset-top, 0px));
-    left: 50%; transform: translateX(-50%);
-    width: 64px; height: 4px; border-radius: 999px;
+    position: fixed; top: calc(86px + env(safe-area-inset-top, 0px));
+    left: calc(18px + env(safe-area-inset-left, 0px));
+    width: 56px; height: 4px; border-radius: 999px;
     background: rgba(255, 255, 255, 0.55);
     overflow: hidden;
     opacity: 0; transition: opacity 0.25s;
@@ -172,6 +177,9 @@
   #hint {
     position: fixed; bottom: calc(22px + env(safe-area-inset-bottom, 0px));
     left: 50%;
+    max-width: calc(100vw - 160px);
+    overflow: hidden;
+    text-overflow: ellipsis;
     display: flex; align-items: center; gap: 8px;
     background: var(--glass);
     backdrop-filter: blur(14px) saturate(1.3);
@@ -335,6 +343,112 @@
     border-style: dashed; border-color: #e6ccdb;
     background: rgba(255, 255, 255, 0.55);
   }
+  /* ----- écran titre & pause ----- */
+  #menuScreen {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+    z-index: 8;
+    transition: opacity 0.45s, visibility 0.45s;
+  }
+  #menuScreen.hidden { opacity: 0; visibility: hidden; }
+  #menuInner {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    transform: translateY(-3vh);
+    text-align: center;
+    padding: 30px 36px;
+    border-radius: 44px;
+    background: rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(7px) saturate(1.2);
+    -webkit-backdrop-filter: blur(7px) saturate(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+  }
+  #menuLogo {
+    width: 86px; height: 86px;
+    filter: drop-shadow(0 8px 18px rgba(120, 60, 110, 0.35));
+    animation: bob 3s ease-in-out infinite;
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-9px); }
+  }
+  #menuTitle {
+    font-size: 46px; letter-spacing: 1px;
+    background: linear-gradient(135deg, #ff7aa8, #b07ad6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 2px 1px rgba(255, 255, 255, 0.65)) drop-shadow(0 8px 18px rgba(120, 60, 110, 0.35));
+  }
+  #menuSub {
+    color: #fff; font-size: 14px; font-weight: 700;
+    text-shadow: 0 1px 2px rgba(70, 35, 70, 0.7), 0 0 10px rgba(70, 35, 70, 0.5);
+    margin-top: -6px;
+  }
+  .bigBtn {
+    pointer-events: auto;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    color: #fff;
+    font-size: 20px; font-weight: 800; font-family: inherit;
+    padding: 15px 58px;
+    border-radius: 999px;
+    box-shadow: 0 12px 32px rgba(200, 100, 180, 0.45);
+    cursor: pointer;
+    touch-action: manipulation;
+    margin-top: 8px;
+    animation: pulseBtn 2.4s ease-in-out infinite;
+  }
+  .bigBtn:active { transform: scale(0.94); }
+  @keyframes pulseBtn {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+  }
+  .menuRow { display: flex; gap: 12px; pointer-events: none; }
+  .menuSmall {
+    pointer-events: auto;
+    width: 52px; height: 52px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--glass-edge);
+    border-radius: 50%;
+    background: var(--glass);
+    backdrop-filter: blur(14px) saturate(1.3);
+    -webkit-backdrop-filter: blur(14px) saturate(1.3);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  .menuSmall:active { transform: scale(0.9); }
+  #menuWorld {
+    display: flex; align-items: center; gap: 6px;
+    color: #fff; font-size: 13px; font-weight: 800;
+    text-shadow: 0 1px 2px rgba(70, 35, 70, 0.7), 0 0 10px rgba(70, 35, 70, 0.5);
+    margin-top: 4px;
+  }
+  #pauseScreen {
+    position: fixed; inset: 0;
+    background: rgba(70, 40, 80, 0.42);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.25s, visibility 0.25s;
+  }
+  #pauseScreen.open { opacity: 1; visibility: visible; }
+  #pauseInner { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  #pauseInner h1 {
+    font-size: 34px;
+    background: linear-gradient(135deg, #ff9ec0, #c8a0ee);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 2px 1px rgba(255, 255, 255, 0.4));
+  }
+  #pauseBtn { bottom: calc(74px + env(safe-area-inset-bottom, 0px)); right: calc(16px + env(safe-area-inset-right, 0px)); }
+  body.inMenu #hud, body.inMenu #combo, body.inMenu #comboBar, body.inMenu #quest,
+  body.inMenu #hint, body.inMenu #menuBtn, body.inMenu #pauseBtn, body.inMenu #notifs { display: none; }
+
   /* ----- habillages par monde ----- */
   body.pixelMode {
     font-family: 'Courier New', Courier, monospace;
@@ -342,10 +456,10 @@
     --glass-edge: #5a4a52;
     --shadow: 4px 4px 0 rgba(90, 74, 82, 0.25);
   }
-  body.pixelMode .chip, body.pixelMode #scoreCard, body.pixelMode #combo, body.pixelMode #comboBar,
-  body.pixelMode #toast, body.pixelMode #hint, body.pixelMode #quest, body.pixelMode .roundBtn,
+  body.pixelMode .chip, body.pixelMode #scoreCard, body.pixelMode #comboBar, body.pixelMode #hint, body.pixelMode #quest, body.pixelMode .roundBtn,
   body.pixelMode .card, body.pixelMode .optRow, body.pixelMode .switch, body.pixelMode .switch::after,
   body.pixelMode .cardBtn, body.pixelMode .closeX, body.pixelMode #albumStats span,
+  body.pixelMode .bigBtn, body.pixelMode .menuSmall,
   body.pixelMode .sticker, body.pixelMode .sticker .em, body.pixelMode #lvlbarTrack, body.pixelMode #lvlbar {
     border-radius: 0 !important;
     backdrop-filter: none;
@@ -362,7 +476,6 @@
     #scoreCard .value { font-size: 26px; }
     #scoreCard { min-width: 126px; }
     .chip { font-size: 12px; padding: 7px 11px; }
-    #toast { font-size: 19px; padding: 11px 20px; }
     #albumGrid { gap: 8px; }
   }
 </style>
@@ -396,6 +509,8 @@
     <symbol id="i-planet" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="#c3aed6"/><circle cx="9.8" cy="9.8" r="1.6" fill="#fff" opacity=".45"/><ellipse cx="12" cy="12.5" rx="10" ry="3.2" fill="none" stroke="#ffd96a" stroke-width="1.6" transform="rotate(-18 12 12.5)"/></symbol>
     <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#ffb3c6"/><circle cx="12" cy="12" r="5.5" fill="#fff"/><circle cx="12" cy="12" r="2.5" fill="#ff6f9c"/></symbol>
     <symbol id="i-gift" viewBox="0 0 24 24"><rect x="4" y="9.5" width="16" height="11" rx="2" fill="#ffb3c6"/><rect x="3" y="6.5" width="18" height="4.5" rx="2" fill="#ff8fab"/><rect x="10.6" y="6.5" width="2.8" height="14" fill="#fff0f7"/><path d="M12 6.5C9 6.5 7.5 4.8 8.3 3.4c.8-1.4 3-.8 3.7 1.4.7-2.2 2.9-2.8 3.7-1.4.8 1.4-.7 3.1-3.7 3.1z" fill="#c98be0"/></symbol>
+    <symbol id="i-trio" viewBox="0 0 24 24"><circle cx="8" cy="9" r="4.5" fill="#ffb3c6"/><circle cx="16" cy="9" r="4.5" fill="#ff8fab"/><circle cx="12" cy="16.5" r="4.5" fill="#ff6f9c"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6.5" y="5" width="3.8" height="14" rx="1.9" fill="#8a5a7a"/><rect x="13.7" y="5" width="3.8" height="14" rx="1.9" fill="#8a5a7a"/></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24"><path fill="#cbb3c6" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></symbol>
   </defs>
 </svg>
@@ -411,10 +526,34 @@
 </div>
 <div id="combo"></div>
 <div id="comboBar"><i id="comboFill"></i></div>
-<div id="toast"></div>
+<div id="notifs"></div>
 <div id="quest"></div>
-<div id="hint"><svg class="ic" style="width:17px;height:17px"><use href="#i-bubble"/></svg> Tapote les bulles, vise bien pour le combo !</div>
+<div id="hint"><svg class="ic" style="width:17px;height:17px"><use href="#i-bubble"/></svg> Vise les bulles !</div>
 <button id="menuBtn" class="roundBtn" aria-label="Options"><svg class="ic" style="width:24px;height:24px"><use href="#i-gear"/></svg></button>
+<button id="pauseBtn" class="roundBtn" aria-label="Pause"><svg class="ic" style="width:22px;height:22px"><use href="#i-pause"/></svg></button>
+<div id="menuScreen">
+  <div id="menuInner">
+    <svg id="menuLogo" aria-hidden="true"><use href="#i-bubble"/></svg>
+    <h1 id="menuTitle">Bulle Pop</h1>
+    <p id="menuSub">Un petit moment tout doux</p>
+    <button id="playBtn" class="bigBtn">Jouer</button>
+    <div class="menuRow">
+      <button id="menuOpts" class="menuSmall" aria-label="Options"><svg class="ic" style="width:22px;height:22px"><use href="#i-gear"/></svg></button>
+      <button id="menuAlbum" class="menuSmall" aria-label="Album de stickers"><svg class="ic" style="width:22px;height:22px"><use href="#i-medal"/></svg></button>
+    </div>
+    <p id="menuWorld"></p>
+  </div>
+</div>
+<div id="pauseScreen">
+  <div id="pauseInner">
+    <h1>Pause</h1>
+    <button id="resumeBtn" class="bigBtn">Reprendre</button>
+    <div class="menuRow">
+      <button id="pauseOpts" class="menuSmall" aria-label="Options"><svg class="ic" style="width:22px;height:22px"><use href="#i-gear"/></svg></button>
+      <button id="pauseHome" class="menuSmall" aria-label="Menu principal"><svg class="ic" style="width:22px;height:22px"><use href="#i-bubble"/></svg></button>
+    </div>
+  </div>
+</div>
 <div id="settings">
   <div id="settingsCard" class="card">
     <button class="closeX" id="closeSettings" aria-label="Fermer">&#10005;</button>
@@ -456,9 +595,19 @@
   const questEl = document.getElementById('quest');
   const comboBarEl = document.getElementById('comboBar');
   const comboFillEl = document.getElementById('comboFill');
+  const menuScreenEl = document.getElementById('menuScreen');
+  const playBtn = document.getElementById('playBtn');
+  const menuOptsBtn = document.getElementById('menuOpts');
+  const menuAlbumBtn = document.getElementById('menuAlbum');
+  const menuWorldEl = document.getElementById('menuWorld');
+  const pauseScreenEl = document.getElementById('pauseScreen');
+  const pauseBtnEl = document.getElementById('pauseBtn');
+  const resumeBtn = document.getElementById('resumeBtn');
+  const pauseOptsBtn = document.getElementById('pauseOpts');
+  const pauseHomeBtn = document.getElementById('pauseHome');
   const levelEl = document.getElementById('level');
   const comboEl = document.getElementById('combo');
-  const toastEl = document.getElementById('toast');
+  const notifsEl = document.getElementById('notifs');
   const hintEl = document.getElementById('hint');
   const menuBtn = document.getElementById('menuBtn');
   const settingsEl = document.getElementById('settings');
@@ -511,6 +660,10 @@
   let frenzyUntil = 0;   // pluie de bulles (x2)
   let feverUntil = 0;    // fièvre des bulles (x3)
   let idSeq = 0;
+  let gameState = 'menu';   // 'menu' | 'play' | 'paused'
+  let menuPreview = 0;      // monde affiché derrière l'écran titre
+  let menuCycle = 420;      // ~7 s par monde dans le menu
+  let trioPi = -1, trioN = 0; // série de bulles de la même couleur
   let quest = null;
   let questCooldown = 300; // ~5 s après le premier pop
   let questsDone = +store.get('bullepop-quests', 0) || 0;
@@ -572,6 +725,8 @@
     { id: 'score5k', icon: 'trophy',    nm: 'Champion·ne',       ds: 'Marquer 5000 points' },
     { id: 'quest5',  icon: 'target',    nm: 'Touche-à-tout',     ds: 'Réussir 5 petits défis' },
     { id: 'gift',    icon: 'gift',      nm: 'Bien le bonjour',   ds: 'Recevoir le cadeau du jour' },
+    { id: 'trio',    icon: 'trio',      nm: 'Trio assorti',      ds: '3 bulles de même couleur d’affilée' },
+    { id: 'tour',    icon: 'planet',    nm: 'Globe-trotteur',    ds: 'Découvrir les 8 mondes' },
   ];
   let unlocked = {};
   try { unlocked = JSON.parse(store.get('bullepop-stickers', '{}')) || {}; } catch (e) { unlocked = {}; }
@@ -635,7 +790,7 @@
     { name: 'Néon rétro',        icon: 'neon',   top: '#160a2e', mid: '#341058', bot: '#0c0524', cloud: 0,    star: 0.7,  pal: 'neon',   glow: 1,    mode: 'neon' },
     { name: 'Cosmos',            icon: 'planet', top: '#0b0b28', mid: '#1c1242', bot: '#2c1856', cloud: 0,    star: 1,    pal: 'cosmos', glow: 0.8,  mode: 'space' },
   ].map(t => Object.assign({}, t, { top: hexToRgb(t.top), mid: hexToRgb(t.mid), bot: hexToRgb(t.bot) }));
-  function curThemeIdx() { return (level - 1) % THEMES.length; }
+  function curThemeIdx() { return gameState === 'menu' ? menuPreview : (level - 1) % THEMES.length; }
   function curTheme() { return THEMES[curThemeIdx()]; }
   // chaque monde a ses propres couleurs de bulles
   const PAL_SETS = {
@@ -900,7 +1055,7 @@
   let musicTimer = null;
   let musicBeat = 0;
   function musicTick() {
-    const mood = MOODS[(level - 1) % MOODS.length];
+    const mood = MOODS[curThemeIdx() % MOODS.length];
     if (audioCtx && musicOn && !document.hidden) {
       const t = audioCtx.currentTime;
       musicBeat++;
@@ -948,11 +1103,49 @@
   }
   syncOpts();
   if (!navigator.vibrate) optVibesRow.style.display = 'none'; // non supporté (ex. iPhone)
-  menuBtn.addEventListener('click', () => {
+  function openSettings() {
     ensureAudio();
     syncOpts();
     settingsEl.classList.add('open');
     whoosh(300, 900, 0.2, 0.016);
+  }
+  menuBtn.addEventListener('click', openSettings);
+  menuOptsBtn.addEventListener('click', openSettings);
+  pauseOptsBtn.addEventListener('click', openSettings);
+
+  function startPlay() {
+    gameState = 'play';
+    document.body.classList.remove('inMenu');
+    menuScreenEl.classList.add('hidden');
+    pauseScreenEl.classList.remove('open');
+    applyThemeClass();
+    whoosh(300, 1000, 0.25, 0.02);
+    playChime([523, 659, 784], 0.07);
+    lastTime = performance.now();
+  }
+  playBtn.addEventListener('click', () => { ensureAudio(); startPlay(); });
+  pauseBtnEl.addEventListener('click', () => {
+    if (gameState !== 'play') return;
+    gameState = 'paused';
+    pauseScreenEl.classList.add('open');
+    whoosh(900, 300, 0.18, 0.015);
+  });
+  resumeBtn.addEventListener('click', () => {
+    gameState = 'play';
+    pauseScreenEl.classList.remove('open');
+    whoosh(300, 900, 0.18, 0.015);
+    lastTime = performance.now();
+  });
+  pauseHomeBtn.addEventListener('click', () => {
+    gameState = 'menu';
+    pauseScreenEl.classList.remove('open');
+    menuScreenEl.classList.remove('hidden');
+    document.body.classList.add('inMenu');
+    menuPreview = (level - 1) % THEMES.length;
+    menuCycle = 420;
+    playBtn.textContent = 'Continuer';
+    applyThemeClass();
+    syncMenuWorld();
   });
   closeSettingsBtn.addEventListener('click', () => {
     settingsEl.classList.remove('open');
@@ -984,12 +1177,14 @@
     playChime(vibesOn ? [740] : [520], 0.04);
     if (vibesOn) buzz(15); // petit retour pour confirmer
   });
-  openAlbumBtn.addEventListener('click', () => {
+  function openAlbumPanel() {
     settingsEl.classList.remove('open');
     renderAlbum();
     albumEl.classList.add('open');
     whoosh(350, 1000, 0.2, 0.016);
-  });
+  }
+  openAlbumBtn.addEventListener('click', openAlbumPanel);
+  menuAlbumBtn.addEventListener('click', () => { ensureAudio(); openAlbumPanel(); });
 
   // ---------- Bulles ----------
   // mode : 'rise' (monte depuis le bas), 'place' (apparaît sur place), 'fall' (pluie de bulles)
@@ -1107,11 +1302,16 @@
     popups.push({ x: Math.min(Math.max(x, 40), W - 40), y, text, life: 1, color, big });
   }
 
+  // petites notifications empilées à droite, sans fond, qui s'effacent toutes seules
   function showToast(text, ms, icon) {
-    toastEl.innerHTML = (icon ? ic(icon, 26) : '') + '<span>' + text + '</span>';
-    toastEl.classList.add('show');
-    clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => toastEl.classList.remove('show'), ms || 1500);
+    const n = document.createElement('div');
+    n.className = 'notif';
+    n.innerHTML = (icon ? ic(icon, 16) : '') + '<span>' + text + '</span>';
+    notifsEl.appendChild(n);
+    const kids = notifsEl.children;
+    if (kids && kids.length > 3) notifsEl.removeChild(kids[0]);
+    setTimeout(() => { n.style.opacity = '0'; }, ms || 1500);
+    setTimeout(() => { if (n.parentNode) n.parentNode.removeChild(n); }, (ms || 1500) + 450);
   }
 
   // ---------- Petits défis doux (jamais de chrono, jamais d'échec) ----------
@@ -1215,6 +1415,20 @@
       }
     }
 
+    // trio assorti : trois bulles de la même couleur d'affilée
+    if (!noCombo && b.kind === 'normal') {
+      if (b.pi === trioPi) trioN++; else { trioPi = b.pi; trioN = 1; }
+      if (trioN >= 3) {
+        trioN = 0; trioPi = -1;
+        const tb = 25 * mult * bonus;
+        score += tb;
+        addPopup(b.x, b.y - b.r - 22, 'Trio ! +' + tb, '#ffd96a', true);
+        sparkle(b.x, b.y, '#ffd96a', 6);
+        playChime([880, 1108, 1318], 0.07);
+        unlock('trio');
+      }
+    }
+
     const fancy = b.kind !== 'normal';
     spawnParticles(b.x, b.y, b.kind === 'golden' ? '#ffd96a' : b.palette.body, fancy);
     rings.push({ x: b.x, y: b.y, r: b.baseR * 0.6, max: b.baseR * 2.4, life: 1, color: b.palette.cheek });
@@ -1250,7 +1464,7 @@
 
     if (combo >= 3) {
       comboEl.innerHTML = 'Combo x' + mult +
-        (bonus === 3 ? ' ' + ic('flame', 24) + 'x3' : bonus === 2 ? ' ' + ic('heart', 24) + 'x2' : ' ' + ic('sparkle', 24));
+        (bonus === 3 ? ' ' + ic('flame', 16) + 'x3' : bonus === 2 ? ' ' + ic('heart', 16) + 'x2' : ' ' + ic('sparkle', 16));
       comboEl.classList.add('show');
       clearTimeout(comboEl._t);
       comboEl._t = setTimeout(() => comboEl.classList.remove('show'), 900);
@@ -1283,7 +1497,12 @@
   // l'interface change de peau dans les mondes pixel et néon
   function applyThemeClass() {
     const m = curTheme().mode;
-    document.body.className = m === 'pixel' ? 'pixelMode' : m === 'neon' ? 'neonMode' : '';
+    document.body.classList.toggle('pixelMode', m === 'pixel');
+    document.body.classList.toggle('neonMode', m === 'neon');
+  }
+  function syncMenuWorld() {
+    const th = curTheme();
+    menuWorldEl.innerHTML = ic(th.icon, 16) + '<span>' + th.name + '</span>';
   }
 
   // record battu et passages de niveau (appelé après chaque gain de points)
@@ -1315,6 +1534,7 @@
       playChime([523, 659, 784, 1046], 0.1);
       buzz([10, 30, 10, 30, 10]);
       if (level >= 5) unlock('lvl5');
+      if (level >= 8) unlock('tour');
       if ((level - 1) % THEMES.length === 3) unlock('night');
     }
   }
@@ -1339,6 +1559,24 @@
   }
 
   function popAt(px, py) {
+    if (gameState !== 'play') {
+      // dans le menu : pop décoratif, sans score ni combo
+      let hit = null, hd = Infinity;
+      for (const b of bubbles) {
+        const d = Math.hypot(b.x - px, b.y - py);
+        if (d < b.r + 6 && d < hd) { hit = b; hd = d; }
+      }
+      if (hit) {
+        bubbles.splice(bubbles.indexOf(hit), 1);
+        spawnParticles(hit.x, hit.y, hit.palette.body, false);
+        rings.push({ x: hit.x, y: hit.y, r: hit.baseR * 0.6, max: hit.baseR * 2.4, life: 1, color: hit.palette.cheek });
+        playPop(280 + (52 - hit.baseR) * 11 + Math.random() * 50);
+        buzz(8);
+      } else {
+        sparkle(px, py, '#ffffff', 3);
+      }
+      return;
+    }
     // étoile filante en premier (grosse zone, c'est un cadeau)
     for (let i = shootingStars.length - 1; i >= 0; i--) {
       const s = shootingStars[i];
@@ -1363,6 +1601,7 @@
   // glisser le doigt : tout éclate au passage
   let lastTrailX = -999, lastTrailY = -999;
   function swipeAt(px, py) {
+    if (gameState !== 'play') return;
     for (let i = shootingStars.length - 1; i >= 0; i--) {
       const s = shootingStars[i];
       if (Math.hypot(s.x - px, s.y - py) < 44) { catchStar(s, i); return; }
@@ -1933,6 +2172,8 @@
     const dt = Math.min((time - lastTime) / 16.67, 3);
     lastTime = time;
     const now = performance.now();
+    const paused = gameState === 'paused';
+    const dtw = paused ? 0 : dt; // pendant la pause, le monde respire mais rien ne bouge
 
     const pixelOn = curTheme().mode === 'pixel';
     if (pixelOn) {
@@ -1947,25 +2188,37 @@
 
     drawBackground(time, dt);
 
+    // l'écran titre fait défiler les mondes
+    if (gameState === 'menu') {
+      menuCycle -= dt;
+      if (menuCycle <= 0) {
+        menuCycle = 420;
+        menuPreview = (menuPreview + 1) % THEMES.length;
+        applyThemeClass();
+        syncMenuWorld();
+      }
+    }
+
     // --- apparitions : l'écran n'est jamais vide ---
-    const target = Math.min(10, 6 + Math.floor(level / 3)) + (now < feverUntil ? 3 : 0);
-    spawnTimer -= dt;
-    if (spawnTimer <= 0 && bubbles.length < target) {
+    const target = gameState === 'menu' ? 7
+      : Math.min(10, 6 + Math.floor(level / 3)) + (now < feverUntil ? 3 : 0);
+    spawnTimer -= dtw;
+    if (!paused && spawnTimer <= 0 && bubbles.length < target) {
       spawnBubble(Math.random() < 0.45 ? 'place' : 'rise');
       spawnTimer = 22 + Math.random() * 26;
     }
     // filet de sécurité : si presque tout a éclaté, on en fait réapparaître sur place
-    while (bubbles.length < 3) spawnBubble('place');
+    if (!paused) { while (bubbles.length < 3) spawnBubble('place'); }
 
     // petits défis doux
-    if (!quest && firstPop) {
-      questCooldown -= dt;
+    if (gameState === 'play' && !quest && firstPop) {
+      questCooldown -= dtw;
       if (questCooldown <= 0) newQuest();
     }
 
     // jauge de la fenêtre de combo
     const comboRem = Math.max(0, 1 - (now - lastPopTime) / 2500);
-    if (combo >= 3 && comboRem > 0) {
+    if (gameState === 'play' && combo >= 3 && comboRem > 0) {
       comboBarEl.style.opacity = '1';
       comboFillEl.style.width = (comboRem * 100).toFixed(0) + '%';
     } else {
@@ -1974,7 +2227,7 @@
 
     // pluie de bulles pendant la frénésie
     if (now < frenzyUntil) {
-      frenzySpawnTimer -= dt;
+      frenzySpawnTimer -= dtw;
       if (frenzySpawnTimer <= 0 && bubbles.length < 18) {
         spawnBubble('fall');
         frenzySpawnTimer = 14 + Math.random() * 10;
@@ -1982,7 +2235,7 @@
     }
 
     // étoile filante
-    if (now >= nextStarAt && shootingStars.length === 0) {
+    if (gameState === 'play' && now >= nextStarAt && shootingStars.length === 0) {
       const fromLeft = Math.random() < 0.5;
       shootingStars.push({
         x: fromLeft ? -40 : W + 40,
@@ -1996,9 +2249,9 @@
     }
     for (let i = shootingStars.length - 1; i >= 0; i--) {
       const s = shootingStars[i];
-      s.x += s.vx * dt;
-      s.y += s.vy * dt;
-      s.rot += 0.12 * dt;
+      s.x += s.vx * dtw;
+      s.y += s.vy * dtw;
+      s.rot += 0.12 * dtw;
       if (particles.length < 360) {
         particles.push({
           x: s.x - s.vx * 2, y: s.y - s.vy * 2,
@@ -2023,7 +2276,7 @@
     // réaction en chaîne
     for (let i = chainQueue.length - 1; i >= 0; i--) {
       const c = chainQueue[i];
-      if (now >= c.at) {
+      if (!paused && now >= c.at) {
         chainQueue.splice(i, 1);
         const b = bubbles.find(bb => bb.id === c.id);
         if (b) popBubble(b, c.index, true);
@@ -2039,7 +2292,7 @@
         const d = Math.hypot(dx, dy);
         const min = (a.r + c.r) * 0.9;
         if (d > 0.01 && d < min) {
-          const push = (min - d) * 0.02 * dt;
+          const push = (min - d) * 0.02 * dtw;
           const nx = dx / d, ny = dy / d;
           a.x -= nx * push; a.y -= ny * push * 0.4;
           c.x += nx * push; c.y += ny * push * 0.4;
@@ -2048,9 +2301,9 @@
     }
     for (let i = bubbles.length - 1; i >= 0; i--) {
       const b = bubbles[i];
-      b.wobblePhase += b.wobbleSpeed * dt;
-      b.x += Math.sin(b.wobblePhase) * b.wobbleAmp * dt;
-      b.y += b.vy * dt;
+      b.wobblePhase += b.wobbleSpeed * dtw;
+      b.x += Math.sin(b.wobblePhase) * b.wobbleAmp * dtw;
+      b.y += b.vy * dtw;
       if (b.x < b.r) b.x = b.r;
       if (b.x > W - b.r) b.x = W - b.r;
       // elle s'envole ou se pose, c'est tout — aucune pénalité
@@ -2061,8 +2314,8 @@
     // --- anneaux de pop ---
     for (let i = rings.length - 1; i >= 0; i--) {
       const ring = rings[i];
-      ring.r += (ring.max - ring.r) * 0.18 * dt;
-      ring.life -= 0.05 * dt;
+      ring.r += (ring.max - ring.r) * 0.18 * dtw;
+      ring.life -= 0.05 * dtw;
       if (ring.life <= 0) { rings.splice(i, 1); continue; }
       ctx.globalAlpha = ring.life * 0.6;
       ctx.strokeStyle = ring.color;
@@ -2076,11 +2329,11 @@
     // --- particules ---
     for (let i = particles.length - 1; i >= 0; i--) {
       const p = particles[i];
-      p.x += p.vx * dt;
-      p.y += p.vy * dt;
-      p.vy += 0.05 * dt;
-      p.rot += p.vrot * dt;
-      p.life -= p.decay * dt;
+      p.x += p.vx * dtw;
+      p.y += p.vy * dtw;
+      p.vy += 0.05 * dtw;
+      p.rot += p.vrot * dtw;
+      p.life -= p.decay * dtw;
       if (p.life <= 0 || p.y > H + 20) { particles.splice(i, 1); continue; }
       ctx.globalAlpha = Math.min(1, p.life);
       if (p.star) {
@@ -2097,8 +2350,8 @@
     // --- popups "+N" ---
     for (let i = popups.length - 1; i >= 0; i--) {
       const p = popups[i];
-      p.y -= 0.8 * dt;
-      p.life -= 0.02 * dt;
+      p.y -= 0.8 * dtw;
+      p.life -= 0.02 * dtw;
       if (p.life <= 0) { popups.splice(i, 1); continue; }
       ctx.globalAlpha = Math.min(1, p.life * 2);
       ctx.font = '800 ' + (p.big ? 26 : 18) + 'px "Segoe UI", sans-serif';
@@ -2147,7 +2400,12 @@
       fxA[curThemeIdx()] = 1;
     }
   }
+  if (window.location && /#niveau\d+/.test(window.location.hash || '')) {
+    menuPreview = (level - 1) % THEMES.length;
+  }
+  document.body.classList.add('inMenu');
   applyThemeClass();
+  syncMenuWorld();
 
   // quelques bulles dès le départ, réparties à l'écran
   for (let i = 0; i < 8; i++) {
