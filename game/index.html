@@ -465,6 +465,35 @@
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
+  body.pixelMode .chip, body.pixelMode #scoreCard, body.pixelMode #hint, body.pixelMode #quest,
+  body.pixelMode .roundBtn, body.pixelMode .card, body.pixelMode .optRow, body.pixelMode .menuSmall,
+  body.pixelMode #menuInner, body.pixelMode .sticker, body.pixelMode #albumStats span {
+    border: 3px solid #5a4a52;
+    box-shadow: 4px 4px 0 rgba(90, 74, 82, 0.35);
+  }
+  body.pixelMode .bigBtn, body.pixelMode #openAlbum, body.pixelMode .switch.on, body.pixelMode #lvlbar {
+    background: #ff8fab;
+    border: 3px solid #5a4a52;
+    box-shadow: 4px 4px 0 rgba(90, 74, 82, 0.35);
+    animation: none;
+  }
+  body.pixelMode #menuTitle, body.pixelMode #pauseInner h1, body.pixelMode .card h2 {
+    background: none;
+    -webkit-background-clip: initial;
+    background-clip: initial;
+    color: #5a4a52;
+    filter: none;
+    text-shadow: 3px 3px 0 rgba(255, 255, 255, 0.7);
+  }
+  body.pixelMode #menuInner {
+    background: rgba(255, 247, 251, 0.85);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  body.pixelMode .switch::after { box-shadow: none; border: 2px solid #5a4a52; }
+  body.pixelMode .notif, body.pixelMode #combo, body.pixelMode #menuSub, body.pixelMode #menuWorld {
+    text-shadow: 2px 2px 0 rgba(90, 50, 90, 0.7);
+  }
   body.neonMode {
     --glass: rgba(28, 14, 52, 0.6);
     --glass-edge: rgba(140, 225, 255, 0.4);
@@ -509,6 +538,12 @@
     <symbol id="i-planet" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="#c3aed6"/><circle cx="9.8" cy="9.8" r="1.6" fill="#fff" opacity=".45"/><ellipse cx="12" cy="12.5" rx="10" ry="3.2" fill="none" stroke="#ffd96a" stroke-width="1.6" transform="rotate(-18 12 12.5)"/></symbol>
     <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#ffb3c6"/><circle cx="12" cy="12" r="5.5" fill="#fff"/><circle cx="12" cy="12" r="2.5" fill="#ff6f9c"/></symbol>
     <symbol id="i-gift" viewBox="0 0 24 24"><rect x="4" y="9.5" width="16" height="11" rx="2" fill="#ffb3c6"/><rect x="3" y="6.5" width="18" height="4.5" rx="2" fill="#ff8fab"/><rect x="10.6" y="6.5" width="2.8" height="14" fill="#fff0f7"/><path d="M12 6.5C9 6.5 7.5 4.8 8.3 3.4c.8-1.4 3-.8 3.7 1.4.7-2.2 2.9-2.8 3.7-1.4.8 1.4-.7 3.1-3.7 3.1z" fill="#c98be0"/></symbol>
+    <symbol id="i-sakura" viewBox="0 0 24 24"><g fill="#ffd9e8"><circle cx="12" cy="5.5" r="3.4"/><circle cx="18.2" cy="10" r="3.4"/><circle cx="15.8" cy="17.3" r="3.4"/><circle cx="8.2" cy="17.3" r="3.4"/><circle cx="5.8" cy="10" r="3.4"/></g><circle cx="12" cy="11.8" r="3" fill="#ff8fab"/></symbol>
+    <symbol id="i-candy" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6.5" fill="#ff9ec0"/><path d="M12 9a3.2 3.2 0 0 0-3.2-3.2M12 9a3.2 3.2 0 0 1 3.2 3.2" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round"/><rect x="11.1" y="15" width="1.8" height="7" rx="0.9" fill="#c98be0"/></symbol>
+    <symbol id="i-aurora" viewBox="0 0 24 24"><path d="M3 15C6 7 9 13 12 6s6 4 9-3" stroke="#7ee8c0" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M4 20c3-6 6-1 8-6s5 2 8-2" stroke="#9fd0ff" stroke-width="2" fill="none" stroke-linecap="round" opacity=".85"/><circle cx="19" cy="19" r="1.2" fill="#fff"/></symbol>
+    <symbol id="i-cactus" viewBox="0 0 24 24"><rect x="10" y="5" width="4.4" height="15" rx="2.2" fill="#7ec98a"/><rect x="5" y="9" width="3.2" height="6" rx="1.6" fill="#7ec98a"/><rect x="6.5" y="12.2" width="4" height="2.6" fill="#7ec98a"/><rect x="16" y="7.5" width="3.2" height="5" rx="1.6" fill="#7ec98a"/><rect x="13.8" y="9.8" width="3 " height="2.6" fill="#7ec98a"/><circle cx="19.5" cy="4" r="2" fill="#ffd96a"/></symbol>
+    <symbol id="i-pinata" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#ffe1ef"/><path d="M5.5 8.2h13M4 12h16M5.5 15.8h13" stroke="#ff8fab" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-twin" viewBox="0 0 24 24"><circle cx="8.6" cy="12" r="6.2" fill="#a8d8ea"/><circle cx="16" cy="12" r="5.2" fill="#ffb3c6"/><ellipse cx="6.6" cy="9.6" rx="1.8" ry="1" fill="#fff" opacity=".8" transform="rotate(-25 6.6 9.6)"/></symbol>
     <symbol id="i-trio" viewBox="0 0 24 24"><circle cx="8" cy="9" r="4.5" fill="#ffb3c6"/><circle cx="16" cy="9" r="4.5" fill="#ff8fab"/><circle cx="12" cy="16.5" r="4.5" fill="#ff6f9c"/></symbol>
     <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6.5" y="5" width="3.8" height="14" rx="1.9" fill="#8a5a7a"/><rect x="13.7" y="5" width="3.8" height="14" rx="1.9" fill="#8a5a7a"/></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24"><path fill="#cbb3c6" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></symbol>
@@ -685,6 +720,7 @@
   const GOLD = { body: '#ffd96a', cheek: '#ffb830' };
   const HEART = { body: '#ffa8c5', cheek: '#ff6f9c' };
   const RAINBOW = { body: '#ffffff', cheek: '#ff8fab' };
+  const PINATA = { body: '#ffe1ef', cheek: '#ff8fab' };
 
   const bubbles = [];
   const particles = [];
@@ -726,7 +762,9 @@
     { id: 'quest5',  icon: 'target',    nm: 'Touche-à-tout',     ds: 'Réussir 5 petits défis' },
     { id: 'gift',    icon: 'gift',      nm: 'Bien le bonjour',   ds: 'Recevoir le cadeau du jour' },
     { id: 'trio',    icon: 'trio',      nm: 'Trio assorti',      ds: '3 bulles de même couleur d’affilée' },
-    { id: 'tour',    icon: 'planet',    nm: 'Globe-trotteur',    ds: 'Découvrir les 8 mondes' },
+    { id: 'pinata',  icon: 'pinata',    nm: 'Casse-piñata',      ds: 'Vider une bulle piñata' },
+    { id: 'twin',    icon: 'twin',      nm: 'Inséparables',      ds: 'Séparer des bulles jumelles' },
+    { id: 'tour',    icon: 'planet',    nm: 'Globe-trotteur',    ds: 'Découvrir les 12 mondes' },
   ];
   let unlocked = {};
   try { unlocked = JSON.parse(store.get('bullepop-stickers', '{}')) || {}; } catch (e) { unlocked = {}; }
@@ -785,10 +823,14 @@
     { name: 'Plein ciel',        icon: 'cloud',  top: '#cdebff', mid: '#e0f4ff', bot: '#fdf6e3', cloud: 0.85, star: 0,    pal: 'pastel', glow: 0 },
     { name: 'Coucher de soleil', icon: 'sun',    top: '#ffc88f', mid: '#ffb3ad', bot: '#d8a0d8', cloud: 0.4,  star: 0.25, pal: 'pastel', glow: 0.25 },
     { name: 'Nuit étoilée',      icon: 'moon',   top: '#33305e', mid: '#564b87', bot: '#8a6fae', cloud: 0.13, star: 1,    pal: 'pastel', glow: 0.45 },
-    { name: 'Fonds marins',      icon: 'fish',   top: '#62c2ea', mid: '#3795d2', bot: '#1d5fa6', cloud: 0,    star: 0,    pal: 'marine', glow: 0.4,  mode: 'water' },
+    { name: 'Fonds marins',      icon: 'fish',   top: '#62c2ea', mid: '#3795d2', bot: '#1d5fa6', cloud: 0,    star: 0,    pal: 'marine', glow: 0.4,  mode: 'water', flow: 0.35 },
     { name: 'Monde pixel',       icon: 'pixel',  top: '#8fd6ff', mid: '#c2ecff', bot: '#a8e8b8', cloud: 0.9,  star: 0,    pal: 'pastel', glow: 0,    mode: 'pixel' },
     { name: 'Néon rétro',        icon: 'neon',   top: '#160a2e', mid: '#341058', bot: '#0c0524', cloud: 0,    star: 0.7,  pal: 'neon',   glow: 1,    mode: 'neon' },
     { name: 'Cosmos',            icon: 'planet', top: '#0b0b28', mid: '#1c1242', bot: '#2c1856', cloud: 0,    star: 1,    pal: 'cosmos', glow: 0.8,  mode: 'space' },
+    { name: 'Jardin sakura',     icon: 'sakura', top: '#ffe8f0', mid: '#ffd9e8', bot: '#e8f5e0', cloud: 0.3,  star: 0,    pal: 'sakura', glow: 0,    flow: 0.2 },
+    { name: 'Pays des bonbons',  icon: 'candy',  top: '#ffd9ec', mid: '#ffe9f4', bot: '#d4f5e8', cloud: 0.55, star: 0,    pal: 'candy',  glow: 0.15, flow: 0.15 },
+    { name: 'Aurore polaire',    icon: 'aurora', top: '#0e1f3d', mid: '#1d3a5f', bot: '#3d6b8a', cloud: 0.08, star: 0.9,  pal: 'polar',  glow: 0.6,  flow: 0.55 },
+    { name: 'Désert d’or',     icon: 'cactus', top: '#ffd9a0', mid: '#ffc290', bot: '#e8a06a', cloud: 0.2,  star: 0.35, pal: 'desert', glow: 0.2,  flow: 0.25 },
   ].map(t => Object.assign({}, t, { top: hexToRgb(t.top), mid: hexToRgb(t.mid), bot: hexToRgb(t.bot) }));
   function curThemeIdx() { return gameState === 'menu' ? menuPreview : (level - 1) % THEMES.length; }
   function curTheme() { return THEMES[curThemeIdx()]; }
@@ -808,6 +850,31 @@
       { body: '#5fff9e', cheek: '#aaffd0' },
       { body: '#ffe45f', cheek: '#fff3ad' },
     ], names: ['magenta', 'cyan', 'violettes', 'vert fluo', 'jaune fluo'] },
+    sakura: { colors: [
+      { body: '#ffd9e8', cheek: '#ff9ec8' },
+      { body: '#fff0f5', cheek: '#ffc2d8' },
+      { body: '#ffc2d8', cheek: '#ff8fb8' },
+      { body: '#d8f0d0', cheek: '#a0d098' },
+    ], names: ['rose sakura', 'blanches', 'fuchsia', 'feuille'] },
+    candy: { colors: [
+      { body: '#ff9ec0', cheek: '#ff6f9c' },
+      { body: '#7ee8d0', cheek: '#4fc8a8' },
+      { body: '#ffd96a', cheek: '#f0b830' },
+      { body: '#b8a0ff', cheek: '#9478e8' },
+      { body: '#ff9a8a', cheek: '#f07060' },
+    ], names: ['fraise', 'menthe', 'citron', 'myrtille', 'orange'] },
+    polar: { colors: [
+      { body: '#bfe8ff', cheek: '#8fc8e8' },
+      { body: '#e8f4ff', cheek: '#b8d8f0' },
+      { body: '#9fd0e8', cheek: '#6fa8c8' },
+      { body: '#d0c2ff', cheek: '#a892e8' },
+    ], names: ['glacier', 'neige', 'banquise', 'améthyste'] },
+    desert: { colors: [
+      { body: '#ffcf8f', cheek: '#f0a860' },
+      { body: '#ffb37a', cheek: '#e88a50' },
+      { body: '#f0e0a8', cheek: '#c8b870' },
+      { body: '#e0b0e0', cheek: '#b888b8' },
+    ], names: ['sable', 'terracotta', 'dune', 'figuier'] },
     cosmos: { colors: [
       { body: '#a8b8ff', cheek: '#7e94e8' },
       { body: '#ffb3e8', cheek: '#f08fd0' },
@@ -997,6 +1064,22 @@
       scale: [783.99, 880.0, 1046.5, 1318.5],
       step: 2300, wave: 'sine', vol: 0.026, pad: 65.41, padEvery: 3, dual: 0.15, dur: 3,
       airFreq: 90, airVol: 0.015 },
+    { // jardin sakura : gamme japonaise contemplative
+      scale: [261.63, 277.18, 349.23, 392.0, 466.16, 523.25],
+      step: 1400, wave: 'sine', vol: 0.036, pad: 130.81, padEvery: 5, dual: 0.25, dur: 1.8,
+      airFreq: 280, airVol: 0.012 },
+    { // pays des bonbons : ritournelle joyeuse et sautillante
+      scale: [392.0, 440.0, 493.88, 523.25, 587.33, 659.25, 783.99],
+      step: 700, wave: 'triangle', vol: 0.034, pad: 196.0, padEvery: 6, dual: 0.5, dur: 0.5,
+      airFreq: 400, airVol: 0.01 },
+    { // aurore polaire : quintes aériennes très lentes
+      scale: [261.63, 392.0, 523.25, 587.33, 783.99],
+      step: 2000, wave: 'sine', vol: 0.03, pad: 65.41, padEvery: 2, dual: 0.2, dur: 3.5,
+      airFreq: 110, airVol: 0.018 },
+    { // désert d'or : pentatonique grave et chaleureuse
+      scale: [220.0, 261.63, 293.66, 329.63, 392.0],
+      step: 1600, wave: 'sine', vol: 0.035, pad: 110.0, padEvery: 4, dual: 0.25, dur: 2,
+      airFreq: 200, airVol: 0.014 },
   ];
   // nappe d'air continue (bruit très filtré), suit le thème en douceur
   let ambient = null;
@@ -1194,13 +1277,15 @@
     if (roll < 0.05) kind = 'golden';
     else if (roll < 0.08) kind = 'rainbow';
     else if (roll < 0.10 && performance.now() > frenzyUntil) kind = 'heart';
+    else if (roll < 0.135) kind = 'pinata';
+    else if (roll < 0.18) kind = 'twin';
 
     const special = kind !== 'normal';
     const r = special ? 27 + Math.random() * 8 : 26 + Math.random() * 24;
     const set = currentPalSet();
     const pi = (Math.random() * set.colors.length) | 0;
     const palette = kind === 'golden' ? GOLD : kind === 'heart' ? HEART : kind === 'rainbow' ? RAINBOW
-      : set.colors[pi];
+      : kind === 'pinata' ? PINATA : set.colors[pi];
 
     const b = {
       id: ++idSeq,
@@ -1217,6 +1302,7 @@
       nextBlink: 120 + Math.random() * 240,
       birth: performance.now(),
     };
+    if (kind === 'pinata') b.hp = 3; // demande trois petits coups
     if (mode === 'fall') {
       b.y = -r - 10;
       b.vy = 0.6 + Math.random() * 0.4;
@@ -1226,6 +1312,9 @@
     } else {
       b.y = H + r + 10;
       b.vy = -(0.5 + Math.random() * 0.5) * (kind === 'golden' ? 1.4 : 1);
+    }
+    if (curTheme().mode === 'space' && mode === 'place') {
+      b.vy = (Math.random() - 0.45) * 0.5; // en apesanteur, les bulles dérivent
     }
     bubbles.push(b);
     if (mode === 'place') {
@@ -1394,6 +1483,8 @@
     const base = b.kind === 'golden' ? 50
       : b.kind === 'heart' ? 20
       : b.kind === 'rainbow' ? 15
+      : b.kind === 'pinata' ? 35
+      : b.kind === 'twin' ? 8
       : Math.max(1, Math.round((52 - b.baseR) / 7) + 1);
     const points = base * mult * bonus;
     score += points;
@@ -1458,6 +1549,31 @@
       playChime([523, 659, 784], 0.1);
       buzz([12, 40, 12]);
       unlock('heart');
+    } else if (b.kind === 'pinata') {
+      sprinkle();
+      playChime([784, 988], 0.08);
+      buzz([10, 30, 10]);
+      unlock('pinata');
+    } else if (b.kind === 'twin') {
+      // elle se sépare en deux petites bulles à rattraper
+      for (const sdir of [-1, 1]) {
+        bubbles.push({
+          id: ++idSeq,
+          x: b.x + sdir * b.r * 0.3, y: b.y,
+          r: b.baseR * 0.55, baseR: b.baseR * 0.55,
+          vy: -(0.4 + Math.random() * 0.3),
+          vx: sdir * (1.1 + Math.random() * 0.8),
+          wobblePhase: Math.random() * 6.28,
+          wobbleSpeed: 0.02 + Math.random() * 0.02,
+          wobbleAmp: 0.6,
+          palette: b.palette, kind: 'normal', pi: b.pi,
+          bow: false, blink: 0, nextBlink: 120 + Math.random() * 240,
+          birth: performance.now(),
+        });
+      }
+      playPop(520);
+      buzz([8, 20, 8]);
+      unlock('twin');
     } else {
       buzz(8);
     }
@@ -1534,7 +1650,7 @@
       playChime([523, 659, 784, 1046], 0.1);
       buzz([10, 30, 10, 30, 10]);
       if (level >= 5) unlock('lvl5');
-      if (level >= 8) unlock('tour');
+      if (level >= 12) unlock('tour');
       if ((level - 1) % THEMES.length === 3) unlock('night');
     }
   }
@@ -1556,6 +1672,23 @@
     unlock('star');
     onScoreChanged();
     nextStarAt = now + 18000 + Math.random() * 22000;
+  }
+
+  // petit coup sur une piñata : elle se fendille, le combo reste vivant
+  function hitPinata(b) {
+    const now = performance.now();
+    b.hp--;
+    b.squishT = now;
+    combo = (now - lastPopTime < 2500) ? combo + 1 : 1;
+    lastPopTime = now;
+    if (combo > maxCombo) { maxCombo = combo; store.set('bullepop-maxcombo', maxCombo); }
+    const pts = 2 * bonusMult(now);
+    score += pts;
+    addPopup(b.x, b.y - b.r, '+' + pts, b.palette.cheek, false);
+    sparkle(b.x, b.y - b.r * 0.4, '#ffffff', 4);
+    playPop(620 + (3 - b.hp) * 130);
+    buzz(6);
+    onScoreChanged();
   }
 
   function popAt(px, py) {
@@ -1589,7 +1722,8 @@
       if (d < b.r + 6 && d < hitDist) { hit = b; hitDist = d; }
     }
     if (hit) {
-      popBubble(hit);
+      if (hit.kind === 'pinata' && hit.hp > 1) hitPinata(hit);
+      else popBubble(hit);
     } else {
       // tap dans le vide : le combo retombe, c'est la seule conséquence
       combo = 0;
@@ -1612,7 +1746,8 @@
       if (Math.hypot(b.x - px, b.y - py) < b.r * 0.95) {
         if (nowS - (swipeAt._last || 0) < 110) break; // cadence douce, pas de moisson frénétique
         swipeAt._last = nowS;
-        popBubble(b, undefined, true);
+        if (b.kind === 'pinata' && b.hp > 1) hitPinata(b);
+        else popBubble(b, undefined, true);
         break;
       }
     }
@@ -1628,14 +1763,18 @@
 
   // ---------- Entrées (souris + multi-touch + glisser) ----------
   let ptrX = null, ptrY = null; // dernière position connue : les bulles la regardent
+  const heldPtrs = new Map(); // doigts posés : aimant doux
   function onPress(e) {
     e.preventDefault();
     ensureAudio();
     ptrX = e.clientX; ptrY = e.clientY;
+    heldPtrs.set(e.pointerId || 0, { x: e.clientX, y: e.clientY, t: performance.now() });
     popAt(e.clientX, e.clientY);
   }
   function onMove(e) {
     ptrX = e.clientX; ptrY = e.clientY;
+    const hp = heldPtrs.get(e.pointerId || 0);
+    if (hp) { hp.x = e.clientX; hp.y = e.clientY; }
     // doigt posé ou bouton de souris enfoncé
     if (e.pointerType === 'touch' || e.buttons) {
       e.preventDefault();
@@ -1645,6 +1784,8 @@
   if (window.PointerEvent) {
     canvas.addEventListener('pointerdown', onPress);
     canvas.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', (e) => heldPtrs.delete(e.pointerId || 0));
+    window.addEventListener('pointercancel', (e) => heldPtrs.delete(e.pointerId || 0));
   } else {
     canvas.addEventListener('mousedown', onPress);
     canvas.addEventListener('mousemove', (e) => { if (e.buttons) swipeAt(e.clientX, e.clientY); });
@@ -1835,7 +1976,17 @@
       ctx.stroke();
     }
   }
-  function fxPixel(a, time, dt) { // soleil franc + collines (la pixellisation fait le reste)
+  function fxPixel(a, time, dt) { // ciel en bandes dures, soleil franc, collines
+    const mix = (c1, c2, f) => [0, 1, 2].map(i => Math.round(c1[i] + (c2[i] - c1[i]) * f));
+    const bands = 6;
+    ctx.globalAlpha = a;
+    for (let i = 0; i < bands; i++) {
+      const f = i / (bands - 1);
+      const c = f < 0.55 ? mix(sky.top, sky.mid, f / 0.55) : mix(sky.mid, sky.bot, (f - 0.55) / 0.45);
+      ctx.fillStyle = rgb(c);
+      ctx.fillRect(0, (H * i) / bands, W, H / bands + 1);
+    }
+    ctx.globalAlpha = 1;
     ctx.fillStyle = 'rgba(255,223,106,' + a.toFixed(3) + ')';
     ctx.beginPath(); ctx.arc(W * 0.18, H * 0.13, Math.min(W, H) * 0.08, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = 'rgba(126,200,138,' + (0.85 * a).toFixed(3) + ')';
@@ -1913,7 +2064,118 @@
     ctx.globalAlpha = 1;
     ctx.restore();
   }
-  const FX = [fxDawn, fxDay, fxSunset, fxNight, fxWater, fxPixel, fxNeon, fxSpace];
+  function fxSakura(a, time, dt) { // brume, torii, pluie de pétales
+    ctx.fillStyle = 'rgba(255,255,255,' + (0.16 * a).toFixed(3) + ')';
+    ctx.fillRect(0, H * 0.55 + Math.sin(time * 0.0003) * 12, W, 44);
+    ctx.fillRect(0, H * 0.74 + Math.cos(time * 0.00025) * 10, W, 36);
+    const s = H * 0.075, tx = W * 0.16, ty = H * 0.88;
+    ctx.fillStyle = 'rgba(150,60,80,' + (0.8 * a).toFixed(3) + ')';
+    ctx.fillRect(tx - s * 0.55, ty - s, s * 0.16, s);
+    ctx.fillRect(tx + s * 0.39, ty - s, s * 0.16, s);
+    ctx.fillRect(tx - s * 0.68, ty - s * 1.1, s * 1.36, s * 0.14);
+    ctx.fillRect(tx - s * 0.85, ty - s * 1.38, s * 1.7, s * 0.18);
+    for (const p of parts('sakura', 14, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      vy: 0.25 + Math.random() * 0.3, ph: Math.random() * 6,
+      rot: Math.random() * 6, vr: (Math.random() - 0.5) * 0.06,
+      s: 3 + Math.random() * 4,
+    }))) {
+      p.y += p.vy * dt; p.x += Math.sin(time * 0.002 + p.ph) * 0.8 * dt; p.rot += p.vr * dt;
+      if (p.y > H + 8) { p.y = -8; p.x = Math.random() * W; }
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = 'rgba(255,200,220,' + (0.7 * a).toFixed(3) + ')';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.s, p.s * 0.6, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+  function fxCandy(a, time, dt) { // sucettes et pluie de vermicelles
+    const lols = [[W * 0.12, H * 0.92, 26, '#ff9ec0'], [W * 0.88, H * 0.95, 32, '#7ee8d0']];
+    for (const [lx, ly, lr, lc] of lols) {
+      ctx.globalAlpha = a;
+      ctx.fillStyle = '#f0e8da';
+      ctx.fillRect(lx - 3, ly - lr, 6, lr * 2.4);
+      ctx.fillStyle = lc;
+      ctx.beginPath(); ctx.arc(lx, ly - lr, lr, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+      ctx.lineWidth = 5; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.arc(lx, ly - lr, lr * 0.55, 0.4, 2.6); ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+    const cols = ['#ff9ec0', '#7ee8d0', '#ffd96a', '#b8a0ff', '#ff9a8a'];
+    for (const sp of parts('vermicelles', 16, (i) => ({
+      x: Math.random() * W, y: Math.random() * H,
+      vy: 0.4 + Math.random() * 0.4, rot: Math.random() * 6, vr: (Math.random() - 0.5) * 0.08,
+      c: cols[i % cols.length],
+    }))) {
+      sp.y += sp.vy * dt; sp.rot += sp.vr * dt;
+      if (sp.y > H + 8) { sp.y = -8; sp.x = Math.random() * W; }
+      ctx.save();
+      ctx.translate(sp.x, sp.y);
+      ctx.rotate(sp.rot);
+      ctx.globalAlpha = 0.8 * a;
+      ctx.fillStyle = sp.c;
+      ctx.fillRect(-4, -1.5, 8, 3);
+      ctx.globalAlpha = 1;
+      ctx.restore();
+    }
+  }
+  function fxAurora(a, time, dt) { // rubans d'aurore, neige, banquise
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.lineCap = 'round';
+    for (let rIdx = 0; rIdx < 2; rIdx++) {
+      ctx.beginPath();
+      for (let x = -20; x <= W + 20; x += 24) {
+        const y = H * (0.2 + rIdx * 0.11) + Math.sin(x * 0.012 + time * 0.0006 + rIdx * 2) * 38;
+        if (x === -20) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      const col = rIdx ? '120,200,255' : '110,255,190';
+      ctx.strokeStyle = 'rgba(' + col + ',' + (0.14 * a).toFixed(3) + ')';
+      ctx.lineWidth = 44 - rIdx * 12;
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(' + col + ',' + (0.12 * a).toFixed(3) + ')';
+      ctx.lineWidth = 12;
+      ctx.stroke();
+    }
+    ctx.restore();
+    ctx.fillStyle = 'rgba(255,255,255,' + (0.7 * a).toFixed(3) + ')';
+    for (const n of parts('neige', 16, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      vy: 0.2 + Math.random() * 0.25, ph: Math.random() * 6, s: 1 + Math.random() * 1.8,
+    }))) {
+      n.y += n.vy * dt; n.x += Math.sin(time * 0.001 + n.ph) * 0.3 * dt;
+      if (n.y > H + 5) { n.y = -5; n.x = Math.random() * W; }
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.s, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.fillStyle = 'rgba(235,245,255,' + (0.5 * a).toFixed(3) + ')';
+    ctx.beginPath(); ctx.ellipse(W * 0.15, H + 6, W * 0.3, 26, 0, Math.PI, 0); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(W * 0.8, H + 8, W * 0.34, 30, 0, Math.PI, 0); ctx.fill();
+  }
+  function fxDesert(a, time, dt) { // dunes, cactus, soleil pâle
+    const hg = ctx.createRadialGradient(W * 0.3, H * 0.13, 4, W * 0.3, H * 0.13, 90);
+    hg.addColorStop(0, 'rgba(255,244,210,' + (0.8 * a).toFixed(3) + ')');
+    hg.addColorStop(1, 'rgba(255,244,210,0)');
+    ctx.fillStyle = hg;
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(255,240,205,' + (0.85 * a).toFixed(3) + ')';
+    ctx.beginPath(); ctx.arc(W * 0.3, H * 0.13, 17, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(228,160,95,' + (0.75 * a).toFixed(3) + ')';
+    ctx.beginPath(); ctx.ellipse(W * 0.25, H + 30, W * 0.65, H * 0.13, 0, Math.PI, 0); ctx.fill();
+    ctx.fillStyle = 'rgba(205,130,75,' + (0.75 * a).toFixed(3) + ')';
+    ctx.beginPath(); ctx.ellipse(W * 0.85, H + 30, W * 0.55, H * 0.1, 0, Math.PI, 0); ctx.fill();
+    const cs = H * 0.05, cx0 = W * 0.76, cy0 = H * 0.93;
+    ctx.fillStyle = 'rgba(60,110,70,' + (0.8 * a).toFixed(3) + ')';
+    ctx.fillRect(cx0 - cs * 0.16, cy0 - cs, cs * 0.32, cs);
+    ctx.fillRect(cx0 - cs * 0.55, cy0 - cs * 0.7, cs * 0.45, cs * 0.16);
+    ctx.fillRect(cx0 - cs * 0.55, cy0 - cs * 0.95, cs * 0.16, cs * 0.4);
+    ctx.fillRect(cx0 + cs * 0.1, cy0 - cs * 0.55, cs * 0.45, cs * 0.16);
+    ctx.fillRect(cx0 + cs * 0.39, cy0 - cs * 0.85, cs * 0.16, cs * 0.45);
+  }
+  const FX = [fxDawn, fxDay, fxSunset, fxNight, fxWater, fxPixel, fxNeon, fxSpace, fxSakura, fxCandy, fxAurora, fxDesert];
 
   function drawBackground(time, dt) {
     const ti = curThemeIdx();
@@ -1991,15 +2253,26 @@
     const popIn = Math.min(1, age * 4);
     const ease = 1 - Math.pow(1 - popIn, 3);
     const wob = Math.sin(time * 0.003 + b.wobblePhase) * 0.06;
-    const rx = b.r * ease * (1 + wob);
-    const ry = b.r * ease * (1 - wob);
+    let rx = b.r * ease * (1 + wob);
+    let ry = b.r * ease * (1 - wob);
+    if (b.squishT) { // petit écrasement quand on tape une piñata
+      const e = (time - b.squishT) / 140;
+      if (e >= 0 && e < 1) {
+        const s = 0.82 + 0.18 * e;
+        rx *= Math.min(1.16, 2 - s);
+        ry *= s;
+      }
+    }
     if (rx < 1 || ry < 1) return;
 
     ctx.save();
     ctx.translate(b.x, b.y);
 
     const th = curTheme();
-    if (b.kind === 'golden') {
+    const pixelArt = th.mode === 'pixel'; // en pixel art : aplats nets, pas de flou
+    if (pixelArt) {
+      // rien : aucune ombre portée, le rendu reste franc
+    } else if (b.kind === 'golden') {
       ctx.shadowColor = 'rgba(255, 200, 60, 0.8)';
       ctx.shadowBlur = 22;
     } else if (b.kind === 'heart') {
@@ -2009,6 +2282,57 @@
       // dans les mondes lumineux, les bulles rayonnent de leur propre couleur
       ctx.shadowColor = b.palette.body;
       ctx.shadowBlur = 24 * th.glow;
+    }
+
+    // bulles jumelles : deux lobes accolés avec deux petits visages
+    if (b.kind === 'twin') {
+      const p = b.palette;
+      if (!p._hi) { p._hi = shade(p.body, 0.45); p._lo = shade(p.body, -0.18); p._out = shade(p.body, -0.38); }
+      for (const sdir of [-1, 1]) {
+        ctx.save();
+        ctx.translate(sdir * rx * 0.42, 0);
+        const lr = rx * 0.62, lry = ry * 0.62;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, lr, lry, 0, 0, Math.PI * 2);
+        if (pixelArt) {
+          ctx.fillStyle = p.body;
+        } else {
+          const tg = ctx.createRadialGradient(-lr * 0.35, -lry * 0.45, lr * 0.1, 0, 0, lr * 1.25);
+          tg.addColorStop(0, p._hi);
+          tg.addColorStop(0.55, p.body);
+          tg.addColorStop(1, p._lo);
+          ctx.fillStyle = tg;
+        }
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        if (pixelArt) {
+          ctx.lineWidth = 3.5;
+          ctx.strokeStyle = p._out;
+          ctx.stroke();
+          ctx.fillStyle = 'rgba(255,255,255,0.85)';
+          ctx.fillRect(-lr * 0.5, -lry * 0.55, lr * 0.3, lry * 0.3);
+        } else {
+          ctx.beginPath();
+          ctx.ellipse(-lr * 0.3, -lry * 0.35, lr * 0.2, lry * 0.13, -0.6, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255,255,255,0.7)';
+          ctx.fill();
+        }
+        ctx.fillStyle = '#5a4a52';
+        for (const e2 of [-1, 1]) {
+          ctx.beginPath();
+          ctx.arc(e2 * lr * 0.3, -lry * 0.05, Math.max(1.4, lr * 0.1), 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.beginPath();
+        ctx.arc(0, lry * 0.22, lr * 0.18, 0.15 * Math.PI, 0.85 * Math.PI);
+        ctx.lineWidth = Math.max(1.4, lr * 0.07);
+        ctx.strokeStyle = '#5a4a52';
+        ctx.lineCap = 'round';
+        ctx.stroke();
+        ctx.restore();
+      }
+      ctx.restore();
+      return;
     }
 
     // corps avec volume : lumière en haut à gauche, ombre sur le bord opposé
@@ -2022,6 +2346,10 @@
       rg.addColorStop(0.8, '#a8d8ea');
       rg.addColorStop(1, '#c3aed6');
       ctx.fillStyle = rg;
+    } else if (pixelArt) {
+      const p = b.palette;
+      if (!p._out) p._out = shade(p.body, -0.38);
+      ctx.fillStyle = p.body;
     } else {
       const p = b.palette;
       if (!p._hi) { p._hi = shade(p.body, 0.45); p._lo = shade(p.body, -0.18); }
@@ -2034,15 +2362,42 @@
     ctx.fill();
     ctx.shadowBlur = 0;
 
-    // double reflet : grand reflet doux + petit éclat net
-    ctx.beginPath();
-    ctx.ellipse(-rx * 0.35, -ry * 0.4, rx * 0.22, ry * 0.14, -0.6, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(rx * 0.18, -ry * 0.58, Math.max(1.2, rx * 0.07), 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-    ctx.fill();
+    // rayures de la piñata
+    if (b.kind === 'pinata') {
+      ctx.save();
+      ctx.beginPath();
+      ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.fillStyle = 'rgba(255,143,171,0.45)';
+      for (const off of [-1.05, 0, 1.05]) {
+        ctx.fillRect(off * rx - rx * 0.16, -ry, rx * 0.32, ry * 2);
+      }
+      ctx.restore();
+      for (let i = 0; i < 3 - (b.hp || 1); i++) {
+        drawStarShape(rx * (0.45 - i * 0.5), -ry * (0.55 - i * 0.2), 3.2, 0.5 + i, '#ffffff');
+      }
+    }
+
+    if (pixelArt) {
+      // pixel art : contour épais et reflet carré, aucun flou
+      ctx.beginPath();
+      ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+      ctx.lineWidth = 3.5;
+      ctx.strokeStyle = b.kind === 'rainbow' ? '#c3aed6' : b.palette._out || shade(b.palette.body, -0.38);
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+      ctx.fillRect(-rx * 0.5, -ry * 0.58, rx * 0.3, ry * 0.3);
+    } else {
+      // double reflet : grand reflet doux + petit éclat net
+      ctx.beginPath();
+      ctx.ellipse(-rx * 0.35, -ry * 0.4, rx * 0.22, ry * 0.14, -0.6, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(rx * 0.18, -ry * 0.58, Math.max(1.2, rx * 0.07), 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.fill();
+    }
 
     // visage kawaii
     const eyeY = -ry * 0.05;
@@ -2181,6 +2536,7 @@
       const ph = Math.max(1, Math.ceil(H / PIX));
       if (pixCanvas.width !== pw || pixCanvas.height !== ph) { pixCanvas.width = pw; pixCanvas.height = ph; }
       pixCtx.setTransform(1 / PIX, 0, 0, 1 / PIX, 0, 0);
+      pixCtx.imageSmoothingEnabled = false;
       ctx = pixCtx;
     } else {
       ctx = mainCtx;
@@ -2214,6 +2570,23 @@
     if (gameState === 'play' && !quest && firstPop) {
       questCooldown -= dtw;
       if (questCooldown <= 0) newQuest();
+    }
+
+    // aimant doux : un doigt posé un instant attire les bulles voisines
+    if (gameState === 'play' && !paused) {
+      heldPtrs.forEach((hp) => {
+        if (now - hp.t < 300 || now - hp.t > 20000) return;
+        for (const b of bubbles) {
+          const dxm = hp.x - b.x, dym = hp.y - b.y;
+          const dm = Math.hypot(dxm, dym);
+          if (dm > 8 && dm < 190) {
+            const fm = 0.012 * dtw * (1 - dm / 190);
+            b.x += dxm * fm;
+            b.y += dym * fm;
+          }
+        }
+        if (Math.random() < 0.12) sparkle(hp.x, hp.y, '#ffffff', 1, true);
+      });
     }
 
     // jauge de la fenêtre de combo
@@ -2303,6 +2676,9 @@
       const b = bubbles[i];
       b.wobblePhase += b.wobbleSpeed * dtw;
       b.x += Math.sin(b.wobblePhase) * b.wobbleAmp * dtw;
+      const flw = curTheme().flow;
+      if (flw) b.x += Math.sin(time * 0.0006 + b.y * 0.012) * flw * dtw;
+      if (b.vx) { b.x += b.vx * dtw; b.vx *= Math.max(0, 1 - 0.05 * dtw); }
       b.y += b.vy * dtw;
       if (b.x < b.r) b.x = b.r;
       if (b.x > W - b.r) b.x = W - b.r;
